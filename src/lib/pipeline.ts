@@ -96,7 +96,7 @@ export async function processJob(jobId: string) {
   }
 
   // Check if Replicate is configured
-  if (!replicate) {
+  if (!process.env.REPLICATE_API_TOKEN) {
     // For demo purposes, simulate the pipeline
     await simulatePipeline(sanitizedJobId, { youtubeUrl, character, imagePrompt: imagePrompt || '' });
     return;
@@ -148,7 +148,7 @@ export async function processJob(jobId: string) {
     };
     
     const fullMixOutput = await replicate.run(
-      "zsxkib/realistic-voice-cloning:668a4fec05a887143e5fe8d45df25ec4c794dd43169b9a11562309b2d45873b0",
+      "zsxkib/realistic-voice-cloning:0a9c7c558af4c0f20667c1bd1260ce32a2879944a0b9e44e1398660c077b1550",
       { input: voiceCloneParams }
     ) as unknown as string;
     
@@ -164,7 +164,7 @@ export async function processJob(jobId: string) {
     // Step 3: Run voice cloning (isolated vocals)
     jobStore.update(sanitizedJobId, { progress: 40, message: 'Isolating vocals...' });
     const isolatedVoxOutput = await replicate.run(
-      "zsxkib/realistic-voice-cloning:668a4fec05a887143e5fe8d45df25ec4c794dd43169b9a11562309b2d45873b0",
+      "zsxkib/realistic-voice-cloning:0a9c7c558af4c0f20667c1bd1260ce32a2879944a0b9e44e1398660c077b1550",
       {
         input: {
           input_audio: audioUrl,
@@ -198,7 +198,7 @@ export async function processJob(jobId: string) {
     const fullPrompt = `close-up portrait of ${defaultPrompt}, professional lighting, high quality`;
     
     const stillOutput = await replicate.run(
-      "black-forest-labs/flux-schnell:bf53bdb9790c8a042a21c9fe0e88f0496a67f69f7a8b260b48ec25d2e005e04f",
+      "black-forest-labs/flux-schnell:131d9e185621b4b4d349fd262e363420a6f74081d8c27966c9c5bcf120fa3985",
       {
         input: {
           prompt: fullPrompt,
@@ -213,7 +213,7 @@ export async function processJob(jobId: string) {
     // Step 5: Generate video with Sonic
     jobStore.update(sanitizedJobId, { progress: 80, message: 'Bringing your vision to life...' });
     const videoOutput = await replicate.run(
-      "zsxkib/sonic:97851dcaeee2b52e5e0bda1c913fabb32cb1c8c07b7966fc77e5bd83e8e2c30e",
+      "zsxkib/sonic:a2aad29ea95f19747a5ea22ab14fc6594654506e5815f7f5ba4293e888d3e20f",
       {
         input: {
           image: stillOutput[0],
