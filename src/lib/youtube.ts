@@ -1,6 +1,6 @@
 import fs from 'fs';
 import path from 'path';
-import ytdl from 'ytdl-core';
+import ytdl from '@distube/ytdl-core';
 
 // Create temp directory if it doesn't exist
 const TEMP_DIR = process.env.NODE_ENV === 'test' ? '/tmp' : path.join(process.cwd(), 'temp');

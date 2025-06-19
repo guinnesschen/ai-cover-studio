@@ -271,12 +271,12 @@ async function simulatePipeline(
 
   // Simulate progress
   for (const { progress, message } of messages) {
-    jobStore.update(sanitizedJobId, { status: 'processing', progress, message });
+    jobStore.update(jobId, { status: 'processing', progress, message });
     await new Promise(resolve => setTimeout(resolve, 2000)); // 2 second delay
   }
 
   // Complete with placeholder
-  jobStore.update(sanitizedJobId, {
+  jobStore.update(jobId, {
     status: 'completed',
     progress: 100,
     outputUrl: '/placeholder.mp4',
