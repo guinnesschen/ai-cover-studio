@@ -35,8 +35,8 @@ interface PipelineAudit {
   stage: string;
   timestamp: Date;
   duration?: number;
-  input?: any;
-  output?: any;
+  input?: unknown;
+  output?: unknown;
   error?: string;
 }
 
@@ -53,7 +53,6 @@ async function logAudit(audit: PipelineAudit): Promise<void> {
 }
 
 export async function processJob(jobId: string) {
-  const startTime = Date.now();
   const sanitizedJobId = sanitizeJobId(jobId);
   
   const job = jobStore.get(sanitizedJobId);
@@ -127,7 +126,7 @@ export async function processJob(jobId: string) {
     jobStore.update(sanitizedJobId, { progress: 20, message: 'Fine-tuning vocals...' });
     
     const voiceCloneParams = {
-      song_input: audioUrl,
+      input_audio: audioUrl,
       rvc_model: characterData?.voiceModelUrl ? "CUSTOM" : "Squidward",
       custom_rvc_model_download_url: characterData?.voiceModelUrl,
       pitch_change: "no-change",
@@ -168,7 +167,7 @@ export async function processJob(jobId: string) {
       "zsxkib/realistic-voice-cloning:668a4fec05a887143e5fe8d45df25ec4c794dd43169b9a11562309b2d45873b0",
       {
         input: {
-          song_input: audioUrl,
+          input_audio: audioUrl,
           rvc_model: characterData?.voiceModelUrl ? "CUSTOM" : "Squidward",
           custom_rvc_model_download_url: characterData?.voiceModelUrl,
           pitch_change: "no-change",

@@ -19,25 +19,40 @@ export async function GET(
     'Connection': 'keep-alive',
   });
 
+  let isClosed = false;
+  
+  const closeStream = () => {
+    if (!isClosed) {
+      isClosed = true;
+      try {
+        writer.close();
+      } catch (error) {
+        // Ignore errors when closing already closed stream
+      }
+      unsubscribe();
+    }
+  };
+
   // Subscribe to job updates
   const unsubscribe = jobStore.subscribe(jobId, (progress) => {
-    const data = `data: ${JSON.stringify(progress)}\n\n`;
-    writer.write(encoder.encode(data));
+    if (isClosed) return;
+    
+    try {
+      const data = `data: ${JSON.stringify(progress)}\n\n`;
+      writer.write(encoder.encode(data));
 
-    // Close stream when job is done
-    if (progress.status === 'completed' || progress.status === 'error') {
-      setTimeout(() => {
-        writer.close();
-        unsubscribe();
-      }, 1000);
+      // Close stream when job is done
+      if (progress.status === 'completed' || progress.status === 'error') {
+        setTimeout(closeStream, 1000);
+      }
+    } catch (error) {
+      // Handle write errors (e.g., client disconnected)
+      closeStream();
     }
   });
 
   // Handle client disconnect
-  request.signal.addEventListener('abort', () => {
-    unsubscribe();
-    writer.close();
-  });
+  request.signal.addEventListener('abort', closeStream);
 
   return new Response(stream.readable, { headers });
 }
