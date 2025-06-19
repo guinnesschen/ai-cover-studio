@@ -85,7 +85,7 @@ export default function CreateCoverForm({ onSubmit, disabled }: CreateCoverFormP
           className="w-full px-3 py-2 border border-border rounded-lg bg-background focus:outline-none focus:ring-2 focus:ring-accent focus:border-transparent transition-all"
           disabled={isSubmitting || disabled}
         >
-          {characters.map((character) => (
+          {characters.filter(c => c.available).map((character) => (
             <option key={character.id} value={character.id}>
               {character.name} {character.emoji}
             </option>

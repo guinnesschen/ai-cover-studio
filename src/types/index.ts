@@ -26,6 +26,7 @@ export interface Character {
   id: string;
   name: string;
   emoji: string;
+  available: boolean;
   voiceModelUrl?: string;
   fluxFineTuneId?: string;
 }

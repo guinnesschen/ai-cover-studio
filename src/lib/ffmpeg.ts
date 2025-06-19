@@ -14,18 +14,49 @@ try {
   console.log('ffmpeg-static not available, using system ffmpeg');
 }
 
-const TEMP_DIR = path.join(process.cwd(), 'temp');
+const TEMP_DIR = process.env.NODE_ENV === 'test' ? '/tmp' : path.join(process.cwd(), 'temp');
+
+// Validation helpers
+function validateUrl(url: string): boolean {
+  try {
+    new URL(url);
+    return true;
+  } catch {
+    return false;
+  }
+}
+
+function sanitizeJobId(jobId: string): string {
+  // Remove any path traversal attempts and special characters
+  return jobId.replace(/[^a-zA-Z0-9-_]/g, '');
+}
 
 export async function stitchVideoAudio(
   videoUrl: string,
   audioUrl: string,
   jobId: string
 ): Promise<string> {
+  // Validate inputs
+  if (!validateUrl(videoUrl)) {
+    throw new Error('Invalid video URL');
+  }
+  
+  if (!validateUrl(audioUrl)) {
+    throw new Error('Invalid audio URL');
+  }
+  
+  const sanitizedJobId = sanitizeJobId(jobId);
+  
   try {
+    // Ensure temp directory exists
+    if (!fs.existsSync(TEMP_DIR)) {
+      fs.mkdirSync(TEMP_DIR, { recursive: true });
+    }
+    
     // Download video and audio files
-    const videoPath = path.join(TEMP_DIR, `${jobId}_video.mp4`);
-    const audioPath = path.join(TEMP_DIR, `${jobId}_audio.mp3`);
-    const outputPath = path.join(TEMP_DIR, `${jobId}_final.mp4`);
+    const videoPath = path.join(TEMP_DIR, `${sanitizedJobId}_video.mp4`);
+    const audioPath = path.join(TEMP_DIR, `${sanitizedJobId}_audio.mp3`);
+    const outputPath = path.join(TEMP_DIR, `${sanitizedJobId}_final.mp4`);
 
     // Download files
     await downloadFile(videoUrl, videoPath);
