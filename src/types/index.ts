@@ -99,6 +99,10 @@ export interface ReplicatePrediction {
   status: 'starting' | 'processing' | 'succeeded' | 'failed' | 'canceled';
   output?: unknown;
   error?: string;
+  model?: string;
+  created_at?: string;
+  started_at?: string;
+  completed_at?: string;
   metrics?: {
     predict_time?: number;
   };
