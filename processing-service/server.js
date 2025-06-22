@@ -62,20 +62,37 @@ app.post('/download-youtube', async (req, res) => {
     console.log(`[YouTube Download] Starting download for job ${sanitizedJobId}`);
 
     // Download using youtube-dl-exec (works great on real servers!)
-    await youtubedl(url, {
-      format: 'bestaudio',
-      output: outputPath,
-      maxFilesize: '500M',
-      matchFilter: 'duration < 600',
-      noPlaylist: true,
-      userAgent: 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36'
-    });
+    console.log(`[YouTube Download] Attempting download with yt-dlp...`);
+    console.log(`[YouTube Download] Output path: ${outputPath}`);
+    console.log(`[YouTube Download] URL: ${url}`);
+    
+    try {
+      await youtubedl(url, {
+        format: 'bestaudio',
+        output: outputPath,
+        maxFilesize: '500M',
+        matchFilter: 'duration < 600',
+        noPlaylist: true,
+        userAgent: 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
+        verbose: true
+      });
+      console.log(`[YouTube Download] yt-dlp completed successfully`);
+    } catch (ytdlError) {
+      console.error(`[YouTube Download] yt-dlp failed:`, ytdlError);
+      throw ytdlError;
+    }
 
     // Find the actual downloaded file
+    console.log(`[YouTube Download] Looking for files in ${TEMP_DIR}`);
+    const allFiles = fs.readdirSync(TEMP_DIR);
+    console.log(`[YouTube Download] All files in temp dir:`, allFiles);
+    
     const baseName = `${sanitizedJobId}_audio`;
-    const files = fs.readdirSync(TEMP_DIR).filter(file => file.startsWith(baseName));
+    const files = allFiles.filter(file => file.startsWith(baseName));
+    console.log(`[YouTube Download] Matching files:`, files);
 
     if (files.length === 0) {
+      console.error(`[YouTube Download] No files found with basename: ${baseName}`);
       throw new Error('No downloaded file found');
     }
 

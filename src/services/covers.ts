@@ -11,23 +11,41 @@ interface CreateCoverData {
 export class CoversService {
   // Create a new cover and start processing
   static async create(data: CreateCoverData): Promise<Cover> {
+    console.log('[CoversService] Creating new cover:', { 
+      youtubeUrl: data.youtubeUrl, 
+      character: data.character,
+      hasImagePrompt: !!data.imagePrompt
+    });
+    
     const cover = await prisma.cover.create({
       data: {
         ...data,
         status: 'in-progress',
       },
     });
+    
+    console.log(`[CoversService] Cover created: ${cover.id}`);
 
     // Trigger parallel processing for download and image generation (fire and forget)
     Promise.all([
       processNextStep(cover.id, 'downloading'),
       processNextStep(cover.id, 'generating_image')
-    ]).catch(error => {
-      console.error(`Failed to start processing for cover ${cover.id}:`, error);
+    ]).catch(async (error) => {
+      console.error(`[CoversService] Failed to start processing for cover ${cover.id}:`, {
+        error: error instanceof Error ? error.message : error,
+        stack: error instanceof Error ? error.stack : undefined,
+        timestamp: new Date().toISOString()
+      });
+      
       // Update cover with error
-      this.updateStatus(cover.id, 'failed', { 
-        errorMessage: 'Failed to start processing' 
-      }).catch(console.error);
+      try {
+        await this.updateStatus(cover.id, 'failed', { 
+          errorMessage: `Failed to start processing: ${error instanceof Error ? error.message : 'Unknown error'}` 
+        });
+        console.log(`[CoversService] Updated cover ${cover.id} status to failed`);
+      } catch (updateError) {
+        console.error(`[CoversService] Failed to update cover ${cover.id} status:`, updateError);
+      }
     });
 
     return this.toDto(cover);

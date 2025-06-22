@@ -9,6 +9,7 @@ export async function GET(
 ) {
   try {
     const { id } = await params;
+    console.log(`[API] GET /api/covers/${id}/progress - Fetching progress`);
     
     const cover = await prisma.cover.findUnique({
       where: { id },
@@ -25,6 +26,7 @@ export async function GET(
     });
 
     if (!cover) {
+      console.warn(`[API] Cover not found: ${id}`);
       return NextResponse.json(
         { error: 'Cover not found' },
         { status: 404 }
@@ -46,11 +48,26 @@ export async function GET(
       error: cover.errorMessage || undefined,
     };
 
+    console.log(`[API] Progress for ${id}:`, {
+      status: update.status,
+      progress: update.progress,
+      hasError: !!update.error,
+      artifactCount: cover.artifacts.length
+    });
+
     return NextResponse.json(update);
   } catch (error) {
-    console.error('Error fetching progress:', error);
+    console.error(`[API] Error fetching progress for ${params}:`, {
+      error: error instanceof Error ? error.message : error,
+      stack: error instanceof Error ? error.stack : undefined,
+      timestamp: new Date().toISOString()
+    });
+    
     return NextResponse.json(
-      { error: 'Failed to fetch progress' },
+      { 
+        error: 'Failed to fetch progress',
+        details: error instanceof Error ? error.message : 'Unknown error'
+      },
       { status: 500 }
     );
   }
