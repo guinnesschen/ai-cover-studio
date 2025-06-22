@@ -2,11 +2,8 @@ import fs from 'fs';
 import path from 'path';
 import ytdl from '@distube/ytdl-core';
 
-// Create temp directory if it doesn't exist
-const TEMP_DIR = path.join(process.cwd(), 'temp');
-if (!fs.existsSync(TEMP_DIR)) {
-  fs.mkdirSync(TEMP_DIR, { recursive: true });
-}
+// Use /tmp directory for serverless environments like Vercel
+const TEMP_DIR = '/tmp';
 
 // Validation helpers
 function validateYouTubeUrl(url: string): boolean {
