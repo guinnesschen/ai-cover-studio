@@ -1,6 +1,5 @@
 import { prisma } from '@/clients/prisma';
 import { replicate, getWebhookUrl, isReplicateConfigured } from '@/clients/replicate';
-import { getCharacterById } from '@/data/characters';
 
 type CoverWithArtifacts = {
   id: string;
@@ -25,41 +24,16 @@ export async function generateImage(cover: CoverWithArtifacts) {
       throw new Error('Replicate is not configured - missing API token');
     }
     console.log(`[IMAGE STEP] ✅ Replicate configuration verified`);
-
-    console.log(`[IMAGE STEP] 👤 Looking up character: ${cover.character}`);
-    const character = getCharacterById(cover.character);
-    if (!character) {
-      console.error(`[IMAGE STEP] ❌ Character not found`, { characterId: cover.character });
-      throw new Error(`Character not found: ${cover.character}`);
-    }
-    console.log(`[IMAGE STEP] ✅ Character found`, {
-      name: character.name,
-      hasFineTune: !!character.fluxFineTuneId,
-      fineTuneId: character.fluxFineTuneId || 'none'
-    });
     
     console.log(`[IMAGE STEP] 🌐 Getting webhook URL...`);
     const webhookUrl = getWebhookUrl();
     console.log(`[IMAGE STEP] ✅ Webhook URL obtained`, { webhookUrl });
 
-    // Create image generation prediction
-    const prompt = cover.imagePrompt || 
-      `${character.name} performing on stage, professional portrait, dramatic lighting`;
-
-    // Use custom finetune if available, otherwise fallback to basic Flux
-    const useCustomFinetune = character.fluxFineTuneId && character.fluxFineTuneId.trim() !== '';
-    const model = useCustomFinetune ? 'black-forest-labs/flux-pro-finetuned' : 'black-forest-labs/flux-schnell';
+    // Use user's prompt, or simple fallback
+    const prompt = cover.imagePrompt || 'a professional portrait, dramatic lighting';
+    const model = 'black-forest-labs/flux-schnell';
     
-    const predictionConfig = useCustomFinetune ? {
-      prompt,
-      finetune_id: character.fluxFineTuneId!,
-      finetune_strength: 1,
-      aspect_ratio: '1:1',
-      steps: 40,
-      guidance: 3,
-      safety_tolerance: 2,
-      output_format: 'jpg'
-    } : {
+    const predictionConfig = {
       prompt,
       aspect_ratio: '1:1',
       num_outputs: 1,
@@ -69,7 +43,6 @@ export async function generateImage(cover: CoverWithArtifacts) {
 
     console.log(`[IMAGE STEP] 🚀 Creating Replicate prediction...`, {
       model,
-      useCustomFinetune,
       prompt: prompt.substring(0, 100) + (prompt.length > 100 ? '...' : ''),
       webhookUrl,
       config: predictionConfig
@@ -117,7 +90,6 @@ export async function generateImage(cover: CoverWithArtifacts) {
     const totalTime = Date.now() - startTime;
     console.error(`[IMAGE STEP] ❌ IMAGE GENERATION FAILED`, {
       coverId: cover.id,
-      character: cover.character,
       error: error instanceof Error ? error.message : error,
       stack: error instanceof Error ? error.stack : undefined,
       hasImagePrompt: !!cover.imagePrompt,
