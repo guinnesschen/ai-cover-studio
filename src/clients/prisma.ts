@@ -11,7 +11,7 @@ export const prisma =
     // Optimize for serverless
     datasources: {
       db: {
-        url: process.env.POSTGRES_URL,
+        url: process.env.POSTGRES_URL || 'postgresql://dummy:dummy@localhost:5432/dummy',
       },
     },
   });

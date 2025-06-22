@@ -45,7 +45,6 @@ export default function Home() {
   useEffect(() => {
     if (!currentCoverId) return;
 
-    let intervalId: NodeJS.Timeout;
     let isActive = true;
 
     const pollProgress = async () => {
@@ -90,7 +89,7 @@ export default function Home() {
     pollProgress();
 
     // Then poll every 2 seconds
-    intervalId = setInterval(pollProgress, 2000);
+    const intervalId = setInterval(pollProgress, 2000);
 
     return () => {
       isActive = false;
