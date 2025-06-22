@@ -34,6 +34,8 @@ export async function GET(
             select: {
               id: true,
               type: true,
+              url: true,
+              replicateId: true,
             },
           },
         },
@@ -49,7 +51,7 @@ export async function GET(
       const update: ProgressUpdate = {
         status: cover.status as CoverStatus,
         progress: cover.progress,
-        message: getStatusMessage(cover.status),
+        message: getStatusMessage(cover.status, cover.artifacts),
         artifacts: {
           downloadedAudioId: cover.artifacts.find(a => a.type === 'audio')?.id,
           generatedImageId: cover.artifacts.find(a => a.type === 'image')?.id,
@@ -94,17 +96,46 @@ export async function GET(
   return new Response(stream.readable, { headers });
 }
 
-function getStatusMessage(status: string): string {
-  const messages: Record<string, string> = {
-    queued: 'Preparing your cover...',
-    downloading: 'Downloading audio from YouTube...',
-    generating_image: 'Creating character portrait...',
-    cloning_voice_full: 'Cloning voice with full mix...',
-    cloning_voice_isolated: 'Isolating vocals...',
-    generating_video: 'Animating your performance...',
-    stitching: 'Finalizing your cover...',
-    completed: 'Your cover is ready!',
-    failed: 'Something went wrong',
-  };
-  return messages[status] || 'Processing...';
+function getStatusMessage(status: string, artifacts: { type: string; url?: string; replicateId?: string }[]): string {
+  // For overall status messages
+  if (status === 'completed') return 'Your cover is ready!';
+  if (status === 'failed') return 'Something went wrong';
+  
+  // Determine what's currently happening based on completed artifacts
+  const completedArtifacts = new Set(
+    artifacts.filter(a => a.url).map(a => a.type)
+  );
+  
+  // Check artifacts that exist but may not have URLs yet (in progress)
+  const inProgressArtifacts = new Set(
+    artifacts.filter(a => !a.url && a.replicateId).map(a => a.type)
+  );
+  
+  const messages: string[] = [];
+  
+  // Show what's currently in progress
+  if (!completedArtifacts.has('audio') && !inProgressArtifacts.has('audio')) {
+    messages.push('Downloading audio from YouTube');
+  }
+  if (!completedArtifacts.has('image') && inProgressArtifacts.has('image')) {
+    messages.push('Creating character portrait');
+  }
+  if (completedArtifacts.has('audio')) {
+    if (!completedArtifacts.has('vocals_full') && inProgressArtifacts.has('vocals_full')) {
+      messages.push('Cloning voice with full mix');
+    }
+    if (!completedArtifacts.has('vocals_isolated') && inProgressArtifacts.has('vocals_isolated')) {
+      messages.push('Isolating vocals');
+    }
+  }
+  if (completedArtifacts.has('image') && completedArtifacts.has('vocals_isolated')) {
+    if (!completedArtifacts.has('video') && inProgressArtifacts.has('video')) {
+      messages.push('Animating your performance');
+    }
+  }
+  if (completedArtifacts.has('video') && completedArtifacts.has('vocals_full')) {
+    messages.push('Finalizing your cover');
+  }
+  
+  return messages.length > 0 ? messages.join(' • ') : 'Processing...';
 }

@@ -1,13 +1,21 @@
 import { prisma } from '@/clients/prisma';
-import { CoverStatus } from '@/types';
 import { downloadAudio } from './steps/download';
 import { generateImage } from './steps/image';
 import { cloneVoiceFull, cloneVoiceIsolated } from './steps/voice';
 import { generateVideo } from './steps/video';
 import { stitchFinal } from './steps/stitch';
 
-// Main pipeline orchestrator - much simpler!
-export async function processNextStep(coverId: string) {
+// Pipeline action types (internal use only)
+type PipelineAction = 
+  | 'downloading'
+  | 'generating_image'
+  | 'cloning_voice_full'
+  | 'cloning_voice_isolated'
+  | 'generating_video'
+  | 'stitching';
+
+// Main pipeline orchestrator
+export async function processNextStep(coverId: string, action: PipelineAction) {
   try {
     const cover = await prisma.cover.findUnique({
       where: { id: coverId },
@@ -19,10 +27,10 @@ export async function processNextStep(coverId: string) {
       return;
     }
 
-    console.log(`Processing cover ${coverId} - Status: ${cover.status}`);
+    console.log(`Processing cover ${coverId} - Action: ${action}`);
 
-    // Route to the appropriate handler based on current status
-    switch (cover.status as CoverStatus) {
+    // Route to the appropriate handler based on action
+    switch (action) {
       case 'downloading':
         await downloadAudio(cover);
         break;
@@ -47,13 +55,8 @@ export async function processNextStep(coverId: string) {
         await stitchFinal(cover);
         break;
       
-      case 'completed':
-      case 'failed':
-        // Nothing to do
-        break;
-      
       default:
-        console.warn(`Unknown status: ${cover.status}`);
+        console.warn(`Unknown pipeline action: ${action}`);
     }
   } catch (error) {
     console.error(`Pipeline error for cover ${coverId}:`, error);

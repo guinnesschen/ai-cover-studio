@@ -28,18 +28,23 @@ export async function downloadAudio(cover: CoverWithArtifacts) {
     },
   });
 
-  // Update cover status to trigger next step
+  // Update cover metadata
   await prisma.cover.update({
     where: { id: cover.id },
     data: {
-      status: 'generating_image',
       progress: 20,
       title: cover.title || `Cover ${new Date().toLocaleDateString()}`,
       artist: cover.artist || 'Unknown Artist',
     },
   });
 
-  // Continue to next step
+  // Trigger voice cloning tasks in parallel
   const { processNextStep } = await import('@/core/pipeline');
-  await processNextStep(cover.id);
+  
+  // Start voice cloning (both full and isolated) in parallel
+  // Note: image generation is already started in parallel with download
+  await Promise.all([
+    processNextStep(cover.id, 'cloning_voice_full'),
+    processNextStep(cover.id, 'cloning_voice_isolated'),
+  ]);
 }
