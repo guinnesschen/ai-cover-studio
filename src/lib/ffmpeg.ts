@@ -14,7 +14,7 @@ try {
   console.log('ffmpeg-static not available, using system ffmpeg');
 }
 
-const TEMP_DIR = process.env.NODE_ENV === 'test' ? '/tmp' : path.join(process.cwd(), 'temp');
+const TEMP_DIR = path.join(process.cwd(), 'temp');
 
 // Validation helpers
 function validateUrl(url: string): boolean {
@@ -87,11 +87,7 @@ export async function stitchVideoAudio(
     return outputPath;
   } catch (error) {
     console.error('Stitching error:', error);
-    
-    // For MVP fallback, just return a dummy path
-    const dummyPath = path.join(TEMP_DIR, `${jobId}_final.mp4`);
-    fs.writeFileSync(dummyPath, ''); // Empty file
-    return dummyPath;
+    throw error;
   }
 }
 

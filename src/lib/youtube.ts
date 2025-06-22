@@ -3,7 +3,7 @@ import path from 'path';
 import ytdl from '@distube/ytdl-core';
 
 // Create temp directory if it doesn't exist
-const TEMP_DIR = process.env.NODE_ENV === 'test' ? '/tmp' : path.join(process.cwd(), 'temp');
+const TEMP_DIR = path.join(process.cwd(), 'temp');
 if (!fs.existsSync(TEMP_DIR)) {
   fs.mkdirSync(TEMP_DIR, { recursive: true });
 }
@@ -115,14 +115,6 @@ export async function downloadYouTubeAudio(url: string, jobId: string): Promise<
 
   } catch (error) {
     console.error('YouTube download error:', error);
-    
-    // Don't create dummy files in production
-    if (process.env.NODE_ENV === 'test') {
-      const dummyPath = path.join(TEMP_DIR, `${sanitizedJobId}_audio.mp3`);
-      fs.writeFileSync(dummyPath, 'dummy audio content');
-      return dummyPath;
-    }
-    
     throw error;
   }
 }
