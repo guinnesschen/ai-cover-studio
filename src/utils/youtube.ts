@@ -1,9 +1,11 @@
 import fs from 'fs';
 import path from 'path';
-import youtubedl from 'youtube-dl-exec';
 
 // Use /tmp directory for serverless environments like Vercel
 const TEMP_DIR = '/tmp';
+
+// Get processing service URL from environment variable
+const PROCESSING_SERVICE_URL = process.env.PROCESSING_SERVICE_URL || 'http://localhost:3001';
 
 // Validation helpers
 function validateYouTubeUrl(url: string): boolean {
@@ -21,8 +23,6 @@ function sanitizeJobId(jobId: string): string {
   return jobId.replace(/[^a-zA-Z0-9-_]/g, '');
 }
 
-// File size limit is handled by yt-dlp with maxFilesize option
-
 export async function downloadYouTubeAudio(url: string, jobId: string): Promise<string> {
   // Validate inputs
   if (!validateYouTubeUrl(url)) {
@@ -30,77 +30,60 @@ export async function downloadYouTubeAudio(url: string, jobId: string): Promise<
   }
   
   const sanitizedJobId = sanitizeJobId(jobId);
-  const outputPath = path.join(TEMP_DIR, `${sanitizedJobId}_audio.%(ext)s`);
+  const outputPath = path.join(TEMP_DIR, `${sanitizedJobId}_audio.webm`);
   
-  console.log(`[YouTube Download] Starting download for job ${sanitizedJobId}`);
+  console.log(`[YouTube Download] Starting download for job ${sanitizedJobId} via processing service`);
   
   try {
-    // Use youtube-dl-exec (yt-dlp) which is much more reliable
-    // Download audio in its original format (usually webm/opus) 
-    await youtubedl(url, {
-      format: 'bestaudio', // Download best audio format available
-      output: outputPath,
-      maxFilesize: '500M', // 500MB limit
-      matchFilter: 'duration < 600', // 10 minutes max
-      noPlaylist: true,
-      // Add user agent to avoid bot detection
-      userAgent: 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36'
+    // Call external processing service
+    const response = await fetch(`${PROCESSING_SERVICE_URL}/download-youtube`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        url,
+        jobId: sanitizedJobId
+      }),
     });
-    
-    // Find the actual downloaded file (since extension can vary)
-    const baseName = `${sanitizedJobId}_audio`;
-    const files = fs.readdirSync(TEMP_DIR).filter(file => file.startsWith(baseName));
-    
-    if (files.length === 0) {
-      throw new Error('No downloaded file found');
+
+    if (!response.ok) {
+      const errorData = await response.json().catch(() => ({ error: 'Unknown error' }));
+      throw new Error(`Processing service failed: ${errorData.error || response.statusText}`);
     }
-    
-    const actualPath = path.join(TEMP_DIR, files[0]);
-    
+
+    const data = await response.json();
+
+    if (!data.success || !data.fileData) {
+      throw new Error('Invalid response from processing service');
+    }
+
+    // Convert base64 back to file
+    const buffer = Buffer.from(data.fileData, 'base64');
+    fs.writeFileSync(outputPath, buffer);
+
     // Verify file was created and has content
-    if (!fs.existsSync(actualPath)) {
+    if (!fs.existsSync(outputPath)) {
       throw new Error('Failed to create audio file');
     }
     
-    const stats = fs.statSync(actualPath);
+    const stats = fs.statSync(outputPath);
     if (stats.size === 0) {
-      fs.unlinkSync(actualPath);
+      fs.unlinkSync(outputPath);
       throw new Error('Downloaded file is empty');
     }
     
-    console.log(`[YouTube Download] Success! Downloaded ${(stats.size / 1024 / 1024).toFixed(2)}MB to ${actualPath}`);
-    return actualPath;
+    console.log(`[YouTube Download] Success! Downloaded ${(stats.size / 1024 / 1024).toFixed(2)}MB via processing service`);
+    return outputPath;
     
   } catch (error) {
     console.error('[YouTube Download] Failed:', error);
-    // Type-safe error details extraction
-    const errorDetails: Record<string, unknown> = {
-      message: error instanceof Error ? error.message : 'Unknown error',
-      stack: error instanceof Error ? error.stack : undefined,
-      name: error instanceof Error ? error.name : undefined,
-    };
-    
-    // Add ChildProcessError details if available
-    if (error && typeof error === 'object' && error !== null) {
-      const processError = error as Record<string, unknown>;
-      if ('stderr' in processError) errorDetails.stderr = processError.stderr;
-      if ('stdout' in processError) errorDetails.stdout = processError.stdout;
-      if ('command' in processError) errorDetails.command = processError.command;
-      if ('exitCode' in processError) errorDetails.exitCode = processError.exitCode;
-    }
-    
-    console.error('[YouTube Download] Error details:', errorDetails);
     
     // Clean up any partial files
     try {
-      const baseName = `${sanitizedJobId}_audio`;
-      const files = fs.readdirSync(TEMP_DIR).filter(file => file.startsWith(baseName));
-      files.forEach(file => {
-        const filePath = path.join(TEMP_DIR, file);
-        if (fs.existsSync(filePath)) {
-          fs.unlinkSync(filePath);
-        }
-      });
+      if (fs.existsSync(outputPath)) {
+        fs.unlinkSync(outputPath);
+      }
     } catch (cleanupError) {
       console.error('[YouTube Download] Cleanup error:', cleanupError);
     }

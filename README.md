@@ -17,6 +17,34 @@ Transform any song into a character performance using AI. Drop in a YouTube link
 - K-Pop Idol 🎤 (Coming Soon)
 - Drake 🦉 (Coming Soon)
 
+## Architecture
+
+This project uses a hybrid deployment approach for optimal performance:
+
+- **Main App** (Next.js) → Vercel - Handles UI, API routes, and database
+- **Processing Service** (Express.js) → Render/Railway - Handles YouTube downloads and video processing
+
+This split solves Vercel's limitations with binary processing while keeping the main app simple to deploy.
+
+## Quick Start
+
+1. **Deploy Processing Service**: See [DEPLOYMENT.md](./DEPLOYMENT.md)
+2. **Deploy Main App**: Standard Vercel deployment
+3. **Configure**: Set `PROCESSING_SERVICE_URL` environment variable
+
+## Development
+
+```bash
+# Main app
+npm install
+npm run dev
+
+# Processing service (separate terminal)
+cd processing-service
+npm install
+npm run dev
+```
+
 ---
 
 *Built with AI voice cloning, image generation, and video synthesis*
