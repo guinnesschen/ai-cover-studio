@@ -13,6 +13,7 @@
     "setup": "node scripts/setup-db.js",
     "db:push": "prisma db push",
     "db:generate": "prisma generate",
+    "db:reset": "prisma db push --force-reset",
     "postinstall": "prisma generate"
   },
   "dependencies": {
