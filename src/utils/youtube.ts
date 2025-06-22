@@ -1,6 +1,6 @@
 import fs from 'fs';
 import path from 'path';
-import ytdl from '@distube/ytdl-core';
+import youtubedl from 'youtube-dl-exec';
 
 // Use /tmp directory for serverless environments like Vercel
 const TEMP_DIR = '/tmp';
@@ -31,87 +31,60 @@ export async function downloadYouTubeAudio(url: string, jobId: string): Promise<
   }
   
   const sanitizedJobId = sanitizeJobId(jobId);
+  const outputPath = path.join(TEMP_DIR, `${sanitizedJobId}_audio.%(ext)s`);
+  
+  console.log(`[YouTube Download] Starting download for job ${sanitizedJobId}`);
   
   try {
-    // For MVP, we'll use ytdl-core directly
-    // In production, you might want to use ytdl-worker.vercel.app or yt-dlp
+    // Use youtube-dl-exec (yt-dlp) which is much more reliable
+    // Download audio in its original format (usually webm/opus) 
+    const result = await youtubedl(url, {
+      format: 'bestaudio', // Download best audio format available
+      output: outputPath,
+      maxFilesize: '500M', // 500MB limit
+      matchFilter: 'duration < 600', // 10 minutes max
+      noPlaylist: true,
+      // Add user agent to avoid bot detection
+      userAgent: 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36'
+    });
     
-    const info = await ytdl.getInfo(url);
+    // Find the actual downloaded file (since extension can vary)
+    const baseName = `${sanitizedJobId}_audio`;
+    const files = fs.readdirSync(TEMP_DIR).filter(file => file.startsWith(baseName));
     
-    // Validate video duration (max 10 minutes for safety)
-    const duration = parseInt(info.videoDetails.lengthSeconds);
-    if (duration > 600) {
-      throw new Error('Video duration exceeds 10 minutes');
+    if (files.length === 0) {
+      throw new Error('No downloaded file found');
     }
     
-    // Get audio format
-    const format = ytdl.chooseFormat(info.formats, {
-      quality: 'highestaudio',
-      filter: 'audioonly',
-    });
-
-    if (!format) {
-      throw new Error('No suitable audio format found');
-    }
-
-    const outputPath = path.join(TEMP_DIR, `${sanitizedJobId}_audio.mp3`);
+    const actualPath = path.join(TEMP_DIR, files[0]);
     
-    return new Promise((resolve, reject) => {
-      let downloadedBytes = 0;
-      
-      const stream = ytdl(url, { format });
-      const writeStream = fs.createWriteStream(outputPath);
-      
-      stream.on('data', (chunk) => {
-        downloadedBytes += chunk.length;
-        
-        // Check file size limit
-        if (downloadedBytes > MAX_FILE_SIZE) {
-          stream.destroy();
-          writeStream.destroy();
-          if (fs.existsSync(outputPath)) {
-            fs.unlinkSync(outputPath);
-          }
-          reject(new Error('File size exceeds 500MB limit'));
-        }
-      });
-      
-      stream.pipe(writeStream);
-      
-      stream.on('error', (error) => {
-        if (fs.existsSync(outputPath)) {
-          fs.unlinkSync(outputPath);
-        }
-        reject(error);
-      });
-      
-      writeStream.on('error', (error) => {
-        if (fs.existsSync(outputPath)) {
-          fs.unlinkSync(outputPath);
-        }
-        reject(error);
-      });
-      
-      writeStream.on('finish', () => {
-        // Verify file was created and has content
-        if (!fs.existsSync(outputPath)) {
-          reject(new Error('Failed to create audio file'));
-          return;
-        }
-        
-        const stats = fs.statSync(outputPath);
-        if (stats.size === 0) {
-          fs.unlinkSync(outputPath);
-          reject(new Error('Downloaded file is empty'));
-          return;
-        }
-        
-        resolve(outputPath);
-      });
-    });
-
+    // Verify file was created and has content
+    if (!fs.existsSync(actualPath)) {
+      throw new Error('Failed to create audio file');
+    }
+    
+    const stats = fs.statSync(actualPath);
+    if (stats.size === 0) {
+      fs.unlinkSync(actualPath);
+      throw new Error('Downloaded file is empty');
+    }
+    
+    console.log(`[YouTube Download] Success! Downloaded ${(stats.size / 1024 / 1024).toFixed(2)}MB to ${actualPath}`);
+    return actualPath;
+    
   } catch (error) {
-    console.error('YouTube download error:', error);
-    throw error;
+    console.error('[YouTube Download] Failed:', error);
+    
+    // Clean up any partial files
+    const baseName = `${sanitizedJobId}_audio`;
+    const files = fs.readdirSync(TEMP_DIR).filter(file => file.startsWith(baseName));
+    files.forEach(file => {
+      const filePath = path.join(TEMP_DIR, file);
+      if (fs.existsSync(filePath)) {
+        fs.unlinkSync(filePath);
+      }
+    });
+    
+    throw new Error(`Failed to download YouTube audio: ${error instanceof Error ? error.message : 'Unknown error'}`);
   }
 }

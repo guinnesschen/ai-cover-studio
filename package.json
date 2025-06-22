@@ -10,6 +10,7 @@
     "test": "jest",
     "test:watch": "jest --watch",
     "test:coverage": "jest --coverage",
+    "test:youtube": "npx tsx test-youtube.ts",
     "setup": "node scripts/setup-db.js",
     "db:push": "prisma db push",
     "db:generate": "prisma generate",
@@ -17,7 +18,6 @@
     "postinstall": "prisma generate"
   },
   "dependencies": {
-    "@distube/ytdl-core": "^4.16.12",
     "@ffmpeg/ffmpeg": "^0.12.10",
     "@ffmpeg/util": "^0.12.1",
     "@prisma/client": "^6.10.1",
@@ -29,7 +29,8 @@
     "prisma": "^6.10.1",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
-    "replicate": "^1.0.1"
+    "replicate": "^1.0.1",
+    "youtube-dl-exec": "^3.0.22"
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3",
