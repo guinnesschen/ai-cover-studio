@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
-import { CoverWithArtifacts } from '@/types';
+import { CoverWithArtifacts, CoverStatus } from '@/types';
 
 // GET /api/covers/[id] - Get specific cover with artifacts
 export async function GET(
@@ -45,7 +45,7 @@ export async function GET(
       youtubeUrl: cover.youtubeUrl,
       character: cover.character,
       imagePrompt: cover.imagePrompt,
-      status: cover.status as any,
+      status: cover.status as CoverStatus,
       progress: cover.progress,
       errorMessage: cover.errorMessage,
       title: cover.title,

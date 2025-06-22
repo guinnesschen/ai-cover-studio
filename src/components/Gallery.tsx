@@ -31,7 +31,7 @@ export default function Gallery({ covers, onSelect }: GalleryProps) {
             {/* Video Thumbnail */}
             <div className="aspect-square relative overflow-hidden bg-gradient-to-br from-accent/10 to-accent/5">
               <video
-                src={cover.videoUrl}
+                src={cover.videoUrl || undefined}
                 className="w-full h-full object-cover"
                 muted
                 playsInline

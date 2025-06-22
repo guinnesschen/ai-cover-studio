@@ -11,13 +11,15 @@ export default function VideoPlayer({ cover }: VideoPlayerProps) {
   const character = getCharacterById(cover.character);
 
   const handleDownload = async () => {
+    if (!cover.videoUrl) return;
+    
     try {
       const response = await fetch(cover.videoUrl);
       const blob = await response.blob();
       const url = window.URL.createObjectURL(blob);
       const a = document.createElement('a');
       a.href = url;
-      a.download = `${cover.title.replace(/[^a-z0-9]/gi, '_')}.mp4`;
+      a.download = `${(cover.title || 'cover').replace(/[^a-z0-9]/gi, '_')}.mp4`;
       document.body.appendChild(a);
       a.click();
       window.URL.revokeObjectURL(url);
@@ -32,7 +34,7 @@ export default function VideoPlayer({ cover }: VideoPlayerProps) {
       {/* Video */}
       <div className="relative rounded-lg overflow-hidden bg-black">
         <video
-          src={cover.videoUrl}
+          src={cover.videoUrl || undefined}
           controls
           autoPlay
           className="w-full"
@@ -43,7 +45,7 @@ export default function VideoPlayer({ cover }: VideoPlayerProps) {
       {/* Info */}
       <div className="space-y-2">
         <p className="text-sm text-muted">
-          {character?.name || cover.character} interpreting &ldquo;{cover.title}&rdquo; {character?.emoji}
+          {character?.name || cover.character} interpreting &ldquo;{cover.title || 'Untitled'}&rdquo; {character?.emoji}
         </p>
         
         {/* Download Button */}

@@ -29,7 +29,7 @@ export interface Artifact {
   coverId: string;
   type: ArtifactType;
   url: string;
-  metadata?: any;
+  metadata?: Record<string, unknown>;
   createdAt: string;
 }
 
@@ -103,7 +103,7 @@ export interface Character {
 export interface ReplicatePrediction {
   id: string;
   status: 'starting' | 'processing' | 'succeeded' | 'failed' | 'canceled';
-  output?: any;
+  output?: unknown;
   error?: string;
   metrics?: {
     predict_time?: number;

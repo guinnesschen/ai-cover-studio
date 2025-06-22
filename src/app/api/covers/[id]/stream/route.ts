@@ -1,6 +1,6 @@
 import { NextRequest } from 'next/server';
 import { prisma } from '@/lib/prisma';
-import { ProgressUpdate } from '@/types';
+import { ProgressUpdate, CoverStatus } from '@/types';
 
 // GET /api/covers/[id]/stream - Server-Sent Events for progress updates
 export async function GET(
@@ -21,8 +21,9 @@ export async function GET(
     'Connection': 'keep-alive',
   });
 
+  // eslint-disable-next-line prefer-const
   let intervalId: NodeJS.Timeout;
-
+  
   // Poll database for updates
   const sendUpdate = async () => {
     try {
@@ -46,7 +47,7 @@ export async function GET(
 
       // Build progress update
       const update: ProgressUpdate = {
-        status: cover.status as any,
+        status: cover.status as CoverStatus,
         progress: cover.progress,
         message: getStatusMessage(cover.status),
         artifacts: {

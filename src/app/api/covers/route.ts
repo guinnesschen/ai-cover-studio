@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
 import { processNextStep } from '@/lib/pipeline';
-import { GalleryResponse } from '@/types';
+import { GalleryResponse, CoverStatus } from '@/types';
 
 // POST /api/covers - Create a new cover
 export async function POST(request: NextRequest) {
@@ -109,6 +109,7 @@ export async function GET(request: NextRequest) {
     const response: GalleryResponse = {
       covers: covers.map(cover => ({
         ...cover,
+        status: cover.status as CoverStatus,
         createdAt: cover.createdAt.toISOString(),
         completedAt: cover.completedAt?.toISOString() || null,
       })),

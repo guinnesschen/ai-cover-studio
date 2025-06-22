@@ -4,8 +4,6 @@ import { downloadYouTubeAudio } from './youtube';
 import { stitchVideoAudio } from './ffmpeg';
 import { uploadFile } from './storage';
 import { getCharacterById } from './characters';
-import fs from 'fs/promises';
-import path from 'path';
 import { CoverStatus } from '@/types';
 
 const replicate = process.env.REPLICATE_API_TOKEN 
@@ -81,7 +79,13 @@ export async function processNextStep(coverId: string) {
   }
 }
 
-async function handleDownloadAudio(cover: any) {
+async function handleDownloadAudio(cover: {
+  id: string;
+  youtubeUrl: string;
+  title?: string | null;
+  artist?: string | null;
+  artifacts: Array<{ id: string; type: string; url: string; metadata?: unknown }>;
+}) {
   // Download audio (synchronous - it's fast enough)
   const audioPath = await downloadYouTubeAudio(cover.youtubeUrl, cover.id);
   const audioUrl = await uploadFile(audioPath, `${cover.id}/audio.mp3`);
@@ -120,7 +124,12 @@ async function handleDownloadAudio(cover: any) {
   await processNextStep(cover.id);
 }
 
-async function handleGenerateImage(cover: any) {
+async function handleGenerateImage(cover: {
+  id: string;
+  imagePrompt?: string | null;
+  character: string;
+  artifacts: Array<{ id: string; type: string; url: string; metadata?: unknown }>;
+}) {
   const characterData = getCharacterById(cover.character);
   const webhookUrl = getWebhookUrl();
   
@@ -163,9 +172,13 @@ async function handleGenerateImage(cover: any) {
   });
 }
 
-async function handleCloneVoiceFull(cover: any) {
+async function handleCloneVoiceFull(cover: {
+  id: string;
+  character: string;
+  artifacts: Array<{ id: string; type: string; url: string; metadata?: unknown }>;
+}) {
   const characterData = getCharacterById(cover.character);
-  const audioArtifact = cover.artifacts.find((a: any) => a.type === 'audio');
+  const audioArtifact = cover.artifacts.find((a) => a.type === 'audio');
   
   if (!audioArtifact) {
     throw new Error('Audio artifact not found');
@@ -222,9 +235,13 @@ async function handleCloneVoiceFull(cover: any) {
   });
 }
 
-async function handleCloneVoiceIsolated(cover: any) {
+async function handleCloneVoiceIsolated(cover: {
+  id: string;
+  character: string;
+  artifacts: Array<{ id: string; type: string; url: string; metadata?: unknown }>;
+}) {
   const characterData = getCharacterById(cover.character);
-  const audioArtifact = cover.artifacts.find((a: any) => a.type === 'audio');
+  const audioArtifact = cover.artifacts.find((a) => a.type === 'audio');
   
   if (!audioArtifact) {
     throw new Error('Audio artifact not found');
@@ -281,9 +298,12 @@ async function handleCloneVoiceIsolated(cover: any) {
   });
 }
 
-async function handleGenerateVideo(cover: any) {
-  const imageArtifact = cover.artifacts.find((a: any) => a.type === 'image');
-  const vocalsArtifact = cover.artifacts.find((a: any) => a.type === 'vocals_isolated');
+async function handleGenerateVideo(cover: {
+  id: string;
+  artifacts: Array<{ id: string; type: string; url: string; metadata?: unknown }>;
+}) {
+  const imageArtifact = cover.artifacts.find((a) => a.type === 'image');
+  const vocalsArtifact = cover.artifacts.find((a) => a.type === 'vocals_isolated');
   
   if (!imageArtifact || !vocalsArtifact) {
     throw new Error('Required artifacts not found');
@@ -327,10 +347,13 @@ async function handleGenerateVideo(cover: any) {
   });
 }
 
-async function handleStitchFinal(cover: any) {
-  const videoArtifact = cover.artifacts.find((a: any) => a.type === 'video');
-  const fullMixArtifact = cover.artifacts.find((a: any) => a.type === 'vocals_full');
-  const imageArtifact = cover.artifacts.find((a: any) => a.type === 'image');
+async function handleStitchFinal(cover: {
+  id: string;
+  artifacts: Array<{ id: string; type: string; url: string; metadata?: unknown }>;
+}) {
+  const videoArtifact = cover.artifacts.find((a) => a.type === 'video');
+  const fullMixArtifact = cover.artifacts.find((a) => a.type === 'vocals_full');
+  const imageArtifact = cover.artifacts.find((a) => a.type === 'image');
   
   if (!videoArtifact || !fullMixArtifact) {
     throw new Error('Required artifacts not found for stitching');
