@@ -1,6 +1,6 @@
 import { prisma } from '@/clients/prisma';
 import { replicate, getWebhookUrl, isReplicateConfigured } from '@/clients/replicate';
-// import { getCharacterById } from '@/data/characters'; // TODO: Use when custom voice models are available
+import { getCharacterById } from '@/data/characters';
 
 type CoverWithArtifacts = {
   id: string;
@@ -24,28 +24,32 @@ export async function cloneVoiceFull(cover: CoverWithArtifacts) {
 
   const webhookUrl = getWebhookUrl();
 
+  // Get character data for voice model configuration
+  const character = getCharacterById(cover.character);
+  const useCustomVoiceModel = character?.voiceModelUrl && character.voiceModelUrl.trim() !== '';
+  
   // Create voice cloning prediction (full mix)
   const prediction = await replicate!.predictions.create({
     model: 'zsxkib/realistic-voice-cloning',
-    version: '0a9c7c558af4c0f20667c1bd1260ce32a2879944a0b9e44e1398660c077b1550',
     input: {
       song_input: audioArtifact.url,
-      rvc_model: 'Squidward',
+      rvc_model: useCustomVoiceModel ? 'CUSTOM' : 'Squidward',
+      ...(useCustomVoiceModel && { custom_rvc_model_download_url: character!.voiceModelUrl! }),
       pitch_change: 'no-change',
-      index_rate: 0.5,
+      index_rate: 1, // Per docs example, use 1 for full accent retention
       filter_radius: 3,
-      rms_mix_rate: 0.25,
-      pitch_detection_algorithm: 'rmvpe',
+      rms_mix_rate: 0.8, // Per docs example, 0.8 is recommended
+      pitch_detection_algorithm: 'rmvpe', // Docs recommend 'rmvpe' for clarity
       crepe_hop_length: 128,
-      protect: 0.33,
+      protect: 0.5, // Per docs, 0.5 is default/recommended
       main_vocals_volume_change: 0,
       backup_vocals_volume_change: 0,
       instrumental_volume_change: 0,
       pitch_change_all: 0,
-      reverb_size: 0.15,
-      reverb_wetness: 0.2,
-      reverb_dryness: 0.8,
-      reverb_damping: 0.7,
+      reverb_size: 0.6, // Per docs example
+      reverb_wetness: 0.3, // Per docs example
+      reverb_dryness: 0.8, // Per docs example
+      reverb_damping: 0.7, // Per docs example
       output_format: 'mp3',
     },
     webhook: webhookUrl,
@@ -81,28 +85,32 @@ export async function cloneVoiceIsolated(cover: CoverWithArtifacts) {
 
   const webhookUrl = getWebhookUrl();
 
+  // Get character data for voice model configuration
+  const character = getCharacterById(cover.character);
+  const useCustomVoiceModel = character?.voiceModelUrl && character.voiceModelUrl.trim() !== '';
+  
   // Create voice cloning prediction (isolated vocals)
   const prediction = await replicate!.predictions.create({
     model: 'zsxkib/realistic-voice-cloning',
-    version: '0a9c7c558af4c0f20667c1bd1260ce32a2879944a0b9e44e1398660c077b1550',
     input: {
       song_input: audioArtifact.url,
-      rvc_model: 'Squidward',
+      rvc_model: useCustomVoiceModel ? 'CUSTOM' : 'Squidward',
+      ...(useCustomVoiceModel && { custom_rvc_model_download_url: character!.voiceModelUrl! }),
       pitch_change: 'no-change',
-      index_rate: 0.5,
+      index_rate: 1, // Per docs example, use 1 for full accent retention
       filter_radius: 3,
-      rms_mix_rate: 0.25,
-      pitch_detection_algorithm: 'rmvpe',
+      rms_mix_rate: 0.8, // Per docs example, 0.8 is recommended
+      pitch_detection_algorithm: 'rmvpe', // Docs recommend 'rmvpe' for clarity
       crepe_hop_length: 128,
-      protect: 0.33,
+      protect: 0.5, // Per docs, 0.5 is default/recommended
       main_vocals_volume_change: 0,
-      backup_vocals_volume_change: -20,
-      instrumental_volume_change: -20,
+      backup_vocals_volume_change: -10, // Per docs example, reduce backup vocals
+      instrumental_volume_change: -20, // Heavily reduce instrumentals for isolation
       pitch_change_all: 0,
-      reverb_size: 0.15,
-      reverb_wetness: 0.2,
-      reverb_dryness: 0.8,
-      reverb_damping: 0.7,
+      reverb_size: 0.6, // Per docs example
+      reverb_wetness: 0.3, // Per docs example
+      reverb_dryness: 0.8, // Per docs example
+      reverb_damping: 0.7, // Per docs example
       output_format: 'mp3',
     },
     webhook: webhookUrl,
