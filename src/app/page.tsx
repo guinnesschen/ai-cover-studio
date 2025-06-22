@@ -102,9 +102,10 @@ export default function Home() {
       setIsLoadingGallery(true);
       const response = await fetch('/api/covers?limit=20');
       const data: GalleryResponse = await response.json();
-      setCovers(data.covers);
+      setCovers(data.covers || []);
     } catch (error) {
       console.error('Failed to load gallery:', error);
+      setCovers([]); // Ensure covers is always an array
     } finally {
       setIsLoadingGallery(false);
     }

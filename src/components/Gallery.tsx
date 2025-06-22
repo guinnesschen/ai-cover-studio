@@ -4,12 +4,12 @@ import { Cover } from '@/types';
 import { getCharacterById } from '@/data/characters';
 
 interface GalleryProps {
-  covers: Cover[];
+  covers?: Cover[];
   onSelect: (cover: Cover) => void;
 }
 
 export default function Gallery({ covers, onSelect }: GalleryProps) {
-  if (covers.length === 0) {
+  if (!covers || covers.length === 0) {
     return (
       <div className="text-center py-12">
         <p className="text-muted text-sm">No covers yet. Create your first one!</p>
