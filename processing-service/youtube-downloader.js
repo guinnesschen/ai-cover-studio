@@ -108,9 +108,42 @@ class YouTubeDownloader {
           console.log(`[YouTubeDownloader] Result metadata:`, JSON.stringify(result).substring(0, 200) + '...');
         }
         
+        // Debug: List files in temp directory to see what was actually created
+        const dir = path.dirname(outputPath);
+        const baseName = path.basename(outputPath);
+        try {
+          const allFiles = fs.readdirSync(dir);
+          const matchingFiles = allFiles.filter(f => f.includes(baseName.replace('.webm', '')));
+          console.log(`[YouTubeDownloader] Files in ${dir}:`, allFiles.slice(0, 10)); // First 10 files
+          console.log(`[YouTubeDownloader] Files matching pattern:`, matchingFiles);
+        } catch (err) {
+          console.log(`[YouTubeDownloader] Could not list directory: ${err.message}`);
+        }
+        
         // Check if file was created at the expected path
         if (!fs.existsSync(outputPath)) {
-          throw new Error('Download completed but no file was created');
+          // Try to find the file with different extensions
+          const dir = path.dirname(outputPath);
+          const baseName = path.basename(outputPath, '.webm');
+          const possibleExtensions = ['.mp4', '.webm', '.m4a', '.mkv'];
+          let foundFile = null;
+          
+          for (const ext of possibleExtensions) {
+            const testPath = path.join(dir, baseName + ext);
+            if (fs.existsSync(testPath)) {
+              foundFile = testPath;
+              console.log(`[YouTubeDownloader] Found file with different extension: ${foundFile}`);
+              break;
+            }
+          }
+          
+          if (foundFile) {
+            // Rename to expected path
+            fs.renameSync(foundFile, outputPath);
+            console.log(`[YouTubeDownloader] Renamed ${foundFile} to ${outputPath}`);
+          } else {
+            throw new Error('Download completed but no file was created');
+          }
         }
         
         // Verify file size
