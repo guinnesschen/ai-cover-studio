@@ -73,16 +73,32 @@ export async function downloadYouTubeAudio(url: string, jobId: string): Promise<
     
   } catch (error) {
     console.error('[YouTube Download] Failed:', error);
+    console.error('[YouTube Download] Error details:', {
+      message: error instanceof Error ? error.message : 'Unknown error',
+      stack: error instanceof Error ? error.stack : undefined,
+      name: error instanceof Error ? error.name : undefined,
+      // Log additional details for ChildProcessError
+      ...(error && typeof error === 'object' && 'stderr' in error && {
+        stderr: (error as any).stderr,
+        stdout: (error as any).stdout,
+        command: (error as any).command,
+        exitCode: (error as any).exitCode
+      })
+    });
     
     // Clean up any partial files
-    const baseName = `${sanitizedJobId}_audio`;
-    const files = fs.readdirSync(TEMP_DIR).filter(file => file.startsWith(baseName));
-    files.forEach(file => {
-      const filePath = path.join(TEMP_DIR, file);
-      if (fs.existsSync(filePath)) {
-        fs.unlinkSync(filePath);
-      }
-    });
+    try {
+      const baseName = `${sanitizedJobId}_audio`;
+      const files = fs.readdirSync(TEMP_DIR).filter(file => file.startsWith(baseName));
+      files.forEach(file => {
+        const filePath = path.join(TEMP_DIR, file);
+        if (fs.existsSync(filePath)) {
+          fs.unlinkSync(filePath);
+        }
+      });
+    } catch (cleanupError) {
+      console.error('[YouTube Download] Cleanup error:', cleanupError);
+    }
     
     throw new Error(`Failed to download YouTube audio: ${error instanceof Error ? error.message : 'Unknown error'}`);
   }
