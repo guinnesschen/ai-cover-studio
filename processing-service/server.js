@@ -57,11 +57,12 @@ app.post('/download-youtube', async (req, res) => {
     }
 
     const sanitizedJobId = sanitizeJobId(jobId);
-    const outputPath = path.join(TEMP_DIR, `${sanitizedJobId}_audio.%(ext)s`);
-
+    
     console.log(`[YouTube Download] Starting download for job ${sanitizedJobId}`);
 
-    // Download using youtube-dl-exec (works great on real servers!)
+    // Use a fixed webm extension since that's what YouTube typically provides for audio
+    const outputPath = path.join(TEMP_DIR, `${sanitizedJobId}_audio.webm`);
+    
     console.log(`[YouTube Download] Attempting download with yt-dlp...`);
     console.log(`[YouTube Download] Output path: ${outputPath}`);
     console.log(`[YouTube Download] URL: ${url}`);
@@ -82,21 +83,42 @@ app.post('/download-youtube', async (req, res) => {
       throw ytdlError;
     }
 
-    // Find the actual downloaded file
-    console.log(`[YouTube Download] Looking for files in ${TEMP_DIR}`);
-    const allFiles = fs.readdirSync(TEMP_DIR);
-    console.log(`[YouTube Download] All files in temp dir:`, allFiles);
+    // Check if the file was created at the expected location
+    let actualPath;
     
-    const baseName = `${sanitizedJobId}_audio`;
-    const files = allFiles.filter(file => file.startsWith(baseName));
-    console.log(`[YouTube Download] Matching files:`, files);
+    if (fs.existsSync(outputPath)) {
+      console.log(`[YouTube Download] File found at expected location: ${outputPath}`);
+      actualPath = outputPath;
+    } else {
+      console.warn(`[YouTube Download] File not at expected location, searching for alternatives...`);
 
-    if (files.length === 0) {
-      console.error(`[YouTube Download] No files found with basename: ${baseName}`);
-      throw new Error('No downloaded file found');
+      // Find the actual downloaded file
+      console.log(`[YouTube Download] Looking for files in ${TEMP_DIR}`);
+      const allFiles = fs.readdirSync(TEMP_DIR);
+      console.log(`[YouTube Download] All files in temp dir:`, allFiles);
+      
+      const baseName = `${sanitizedJobId}_audio`;
+      const files = allFiles.filter(file => file.startsWith(baseName));
+      console.log(`[YouTube Download] Matching files:`, files);
+      
+      if (files.length > 0) {
+        actualPath = path.join(TEMP_DIR, files[0]);
+        console.log(`[YouTube Download] Found expected file: ${actualPath}`);
+      } else {
+        console.error(`[YouTube Download] No files found with basename: ${baseName}`);
+        console.log(`[YouTube Download] Trying alternative: looking for any files containing job ID`);
+        const jobIdFiles = allFiles.filter(file => file.includes(sanitizedJobId));
+        console.log(`[YouTube Download] Files containing job ID:`, jobIdFiles);
+        
+        if (jobIdFiles.length === 0) {
+          throw new Error('No downloaded file found');
+        }
+        
+        // Use the first file we find with the job ID
+        actualPath = path.join(TEMP_DIR, jobIdFiles[0]);
+        console.log(`[YouTube Download] Using alternative file: ${actualPath}`);
+      }
     }
-
-    const actualPath = path.join(TEMP_DIR, files[0]);
 
     // Verify file
     if (!fs.existsSync(actualPath)) {
