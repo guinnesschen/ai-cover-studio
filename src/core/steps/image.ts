@@ -23,9 +23,27 @@ export async function generateImage(cover: CoverWithArtifacts) {
   const prompt = cover.imagePrompt || 
     `${character?.name || cover.character} performing on stage, professional portrait, dramatic lighting`;
 
+  // Use custom finetune if available, otherwise fallback to basic Flux
+  const useCustomFinetune = character?.fluxFineTuneId && character.fluxFineTuneId.trim() !== '';
+  
   const prediction = await replicate!.predictions.create({
-    model: 'black-forest-labs/flux-schnell',
-    input: { prompt },
+    model: useCustomFinetune ? 'black-forest-labs/flux-pro-finetuned' : 'black-forest-labs/flux-schnell',
+    input: useCustomFinetune ? {
+      prompt,
+      finetune_id: character!.fluxFineTuneId!,
+      finetune_strength: 1,
+      aspect_ratio: '1:1',
+      steps: 40,
+      guidance: 3,
+      safety_tolerance: 2,
+      output_format: 'jpg'
+    } : {
+      prompt,
+      aspect_ratio: '1:1',
+      num_outputs: 1,
+      output_format: 'jpg',
+      output_quality: 80
+    },
     webhook: webhookUrl,
     webhook_events_filter: ['completed'],
   });
