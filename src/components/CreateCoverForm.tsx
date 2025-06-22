@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import { CreateCoverFormData } from '@/types';
-import { characters } from '@/lib/characters';
+import { characters } from '@/data/characters';
 
 interface CreateCoverFormProps {
   onSubmit: (coverId: string) => void;

@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { prisma } from '@/lib/prisma';
+import { CoversService } from '@/services/covers';
 
 // GET /api/artifacts/[id] - Get artifact details
 export async function GET(
@@ -8,17 +8,7 @@ export async function GET(
 ) {
   try {
     const { id } = await params;
-
-    const artifact = await prisma.artifact.findUnique({
-      where: { id },
-      select: {
-        id: true,
-        type: true,
-        url: true,
-        metadata: true,
-        createdAt: true,
-      },
-    });
+    const artifact = await CoversService.findArtifactById(id);
 
     if (!artifact) {
       return NextResponse.json(
@@ -27,13 +17,7 @@ export async function GET(
       );
     }
 
-    return NextResponse.json({
-      id: artifact.id,
-      type: artifact.type,
-      url: artifact.url,
-      metadata: artifact.metadata,
-      createdAt: artifact.createdAt.toISOString(),
-    });
+    return NextResponse.json(artifact);
   } catch (error) {
     console.error('Error fetching artifact:', error);
     return NextResponse.json(

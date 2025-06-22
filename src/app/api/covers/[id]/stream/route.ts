@@ -1,5 +1,5 @@
 import { NextRequest } from 'next/server';
-import { prisma } from '@/lib/prisma';
+import { prisma } from '@/clients/prisma';
 import { ProgressUpdate, CoverStatus } from '@/types';
 
 // GET /api/covers/[id]/stream - Server-Sent Events for progress updates

@@ -1,7 +1,7 @@
 'use client';
 
 import { Cover } from '@/types';
-import { getCharacterById } from '@/lib/characters';
+import { getCharacterById } from '@/data/characters';
 
 interface VideoPlayerProps {
   cover: Cover;
