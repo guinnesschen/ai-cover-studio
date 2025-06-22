@@ -67,57 +67,158 @@ app.post('/download-youtube', async (req, res) => {
     console.log(`[YouTube Download] Output path: ${outputPath}`);
     console.log(`[YouTube Download] URL: ${url}`);
     
+    // HYPOTHESIS TESTING: 3 possible reasons why tmp dir is empty after yt-dlp claims success
+    console.log(`\n=== HYPOTHESIS TESTING STARTS ===`);
+    
+    // Pre-download baseline
+    console.log(`[BASELINE] Pre-download state:`);
+    console.log(`[BASELINE] Current working directory: ${process.cwd()}`);
+    console.log(`[BASELINE] TEMP_DIR value: ${TEMP_DIR}`);
+    console.log(`[BASELINE] /tmp exists: ${fs.existsSync('/tmp')}`);
+    
+    const preDownloadFiles = fs.readdirSync('/tmp');
+    const preDownloadCount = preDownloadFiles.length;
+    console.log(`[BASELINE] Files in /tmp before download (${preDownloadCount}):`, preDownloadFiles);
+    
+    // Test yt-dlp availability
+    console.log(`[BASELINE] Testing yt-dlp availability...`);
     try {
-      await youtubedl(url, {
+      const versionOutput = await youtubedl('--version');
+      console.log(`[BASELINE] yt-dlp version: ${versionOutput}`);
+    } catch (versionError) {
+      console.error(`[BASELINE] yt-dlp version check failed:`, versionError);
+      throw new Error(`yt-dlp not available: ${versionError.message}`);
+    }
+    
+    // HYPOTHESIS 1: yt-dlp writing to wrong directory
+    console.log(`\n[HYPOTHESIS 1] Testing: yt-dlp writes to wrong directory`);
+    console.log(`[HYPOTHESIS 1] Expected output path: ${outputPath}`);
+    console.log(`[HYPOTHESIS 1] Expected directory: ${path.dirname(outputPath)}`);
+    console.log(`[HYPOTHESIS 1] Working directory: ${process.cwd()}`);
+    
+    // HYPOTHESIS 2: yt-dlp failing silently
+    console.log(`\n[HYPOTHESIS 2] Testing: yt-dlp fails silently`);
+    let ytdlResult = null;
+    let ytdlError = null;
+    let ytdlStdout = '';
+    let ytdlStderr = '';
+    
+    // HYPOTHESIS 3: Files created then immediately deleted
+    console.log(`\n[HYPOTHESIS 3] Testing: files created then deleted`);
+    const startTime = Date.now();
+    
+    try {
+      console.log(`[DOWNLOAD] Starting yt-dlp with options:`, {
         format: 'bestaudio',
         output: outputPath,
-        maxFilesize: '500M',
-        matchFilter: 'duration < 600',
         noPlaylist: true,
-        userAgent: 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
-        verbose: true
+        verbose: true,
+        printJson: true
       });
-      console.log(`[YouTube Download] yt-dlp completed successfully`);
-    } catch (ytdlError) {
-      console.error(`[YouTube Download] yt-dlp failed:`, ytdlError);
-      throw ytdlError;
+      
+      // Run yt-dlp and capture everything
+      ytdlResult = await youtubedl(url, {
+        format: 'bestaudio',
+        output: outputPath,
+        noPlaylist: true,
+        verbose: true,
+        printJson: true
+      });
+      
+      console.log(`[DOWNLOAD] yt-dlp returned successfully`);
+      console.log(`[DOWNLOAD] Result type:`, typeof ytdlResult);
+      console.log(`[DOWNLOAD] Result content:`, ytdlResult);
+      
+    } catch (error) {
+      console.log(`[DOWNLOAD] yt-dlp threw an error`);
+      ytdlError = error;
+      console.error(`[DOWNLOAD] Error details:`, error);
+      console.error(`[DOWNLOAD] Error message:`, error.message);
+      console.error(`[DOWNLOAD] Error stack:`, error.stack);
+      
+      // Don't throw yet, continue with hypothesis testing
     }
-
-    // Check if the file was created at the expected location
-    let actualPath;
     
-    if (fs.existsSync(outputPath)) {
-      console.log(`[YouTube Download] File found at expected location: ${outputPath}`);
-      actualPath = outputPath;
+    const endTime = Date.now();
+    const downloadDuration = endTime - startTime;
+    
+    // IMMEDIATE post-download checks (HYPOTHESIS 3)
+    console.log(`\n[HYPOTHESIS 3] Immediate post-download checks (${downloadDuration}ms after start):`);
+    const immediatePostFiles = fs.readdirSync('/tmp');
+    const immediatePostCount = immediatePostFiles.length;
+    console.log(`[HYPOTHESIS 3] Files in /tmp immediately after (${immediatePostCount}):`, immediatePostFiles);
+    console.log(`[HYPOTHESIS 3] File count change: ${preDownloadCount} → ${immediatePostCount} (${immediatePostCount - preDownloadCount > 0 ? '+' : ''}${immediatePostCount - preDownloadCount})`);
+    
+    // Check for expected file specifically
+    const expectedFileExists = fs.existsSync(outputPath);
+    console.log(`[HYPOTHESIS 3] Expected file exists at ${outputPath}: ${expectedFileExists}`);
+    
+    // Check for any new files (HYPOTHESIS 1 & 3)
+    const newFiles = immediatePostFiles.filter(file => !preDownloadFiles.includes(file));
+    console.log(`[HYPOTHESIS 3] New files created: ${newFiles.length > 0 ? newFiles : 'NONE'}`);
+    
+    if (newFiles.length > 0) {
+      console.log(`[HYPOTHESIS 1] SUCCESS - Files were created, checking locations:`);
+      newFiles.forEach(file => {
+        const filePath = path.join('/tmp', file);
+        const stats = fs.statSync(filePath);
+        console.log(`[HYPOTHESIS 1] - ${file}: ${stats.size} bytes, created ${new Date(stats.birthtime).toISOString()}`);
+      });
     } else {
-      console.warn(`[YouTube Download] File not at expected location, searching for alternatives...`);
+      console.log(`[HYPOTHESIS 1] FAILED - No new files created anywhere in /tmp`);
+    }
+    
+    // Wait a moment and check again (HYPOTHESIS 3)
+    console.log(`[HYPOTHESIS 3] Waiting 2 seconds to check for file deletion...`);
+    await new Promise(resolve => setTimeout(resolve, 2000));
+    
+    const delayedPostFiles = fs.readdirSync('/tmp');
+    const delayedPostCount = delayedPostFiles.length;
+    console.log(`[HYPOTHESIS 3] Files in /tmp after 2s delay (${delayedPostCount}):`, delayedPostFiles);
+    
+    const filesDeletedAfterDelay = newFiles.filter(file => !delayedPostFiles.includes(file));
+    if (filesDeletedAfterDelay.length > 0) {
+      console.log(`[HYPOTHESIS 3] SUCCESS - Files were deleted after creation:`, filesDeletedAfterDelay);
+    } else if (newFiles.length > 0 && delayedPostFiles.filter(file => newFiles.includes(file)).length > 0) {
+      console.log(`[HYPOTHESIS 3] FAILED - Files still exist after delay`);
+    } else {
+      console.log(`[HYPOTHESIS 3] INDETERMINATE - No files were created to test deletion`);
+    }
+    
+    // HYPOTHESIS 2 evaluation
+    console.log(`\n[HYPOTHESIS 2] Evaluating silent failure:`);
+    if (ytdlError) {
+      console.log(`[HYPOTHESIS 2] FAILED - yt-dlp threw visible error:`, ytdlError.message);
+      throw ytdlError; // Rethrow the original error
+    } else if (newFiles.length === 0) {
+      console.log(`[HYPOTHESIS 2] SUCCESS - yt-dlp claimed success but created no files`);
+      console.log(`[HYPOTHESIS 2] This indicates yt-dlp failed silently or returned false success`);
+      throw new Error('yt-dlp claimed success but created no files (silent failure)');
+    } else {
+      console.log(`[HYPOTHESIS 2] FAILED - yt-dlp succeeded and created files`);
+    }
+    
+    console.log(`\n=== HYPOTHESIS TESTING COMPLETE ===\n`)
 
-      // Find the actual downloaded file
-      console.log(`[YouTube Download] Looking for files in ${TEMP_DIR}`);
-      const allFiles = fs.readdirSync(TEMP_DIR);
-      console.log(`[YouTube Download] All files in temp dir:`, allFiles);
-      
-      const baseName = `${sanitizedJobId}_audio`;
-      const files = allFiles.filter(file => file.startsWith(baseName));
-      console.log(`[YouTube Download] Matching files:`, files);
-      
-      if (files.length > 0) {
-        actualPath = path.join(TEMP_DIR, files[0]);
-        console.log(`[YouTube Download] Found expected file: ${actualPath}`);
-      } else {
-        console.error(`[YouTube Download] No files found with basename: ${baseName}`);
-        console.log(`[YouTube Download] Trying alternative: looking for any files containing job ID`);
-        const jobIdFiles = allFiles.filter(file => file.includes(sanitizedJobId));
-        console.log(`[YouTube Download] Files containing job ID:`, jobIdFiles);
-        
-        if (jobIdFiles.length === 0) {
-          throw new Error('No downloaded file found');
-        }
-        
-        // Use the first file we find with the job ID
-        actualPath = path.join(TEMP_DIR, jobIdFiles[0]);
-        console.log(`[YouTube Download] Using alternative file: ${actualPath}`);
-      }
+    // Determine which file to use based on hypothesis testing results
+    let actualPath;
+    let actualFileName;
+    
+    if (newFiles.length === 0) {
+      // This should have been caught by hypothesis testing above
+      throw new Error('No files were created during download');
+    }
+    
+    // Check if the file was created at the expected location
+    if (fs.existsSync(outputPath)) {
+      console.log(`[File Resolution] Using expected file: ${outputPath}`);
+      actualPath = outputPath;
+      actualFileName = path.basename(outputPath);
+    } else {
+      // Use the first new file we found (they were already logged in hypothesis testing)
+      console.log(`[File Resolution] Expected file not found, using first new file: ${newFiles[0]}`);
+      actualPath = path.join(TEMP_DIR, newFiles[0]);
+      actualFileName = newFiles[0];
     }
 
     // Verify file
@@ -143,7 +244,7 @@ app.post('/download-youtube', async (req, res) => {
     res.json({
       success: true,
       fileData: base64Data,
-      fileName: files[0],
+      fileName: actualFileName,
       size: stats.size
     });
 
