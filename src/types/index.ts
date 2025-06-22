@@ -96,10 +96,14 @@ export interface Character {
 // Replicate webhook payload
 export interface ReplicatePrediction {
   id: string;
+  model: string;
   status: 'starting' | 'processing' | 'succeeded' | 'failed' | 'canceled';
   output?: unknown;
   error?: string;
   metrics?: {
     predict_time?: number;
   };
+  created_at: string;
+  started_at: string;
+  completed_at: string;
 }
