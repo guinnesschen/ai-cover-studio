@@ -11,44 +11,94 @@ interface CreateCoverData {
 export class CoversService {
   // Create a new cover and start processing
   static async create(data: CreateCoverData): Promise<Cover> {
-    console.log('[CoversService] Creating new cover:', { 
+    const startTime = Date.now();
+    console.log('[COVERS SERVICE] 🎬 Creating new cover - START', { 
       youtubeUrl: data.youtubeUrl, 
       character: data.character,
-      hasImagePrompt: !!data.imagePrompt
+      hasImagePrompt: !!data.imagePrompt,
+      timestamp: new Date().toISOString()
     });
     
-    const cover = await prisma.cover.create({
-      data: {
-        ...data,
-        status: 'in-progress',
-      },
-    });
-    
-    console.log(`[CoversService] Cover created: ${cover.id}`);
-
-    // Trigger parallel processing for download and image generation (fire and forget)
-    Promise.all([
-      processNextStep(cover.id, 'downloading'),
-      processNextStep(cover.id, 'generating_image')
-    ]).catch(async (error) => {
-      console.error(`[CoversService] Failed to start processing for cover ${cover.id}:`, {
-        error: error instanceof Error ? error.message : error,
-        stack: error instanceof Error ? error.stack : undefined,
-        timestamp: new Date().toISOString()
+    try {
+      console.log('[COVERS SERVICE] 💾 Creating cover record in database...');
+      const cover = await prisma.cover.create({
+        data: {
+          ...data,
+          status: 'in-progress',
+        },
       });
       
-      // Update cover with error
-      try {
-        await this.updateStatus(cover.id, 'failed', { 
-          errorMessage: `Failed to start processing: ${error instanceof Error ? error.message : 'Unknown error'}` 
-        });
-        console.log(`[CoversService] Updated cover ${cover.id} status to failed`);
-      } catch (updateError) {
-        console.error(`[CoversService] Failed to update cover ${cover.id} status:`, updateError);
-      }
-    });
+      const dbTime = Date.now() - startTime;
+      console.log('[COVERS SERVICE] ✅ Cover record created successfully', {
+        coverId: cover.id,
+        dbTime: `${dbTime}ms`,
+        coverData: {
+          id: cover.id,
+          youtubeUrl: cover.youtubeUrl,
+          character: cover.character,
+          status: cover.status,
+          progress: cover.progress,
+          createdAt: cover.createdAt.toISOString()
+        }
+      });
 
-    return this.toDto(cover);
+      // Trigger parallel processing for download and image generation (fire and forget)
+      console.log('[COVERS SERVICE] 🚀 Starting parallel processing pipeline...');
+      console.log('[COVERS SERVICE] 📥 Triggering download step...');
+      console.log('[COVERS SERVICE] 🖼️ Triggering image generation step...');
+      
+      Promise.all([
+        processNextStep(cover.id, 'downloading'),
+        processNextStep(cover.id, 'generating_image')
+      ]).then(() => {
+        console.log('[COVERS SERVICE] ✅ Both pipeline steps initiated successfully', {
+          coverId: cover.id,
+          totalTime: `${Date.now() - startTime}ms`
+        });
+      }).catch(async (error) => {
+        console.error('[COVERS SERVICE] ❌ PIPELINE INITIATION FAILED', {
+          coverId: cover.id,
+          error: error instanceof Error ? error.message : error,
+          stack: error instanceof Error ? error.stack : undefined,
+          totalTime: `${Date.now() - startTime}ms`,
+          timestamp: new Date().toISOString()
+        });
+        
+        // Update cover with error
+        try {
+          console.log('[COVERS SERVICE] 🔄 Updating cover status to failed...');
+          await this.updateStatus(cover.id, 'failed', { 
+            errorMessage: `Failed to start processing: ${error instanceof Error ? error.message : 'Unknown error'}` 
+          });
+          console.log('[COVERS SERVICE] ✅ Cover status updated to failed');
+        } catch (updateError) {
+          console.error('[COVERS SERVICE] ❌ CRITICAL: Failed to update cover status', {
+            coverId: cover.id,
+            updateError: updateError instanceof Error ? updateError.message : updateError,
+            originalError: error instanceof Error ? error.message : error
+          });
+        }
+      });
+
+      const totalTime = Date.now() - startTime;
+      console.log('[COVERS SERVICE] 🎉 Cover creation completed', {
+        coverId: cover.id,
+        totalTime: `${totalTime}ms`,
+        status: 'pipeline_initiated'
+      });
+
+      return this.toDto(cover);
+    } catch (error) {
+      const totalTime = Date.now() - startTime;
+      console.error('[COVERS SERVICE] ❌ COVER CREATION FAILED', {
+        error: error instanceof Error ? error.message : error,
+        stack: error instanceof Error ? error.stack : undefined,
+        totalTime: `${totalTime}ms`,
+        inputData: data,
+        timestamp: new Date().toISOString()
+      });
+      throw error;
+    }
   }
 
   // Get a single cover with its artifacts
