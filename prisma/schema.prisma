@@ -1,0 +1,58 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("POSTGRES_URL")
+  directUrl = env("POSTGRES_URL_NON_POOLING")
+}
+
+model Cover {
+  id           String    @id @default(cuid())
+  youtubeUrl   String    @map("youtube_url")
+  character    String
+  imagePrompt  String?   @map("image_prompt")
+  
+  // Processing state
+  status       String    @default("queued")
+  progress     Int       @default(0)
+  errorMessage String?   @map("error_message")
+  
+  // Metadata (populated during processing)
+  title        String?
+  artist       String?
+  duration     Int?      // in seconds
+  
+  // Final outputs
+  videoUrl     String?   @map("video_url")
+  thumbnailUrl String?   @map("thumbnail_url")
+  
+  // Timestamps
+  createdAt    DateTime  @default(now()) @map("created_at")
+  completedAt  DateTime? @map("completed_at")
+  
+  // Relations
+  artifacts    Artifact[]
+  
+  @@map("covers")
+}
+
+model Artifact {
+  id          String   @id @default(cuid())
+  coverId     String   @map("cover_id")
+  type        String   // 'audio', 'image', 'vocals_full', 'vocals_isolated', 'video'
+  url         String
+  replicateId String?  @map("replicate_id") // For webhook correlation
+  metadata    Json?
+  createdAt   DateTime @default(now()) @map("created_at")
+  
+  cover       Cover    @relation(fields: [coverId], references: [id], onDelete: Cascade)
+  
+  @@index([replicateId])
+  @@index([coverId])
+  @@map("artifacts")
+}

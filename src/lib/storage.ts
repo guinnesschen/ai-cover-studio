@@ -1,67 +1,58 @@
-import fs from 'fs';
+import { put } from '@vercel/blob';
+import fs from 'fs/promises';
 import path from 'path';
 
-// Helper function to upload to temporary public hosting for development
-async function uploadToTempHost(filePath: string): Promise<string | null> {
-  try {
-    const FormData = require('form-data');
-    const fetch = (await import('node-fetch')).default;
-    
-    const form = new FormData();
-    form.append('file', fs.createReadStream(filePath));
-    
-    const response = await fetch('https://0x0.st', {
-      method: 'POST',
-      body: form,
-    });
-    
-    if (response.ok) {
-      const url = await response.text();
-      return url.trim();
-    }
-  } catch (error) {
-    console.error('Temp upload failed:', error);
-  }
-  return null;
-}
-
-// For MVP, we'll use local file storage in the public directory
-// In production, this would upload to S3/R2
+// For local development, we'll still use the file system
+const isDevelopment = process.env.NODE_ENV === 'development';
 const PUBLIC_DIR = path.join(process.cwd(), 'public', 'covers');
 
-// Create directory if it doesn't exist
-if (!fs.existsSync(PUBLIC_DIR)) {
-  fs.mkdirSync(PUBLIC_DIR, { recursive: true });
+// Ensure public directory exists for local development
+if (isDevelopment) {
+  fs.mkdir(PUBLIC_DIR, { recursive: true }).catch(() => {});
 }
 
 export async function uploadFile(filePath: string, fileName: string): Promise<string> {
   try {
-    // In development, use temporary public hosting so Replicate can access files
-    if (process.env.NODE_ENV !== 'production') {
-      console.log('Uploading to temporary public host:', fileName);
-      const publicUrl = await uploadToTempHost(filePath);
-      if (publicUrl) {
-        console.log('Successfully uploaded to:', publicUrl);
-        return publicUrl;
-      }
-      console.log('Temp upload failed, falling back to local storage');
+    // In production or when Vercel Blob is configured
+    if (!isDevelopment && process.env.BLOB_READ_WRITE_TOKEN) {
+      console.log('Uploading to Vercel Blob:', fileName);
+      
+      const fileBuffer = await fs.readFile(filePath);
+      const blob = await put(fileName, fileBuffer, {
+        access: 'public',
+        contentType: getContentType(fileName),
+      });
+      
+      // Clean up local file
+      await fs.unlink(filePath).catch(() => {});
+      
+      console.log('Successfully uploaded to Vercel Blob:', blob.url);
+      return blob.url;
     }
     
-    // Fallback to local storage
-    const destination = path.join(PUBLIC_DIR, fileName);
-    await fs.promises.copyFile(filePath, destination);
+    // Local development fallback
+    console.log('Using local storage for:', fileName);
+    const destination = path.join(PUBLIC_DIR, fileName.replace(/\//g, '-'));
+    await fs.copyFile(filePath, destination);
     
-    // Get the base URL from environment or use localhost for development
-    const baseUrl = process.env.VERCEL_URL 
-      ? `https://${process.env.VERCEL_URL}`
-      : process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000';
+    // Clean up temp file
+    await fs.unlink(filePath).catch(() => {});
     
-    // Return full public URL
-    return `${baseUrl}/covers/${fileName}`;
+    const baseUrl = process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000';
+    return `${baseUrl}/covers/${fileName.replace(/\//g, '-')}`;
+    
   } catch (error) {
     console.error('Upload error:', error);
     
-    // For MVP, return a placeholder URL
-    return `${process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000'}/placeholder.mp4`;
+    // Return placeholder for development
+    return '/placeholder.mp4';
   }
+}
+
+function getContentType(filename: string): string {
+  if (filename.endsWith('.mp3')) return 'audio/mpeg';
+  if (filename.endsWith('.mp4')) return 'video/mp4';
+  if (filename.endsWith('.jpg') || filename.endsWith('.jpeg')) return 'image/jpeg';
+  if (filename.endsWith('.png')) return 'image/png';
+  return 'application/octet-stream';
 }

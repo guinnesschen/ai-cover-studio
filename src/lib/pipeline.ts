@@ -1,11 +1,12 @@
 import Replicate from 'replicate';
-import { jobStore } from './jobs';
+import { prisma } from '@/lib/prisma';
 import { downloadYouTubeAudio } from './youtube';
 import { stitchVideoAudio } from './ffmpeg';
 import { uploadFile } from './storage';
 import { getCharacterById } from './characters';
 import fs from 'fs/promises';
 import path from 'path';
+import { CoverStatus } from '@/types';
 
 const replicate = process.env.REPLICATE_API_TOKEN 
   ? new Replicate({
@@ -13,127 +14,178 @@ const replicate = process.env.REPLICATE_API_TOKEN
     })
   : null;
 
-// Validation helpers
-function validateYouTubeUrl(url: string): boolean {
+// Get webhook URL from environment
+const getWebhookUrl = () => {
+  const baseUrl = process.env.NEXT_PUBLIC_APP_URL || process.env.VERCEL_URL 
+    ? `https://${process.env.VERCEL_URL}`
+    : 'http://localhost:3000';
+  return `${baseUrl}/api/webhooks/replicate`;
+};
+
+export async function processNextStep(coverId: string) {
   try {
-    const urlObj = new URL(url);
-    return (urlObj.hostname === 'www.youtube.com' || urlObj.hostname === 'youtube.com' || urlObj.hostname === 'youtu.be') &&
-           (urlObj.pathname.includes('/watch') || urlObj.hostname === 'youtu.be');
-  } catch {
-    return false;
+    const cover = await prisma.cover.findUnique({
+      where: { id: coverId },
+      include: { artifacts: true },
+    });
+
+    if (!cover) {
+      console.error('Cover not found:', coverId);
+      return;
+    }
+
+    console.log(`Processing cover ${coverId} - Current status: ${cover.status}`);
+
+    switch (cover.status as CoverStatus) {
+      case 'downloading':
+        await handleDownloadAudio(cover);
+        break;
+      
+      case 'generating_image':
+        await handleGenerateImage(cover);
+        break;
+      
+      case 'cloning_voice_full':
+        await handleCloneVoiceFull(cover);
+        break;
+      
+      case 'cloning_voice_isolated':
+        await handleCloneVoiceIsolated(cover);
+        break;
+      
+      case 'generating_video':
+        await handleGenerateVideo(cover);
+        break;
+      
+      case 'stitching':
+        await handleStitchFinal(cover);
+        break;
+      
+      case 'completed':
+      case 'failed':
+        // Nothing to do
+        break;
+      
+      default:
+        console.warn(`Unknown status: ${cover.status}`);
+    }
+  } catch (error) {
+    console.error(`Error processing cover ${coverId}:`, error);
+    await prisma.cover.update({
+      where: { id: coverId },
+      data: {
+        status: 'failed',
+        errorMessage: error instanceof Error ? error.message : 'Processing failed',
+      },
+    });
   }
 }
 
-function sanitizeJobId(jobId: string): string {
-  // Remove any path traversal attempts and special characters
-  return jobId.replace(/[^a-zA-Z0-9-_]/g, '');
-}
-
-// Audit logging for production monitoring
-interface PipelineAudit {
-  jobId: string;
-  stage: string;
-  timestamp: Date;
-  duration?: number;
-  input?: unknown;
-  output?: unknown;
-  error?: string;
-}
-
-async function logAudit(audit: PipelineAudit): Promise<void> {
-  if (process.env.NODE_ENV === 'test' || process.env.ENABLE_AUDIT_LOGGING) {
-    const auditDir = path.join(process.cwd(), 'audit-logs');
-    await fs.mkdir(auditDir, { recursive: true }).catch(() => {});
-    
-    const filename = `pipeline-${audit.jobId}-${Date.now()}.json`;
-    const filepath = path.join(auditDir, filename);
-    
-    await fs.writeFile(filepath, JSON.stringify(audit, null, 2)).catch(console.error);
-  }
-}
-
-export async function processJob(jobId: string) {
-  const sanitizedJobId = sanitizeJobId(jobId);
+async function handleDownloadAudio(cover: any) {
+  // Download audio (synchronous - it's fast enough)
+  const audioPath = await downloadYouTubeAudio(cover.youtubeUrl, cover.id);
+  const audioUrl = await uploadFile(audioPath, `${cover.id}/audio.mp3`);
   
-  const job = jobStore.get(sanitizedJobId);
-  if (!job || !job.data) {
-    await logAudit({
-      jobId: sanitizedJobId,
-      stage: 'validation',
-      timestamp: new Date(),
-      error: 'Job not found',
-    });
-    throw new Error('Job not found');
-  }
-
-  const { youtubeUrl, character, imagePrompt } = job.data;
+  // Extract video title for metadata
+  // For now, we'll use a placeholder - you could enhance this with ytdl info
+  const title = `Cover ${new Date().toLocaleDateString()}`;
   
-  // Validate YouTube URL
-  if (!validateYouTubeUrl(youtubeUrl)) {
-    await logAudit({
-      jobId: sanitizedJobId,
-      stage: 'validation',
-      timestamp: new Date(),
-      input: { youtubeUrl },
-      error: 'Invalid YouTube URL',
-    });
-    jobStore.update(sanitizedJobId, { 
-      status: 'error', 
-      error: 'Invalid YouTube URL format' 
-    });
-    throw new Error('Invalid YouTube URL format');
-  }
-  
-  const characterData = getCharacterById(character);
-  if (!characterData) {
-    await logAudit({
-      jobId: sanitizedJobId,
-      stage: 'validation',
-      timestamp: new Date(),
-      input: { character },
-      error: 'Character not found',
-    });
-  }
+  // Save audio artifact
+  await prisma.artifact.create({
+    data: {
+      coverId: cover.id,
+      type: 'audio',
+      url: audioUrl,
+      metadata: { originalPath: audioPath },
+    },
+  });
 
-  // Check if Replicate is configured
-  if (!process.env.REPLICATE_API_TOKEN) {
-    // For demo purposes, simulate the pipeline
-    await simulatePipeline(sanitizedJobId, { youtubeUrl, character, imagePrompt: imagePrompt || '' });
+  // Update cover status and metadata
+  await prisma.cover.update({
+    where: { id: cover.id },
+    data: {
+      status: 'generating_image',
+      progress: 20,
+      title,
+    },
+  });
+
+  // If no Replicate API, simulate the rest
+  if (!replicate) {
+    await simulatePipeline(cover.id);
     return;
   }
 
-  try {
-    // Update status
-    jobStore.update(sanitizedJobId, { status: 'processing', progress: 5, message: 'Starting...' });
+  // Process next step
+  await processNextStep(cover.id);
+}
 
-    // Step 1: Download YouTube audio
-    const downloadStart = Date.now();
-    jobStore.update(sanitizedJobId, { progress: 10, message: 'Downloading audio...' });
-    const audioPath = await downloadYouTubeAudio(youtubeUrl, sanitizedJobId);
-    const audioUrl = await uploadFile(audioPath, `${sanitizedJobId}_input.mp3`);
-    
-    await logAudit({
-      jobId: sanitizedJobId,
-      stage: 'youtube-download',
-      timestamp: new Date(),
-      duration: Date.now() - downloadStart,
-      input: { youtubeUrl },
-      output: { audioPath, audioUrl },
-    });
+async function handleGenerateImage(cover: any) {
+  const characterData = getCharacterById(cover.character);
+  const webhookUrl = getWebhookUrl();
+  
+  // Generate image prompt
+  const imagePrompt = cover.imagePrompt || 
+    `${characterData?.name || cover.character} performing on stage, close-up portrait, professional lighting, high quality`;
+  
+  // Create Replicate prediction
+  const prediction = await replicate!.predictions.create({
+    model: 'black-forest-labs/flux-schnell',
+    version: '131d9e185621b4b4d349fd262e363420a6f74081d8c27966c9c5bcf120fa3985',
+    input: {
+      prompt: imagePrompt,
+      num_outputs: 1,
+      aspect_ratio: '1:1',
+      output_format: 'jpg',
+      output_quality: 90,
+    },
+    webhook: webhookUrl,
+    webhook_events_filter: ['completed'],
+  });
 
-    // Step 2: Run voice cloning (full mix)
-    const voiceCloneFullStart = Date.now();
-    jobStore.update(sanitizedJobId, { progress: 20, message: 'Fine-tuning vocals...' });
-    
-    const voiceCloneParams = {
-      input_audio: audioUrl,
-      rvc_model: characterData?.voiceModelUrl ? "CUSTOM" : "Squidward",
+  // Create placeholder artifact with Replicate ID
+  await prisma.artifact.create({
+    data: {
+      coverId: cover.id,
+      type: 'image',
+      url: '', // Will be updated by webhook
+      replicateId: prediction.id,
+    },
+  });
+
+  // Update progress
+  await prisma.cover.update({
+    where: { id: cover.id },
+    data: {
+      status: 'generating_image',
+      progress: 30,
+    },
+  });
+}
+
+async function handleCloneVoiceFull(cover: any) {
+  const characterData = getCharacterById(cover.character);
+  const audioArtifact = cover.artifacts.find((a: any) => a.type === 'audio');
+  
+  if (!audioArtifact) {
+    throw new Error('Audio artifact not found');
+  }
+
+  const webhookUrl = getWebhookUrl();
+  
+  // Create voice cloning prediction (full mix)
+  const prediction = await replicate!.predictions.create({
+    model: 'zsxkib/realistic-voice-cloning',
+    version: '0a9c7c558af4c0f20667c1bd1260ce32a2879944a0b9e44e1398660c077b1550',
+    input: {
+      input_audio: audioArtifact.url,
+      rvc_model: characterData?.voiceModelUrl ? 'CUSTOM' : 'Squidward',
       custom_rvc_model_download_url: characterData?.voiceModelUrl,
-      pitch_change: "no-change",
+      pitch_change: 'no-change',
       index_rate: 0.6,
       filter_radius: 3,
       rms_mix_rate: 0.25,
-      pitch_detection_algorithm: "rmvpe",
+      pitch_detection_algorithm: 'rmvpe',
       crepe_hop_length: 128,
       protect: 0.33,
       main_vocals_volume_change: 0,
@@ -144,143 +196,198 @@ export async function processJob(jobId: string) {
       reverb_wetness: 0.2,
       reverb_dryness: 0.8,
       reverb_damping: 0.7,
-      output_format: "mp3",
-    };
-    
-    const fullMixOutput = await replicate.run(
-      "zsxkib/realistic-voice-cloning:0a9c7c558af4c0f20667c1bd1260ce32a2879944a0b9e44e1398660c077b1550",
-      { input: voiceCloneParams }
-    ) as unknown as string;
-    
-    await logAudit({
-      jobId: sanitizedJobId,
-      stage: 'voice-clone-full',
-      timestamp: new Date(),
-      duration: Date.now() - voiceCloneFullStart,
-      input: { model: characterData?.name || character, mixType: 'full' },
-      output: { fullMixUrl: fullMixOutput },
-    });
+      output_format: 'mp3',
+    },
+    webhook: webhookUrl,
+    webhook_events_filter: ['completed'],
+  });
 
-    // Step 3: Run voice cloning (isolated vocals)
-    jobStore.update(sanitizedJobId, { progress: 40, message: 'Isolating vocals...' });
-    const isolatedVoxOutput = await replicate.run(
-      "zsxkib/realistic-voice-cloning:0a9c7c558af4c0f20667c1bd1260ce32a2879944a0b9e44e1398660c077b1550",
-      {
-        input: {
-          input_audio: audioUrl,
-          rvc_model: characterData?.voiceModelUrl ? "CUSTOM" : "Squidward",
-          custom_rvc_model_download_url: characterData?.voiceModelUrl,
-          pitch_change: "no-change",
-          index_rate: 0.6,
-          filter_radius: 3,
-          rms_mix_rate: 0.25,
-          pitch_detection_algorithm: "rmvpe",
-          crepe_hop_length: 128,
-          protect: 0.33,
-          main_vocals_volume_change: 0,
-          backup_vocals_volume_change: -20,
-          instrumental_volume_change: -50, // Significantly reduce instrumental
-          pitch_change_all: 0,
-          reverb_size: 0.15,
-          reverb_wetness: 0.2,
-          reverb_dryness: 0.8,
-          reverb_damping: 0.7,
-          output_format: "mp3",
-        }
-      }
-    ) as unknown as string;
+  // Create placeholder artifact
+  await prisma.artifact.create({
+    data: {
+      coverId: cover.id,
+      type: 'vocals_full',
+      url: '',
+      replicateId: prediction.id,
+    },
+  });
 
-    // Step 4: Generate still image
-    jobStore.update(sanitizedJobId, { progress: 60, message: 'Sketching the perfect frame...' });
-    
-    // For MVP, using a default prompt since we don't have fine-tuned models
-    const defaultPrompt = imagePrompt || `${characterData?.name || character} performing on stage`;
-    const fullPrompt = `close-up portrait of ${defaultPrompt}, professional lighting, high quality`;
-    
-    const stillOutput = await replicate.run(
-      "black-forest-labs/flux-schnell:131d9e185621b4b4d349fd262e363420a6f74081d8c27966c9c5bcf120fa3985",
-      {
-        input: {
-          prompt: fullPrompt,
-          num_outputs: 1,
-          aspect_ratio: "1:1",
-          output_format: "jpg",
-          output_quality: 90,
-        }
-      }
-    ) as unknown as string[];
-
-    // Step 5: Generate video with Sonic
-    jobStore.update(sanitizedJobId, { progress: 80, message: 'Bringing your vision to life...' });
-    const videoOutput = await replicate.run(
-      "zsxkib/sonic:a2aad29ea95f19747a5ea22ab14fc6594654506e5815f7f5ba4293e888d3e20f",
-      {
-        input: {
-          image: stillOutput[0],
-          audio: isolatedVoxOutput,
-          dynamic_scale: 1,
-          min_resolution: 512,
-          inference_steps: 25,
-          keep_resolution: false,
-        }
-      }
-    ) as unknown as string;
-
-    // Step 6: Stitch video with full audio
-    jobStore.update(sanitizedJobId, { progress: 90, message: 'Almost ready—just a moment...' });
-    const finalVideoPath = await stitchVideoAudio(videoOutput, fullMixOutput, sanitizedJobId);
-    const finalVideoUrl = await uploadFile(finalVideoPath, `${sanitizedJobId}_final.mp4`);
-
-    // Extract title from YouTube (for MVP, using a simple title)
-    const title = `Cover ${new Date().toLocaleDateString()}`;
-
-    // Complete job
-    jobStore.update(sanitizedJobId, {
-      status: 'completed',
-      progress: 100,
-      outputUrl: finalVideoUrl,
-      title,
-      character,
-      message: 'Your cover is ready!',
-    });
-
-  } catch (error) {
-    console.error('Pipeline error:', error);
-    jobStore.update(sanitizedJobId, {
-      status: 'error',
-      error: error instanceof Error ? error.message : 'Processing failed',
-    });
-    throw error;
-  }
+  // Update progress
+  await prisma.cover.update({
+    where: { id: cover.id },
+    data: {
+      status: 'cloning_voice_full',
+      progress: 50,
+    },
+  });
 }
 
-// Simulation function for demo when Replicate API is not configured
-async function simulatePipeline(
-  jobId: string,
-  data: { youtubeUrl: string; character: string; imagePrompt: string }
-) {
-  const messages = [
-    { progress: 10, message: 'Downloading audio...' },
-    { progress: 25, message: 'Fine-tuning vocals...' },
-    { progress: 40, message: 'Isolating vocals...' },
-    { progress: 60, message: 'Sketching the perfect frame...' },
-    { progress: 80, message: 'Bringing your vision to life...' },
-    { progress: 90, message: 'Almost ready—just a moment...' },
+async function handleCloneVoiceIsolated(cover: any) {
+  const characterData = getCharacterById(cover.character);
+  const audioArtifact = cover.artifacts.find((a: any) => a.type === 'audio');
+  
+  if (!audioArtifact) {
+    throw new Error('Audio artifact not found');
+  }
+
+  const webhookUrl = getWebhookUrl();
+  
+  // Create voice cloning prediction (isolated vocals)
+  const prediction = await replicate!.predictions.create({
+    model: 'zsxkib/realistic-voice-cloning',
+    version: '0a9c7c558af4c0f20667c1bd1260ce32a2879944a0b9e44e1398660c077b1550',
+    input: {
+      input_audio: audioArtifact.url,
+      rvc_model: characterData?.voiceModelUrl ? 'CUSTOM' : 'Squidward',
+      custom_rvc_model_download_url: characterData?.voiceModelUrl,
+      pitch_change: 'no-change',
+      index_rate: 0.6,
+      filter_radius: 3,
+      rms_mix_rate: 0.25,
+      pitch_detection_algorithm: 'rmvpe',
+      crepe_hop_length: 128,
+      protect: 0.33,
+      main_vocals_volume_change: 0,
+      backup_vocals_volume_change: -20,
+      instrumental_volume_change: -50, // Significantly reduce instrumental
+      pitch_change_all: 0,
+      reverb_size: 0.15,
+      reverb_wetness: 0.2,
+      reverb_dryness: 0.8,
+      reverb_damping: 0.7,
+      output_format: 'mp3',
+    },
+    webhook: webhookUrl,
+    webhook_events_filter: ['completed'],
+  });
+
+  // Create placeholder artifact
+  await prisma.artifact.create({
+    data: {
+      coverId: cover.id,
+      type: 'vocals_isolated',
+      url: '',
+      replicateId: prediction.id,
+    },
+  });
+
+  // Update progress
+  await prisma.cover.update({
+    where: { id: cover.id },
+    data: {
+      status: 'cloning_voice_isolated',
+      progress: 70,
+    },
+  });
+}
+
+async function handleGenerateVideo(cover: any) {
+  const imageArtifact = cover.artifacts.find((a: any) => a.type === 'image');
+  const vocalsArtifact = cover.artifacts.find((a: any) => a.type === 'vocals_isolated');
+  
+  if (!imageArtifact || !vocalsArtifact) {
+    throw new Error('Required artifacts not found');
+  }
+
+  const webhookUrl = getWebhookUrl();
+  
+  // Generate video with Sonic
+  const prediction = await replicate!.predictions.create({
+    model: 'zsxkib/sonic',
+    version: 'a2aad29ea95f19747a5ea22ab14fc6594654506e5815f7f5ba4293e888d3e20f',
+    input: {
+      image: imageArtifact.url,
+      audio: vocalsArtifact.url,
+      dynamic_scale: 1,
+      min_resolution: 512,
+      inference_steps: 25,
+      keep_resolution: false,
+    },
+    webhook: webhookUrl,
+    webhook_events_filter: ['completed'],
+  });
+
+  // Create placeholder artifact
+  await prisma.artifact.create({
+    data: {
+      coverId: cover.id,
+      type: 'video',
+      url: '',
+      replicateId: prediction.id,
+    },
+  });
+
+  // Update progress
+  await prisma.cover.update({
+    where: { id: cover.id },
+    data: {
+      status: 'generating_video',
+      progress: 85,
+    },
+  });
+}
+
+async function handleStitchFinal(cover: any) {
+  const videoArtifact = cover.artifacts.find((a: any) => a.type === 'video');
+  const fullMixArtifact = cover.artifacts.find((a: any) => a.type === 'vocals_full');
+  const imageArtifact = cover.artifacts.find((a: any) => a.type === 'image');
+  
+  if (!videoArtifact || !fullMixArtifact) {
+    throw new Error('Required artifacts not found for stitching');
+  }
+
+  // Stitch video with full audio mix
+  const finalVideoPath = await stitchVideoAudio(
+    videoArtifact.url,
+    fullMixArtifact.url,
+    cover.id
+  );
+  
+  const finalVideoUrl = await uploadFile(finalVideoPath, `${cover.id}/final.mp4`);
+  
+  // Update cover with final results
+  await prisma.cover.update({
+    where: { id: cover.id },
+    data: {
+      status: 'completed',
+      progress: 100,
+      videoUrl: finalVideoUrl,
+      thumbnailUrl: imageArtifact?.url || null,
+      completedAt: new Date(),
+    },
+  });
+}
+
+// Simulation for when Replicate API is not configured
+async function simulatePipeline(coverId: string) {
+  const steps = [
+    { status: 'generating_image', progress: 30, delay: 2000 },
+    { status: 'cloning_voice_full', progress: 50, delay: 2000 },
+    { status: 'cloning_voice_isolated', progress: 70, delay: 2000 },
+    { status: 'generating_video', progress: 85, delay: 2000 },
+    { status: 'stitching', progress: 95, delay: 2000 },
   ];
 
-  // Simulate progress
-  for (const { progress, message } of messages) {
-    jobStore.update(jobId, { status: 'processing', progress, message });
-    await new Promise(resolve => setTimeout(resolve, 2000)); // 2 second delay
+  for (const step of steps) {
+    await new Promise(resolve => setTimeout(resolve, step.delay));
+    await prisma.cover.update({
+      where: { id: coverId },
+      data: {
+        status: step.status,
+        progress: step.progress,
+      },
+    });
   }
 
   // Complete with placeholder
-  jobStore.update(jobId, {
-    status: 'completed',
-    progress: 100,
-    outputUrl: '/placeholder.mp4',
-    title: `${data.character} Cover (Demo)`,
-    character: data.character,
-    message: 'Your cover is ready!',
+  await prisma.cover.update({
+    where: { id: coverId },
+    data: {
+      status: 'completed',
+      progress: 100,
+      videoUrl: '/placeholder.mp4',
+      thumbnailUrl: '/placeholder.jpg',
+      completedAt: new Date(),
+    },
   });
 }

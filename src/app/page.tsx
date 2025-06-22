@@ -5,72 +5,84 @@ import CreateCoverForm from '@/components/CreateCoverForm';
 import Gallery from '@/components/Gallery';
 import VideoPlayer from '@/components/VideoPlayer';
 import ProgressOverlay from '@/components/ProgressOverlay';
-import { Cover, JobProgress } from '@/types';
+import { Cover, ProgressUpdate, GalleryResponse } from '@/types';
 
 export default function Home() {
   const [covers, setCovers] = useState<Cover[]>([]);
-  const [currentJob, setCurrentJob] = useState<string | null>(null);
-  const [jobProgress, setJobProgress] = useState<JobProgress | null>(null);
-  const [latestCover, setLatestCover] = useState<Cover | null>(null);
+  const [currentCoverId, setCurrentCoverId] = useState<string | null>(null);
+  const [progressUpdate, setProgressUpdate] = useState<ProgressUpdate | null>(null);
   const [selectedCover, setSelectedCover] = useState<Cover | null>(null);
+  const [isLoadingGallery, setIsLoadingGallery] = useState(true);
 
-  // Load covers from localStorage on mount
+  // Load gallery on mount
   useEffect(() => {
-    const savedCovers = localStorage.getItem('vividCovers');
-    if (savedCovers) {
-      setCovers(JSON.parse(savedCovers));
-    }
+    loadGallery();
   }, []);
 
-  // Save covers to localStorage whenever they change
+  // Subscribe to progress updates
   useEffect(() => {
-    localStorage.setItem('vividCovers', JSON.stringify(covers));
-  }, [covers]);
+    if (!currentCoverId) return;
 
-  // Subscribe to job progress updates
-  useEffect(() => {
-    if (!currentJob) return;
-
-    const eventSource = new EventSource(`/api/covers/${currentJob}/stream`);
+    const eventSource = new EventSource(`/api/covers/${currentCoverId}/stream`);
 
     eventSource.onmessage = (event) => {
-      const data = JSON.parse(event.data);
-      setJobProgress(data);
+      const data: ProgressUpdate = JSON.parse(event.data);
+      setProgressUpdate(data);
 
-      if (data.status === 'completed' && data.outputUrl) {
-        const newCover: Cover = {
-          id: currentJob,
-          videoUrl: data.outputUrl,
-          title: data.title || 'Untitled Cover',
-          character: data.character || 'Unknown',
-          createdAt: new Date().toISOString(),
-        };
-
-        setLatestCover(newCover);
-        setCovers((prev) => [newCover, ...prev]);
-        setCurrentJob(null);
-        setJobProgress(null);
-      } else if (data.status === 'error') {
-        console.error('Job failed:', data.error);
-        setCurrentJob(null);
-        setJobProgress(null);
+      if (data.status === 'completed') {
+        // Reload gallery to show new cover
+        loadGallery();
+        setCurrentCoverId(null);
+        setProgressUpdate(null);
+      } else if (data.status === 'failed') {
+        console.error('Cover generation failed:', data.error);
+        setCurrentCoverId(null);
+        setProgressUpdate(null);
       }
     };
 
     eventSource.onerror = () => {
       eventSource.close();
-      setCurrentJob(null);
-      setJobProgress(null);
+      setCurrentCoverId(null);
+      setProgressUpdate(null);
     };
 
     return () => {
       eventSource.close();
     };
-  }, [currentJob]);
+  }, [currentCoverId]);
 
-  const handleCreateCover = async (jobId: string) => {
-    setCurrentJob(jobId);
-    setLatestCover(null);
+  const loadGallery = async () => {
+    try {
+      setIsLoadingGallery(true);
+      const response = await fetch('/api/covers?limit=20');
+      const data: GalleryResponse = await response.json();
+      setCovers(data.covers);
+    } catch (error) {
+      console.error('Failed to load gallery:', error);
+    } finally {
+      setIsLoadingGallery(false);
+    }
+  };
+
+  const handleCreateCover = async (coverId: string) => {
+    setCurrentCoverId(coverId);
+  };
+
+  const handleSelectCover = async (cover: Cover) => {
+    // If cover doesn't have full details, fetch them
+    if (!cover.videoUrl && cover.status === 'completed') {
+      try {
+        const response = await fetch(`/api/covers/${cover.id}`);
+        const fullCover = await response.json();
+        setSelectedCover(fullCover);
+      } catch (error) {
+        console.error('Failed to load cover details:', error);
+        setSelectedCover(cover);
+      }
+    } else {
+      setSelectedCover(cover);
+    }
   };
 
   return (
@@ -80,7 +92,7 @@ export default function Home() {
         <div className="max-w-7xl mx-auto px-6 py-4">
           <h1 className="text-2xl font-semibold">🎙️ Vivid Cover Studio</h1>
           <p className="text-sm text-muted mt-1">
-            A cozy digital studio to craft playful character song covers effortlessly.
+            Create AI-powered character covers of your favorite songs
           </p>
         </div>
       </header>
@@ -94,36 +106,68 @@ export default function Home() {
               <h2 className="text-lg font-medium mb-4">Create a Cover</h2>
               <CreateCoverForm 
                 onSubmit={handleCreateCover} 
-                disabled={!!currentJob}
+                disabled={!!currentCoverId}
               />
             </div>
 
-            {/* Latest Cover Display */}
-            {latestCover && !currentJob && (
-              <div className="bg-card rounded-lg border border-border p-6 fade-in">
-                <VideoPlayer cover={latestCover} />
+            {/* Progress or Latest Cover */}
+            {currentCoverId && progressUpdate && (
+              <div className="bg-card rounded-lg border border-border p-6">
+                <h3 className="text-md font-medium mb-3">Creating Your Cover</h3>
+                <div className="space-y-2">
+                  <div className="flex justify-between text-sm">
+                    <span>{progressUpdate.message}</span>
+                    <span>{progressUpdate.progress}%</span>
+                  </div>
+                  <div className="w-full bg-gray-200 rounded-full h-2">
+                    <div 
+                      className="bg-accent h-2 rounded-full transition-all duration-500"
+                      style={{ width: `${progressUpdate.progress}%` }}
+                    />
+                  </div>
+                  
+                  {/* Show artifacts as they become available */}
+                  {progressUpdate.artifacts.generatedImageId && (
+                    <div className="mt-4">
+                      <p className="text-sm text-muted mb-2">Preview:</p>
+                      {/* You could load and display the image artifact here */}
+                    </div>
+                  )}
+                </div>
               </div>
             )}
           </div>
 
           {/* Right: Gallery */}
           <div className="bg-card rounded-lg border border-border p-6">
-            <h2 className="text-lg font-medium mb-4">Your Gallery</h2>
-            <Gallery 
-              covers={covers} 
-              onSelect={setSelectedCover}
-            />
+            <div className="flex justify-between items-center mb-4">
+              <h2 className="text-lg font-medium">Community Gallery</h2>
+              <button 
+                onClick={loadGallery}
+                className="text-sm text-muted hover:text-foreground transition-colors"
+              >
+                Refresh
+              </button>
+            </div>
+            {isLoadingGallery ? (
+              <div className="text-center py-8 text-muted">Loading covers...</div>
+            ) : (
+              <Gallery 
+                covers={covers} 
+                onSelect={handleSelectCover}
+              />
+            )}
           </div>
         </div>
       </main>
 
       {/* Progress Overlay */}
-      {currentJob && jobProgress && (
-        <ProgressOverlay progress={jobProgress} />
+      {currentCoverId && progressUpdate && (
+        <ProgressOverlay progress={progressUpdate} />
       )}
 
       {/* Selected Cover Modal */}
-      {selectedCover && (
+      {selectedCover && selectedCover.videoUrl && (
         <div 
           className="fixed inset-0 bg-black/50 flex items-center justify-center p-6 z-50"
           onClick={() => setSelectedCover(null)}

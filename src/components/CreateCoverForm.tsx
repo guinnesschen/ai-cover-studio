@@ -5,7 +5,7 @@ import { CreateCoverFormData } from '@/types';
 import { characters } from '@/lib/characters';
 
 interface CreateCoverFormProps {
-  onSubmit: (jobId: string) => void;
+  onSubmit: (coverId: string) => void;
   disabled?: boolean;
 }
 
@@ -36,7 +36,7 @@ export default function CreateCoverForm({ onSubmit, disabled }: CreateCoverFormP
         throw new Error(data.error || 'Failed to create cover');
       }
 
-      onSubmit(data.jobId);
+      onSubmit(data.coverId);
       
       // Reset form
       setFormData({

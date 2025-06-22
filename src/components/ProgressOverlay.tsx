@@ -1,10 +1,10 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { JobProgress } from '@/types';
+import { ProgressUpdate } from '@/types';
 
 interface ProgressOverlayProps {
-  progress: JobProgress;
+  progress: ProgressUpdate;
 }
 
 const loadingMessages = [
@@ -52,8 +52,20 @@ export default function ProgressOverlay({ progress }: ProgressOverlayProps) {
 
         {/* Status */}
         <p className="text-xs text-muted mt-2 capitalize">
-          Status: {progress.status}
+          Status: {progress.status.replace(/_/g, ' ')}
         </p>
+
+        {/* Show artifact hints */}
+        {progress.artifacts.generatedImageId && !progress.artifacts.generatedVideoId && (
+          <p className="text-xs text-muted mt-2">
+            🖼️ Character portrait ready
+          </p>
+        )}
+        {progress.artifacts.generatedVocalsFullId && !progress.artifacts.generatedVideoId && (
+          <p className="text-xs text-muted mt-2">
+            🎵 Vocals processed
+          </p>
+        )}
       </div>
     </div>
   );

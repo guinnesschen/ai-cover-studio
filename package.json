@@ -9,15 +9,21 @@
     "lint": "next lint",
     "test": "jest",
     "test:watch": "jest --watch",
-    "test:coverage": "jest --coverage"
+    "test:coverage": "jest --coverage",
+    "setup": "node scripts/setup-db.js",
+    "db:push": "prisma db push",
+    "db:generate": "prisma generate"
   },
   "dependencies": {
     "@distube/ytdl-core": "^4.16.12",
+    "@prisma/client": "^6.10.1",
     "@types/fluent-ffmpeg": "^2.1.27",
+    "@vercel/blob": "^1.1.1",
     "fluent-ffmpeg": "^2.1.3",
     "form-data": "^4.0.3",
     "next": "15.3.4",
     "node-fetch": "^3.3.2",
+    "prisma": "^6.10.1",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
     "replicate": "^1.0.1"
