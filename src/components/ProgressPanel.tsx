@@ -2,24 +2,24 @@
 
 import { useState, useEffect } from 'react';
 import { ProgressUpdate } from '@/types';
-import { X, Download, Music, Image, Video, Loader2 } from 'lucide-react';
+import { X, Download, Music, Image as ImageIcon, Video, Loader2 } from 'lucide-react';
+import Image from 'next/image';
 
 interface ProgressPanelProps {
   progress: ProgressUpdate;
-  coverId: string;
   onCancel?: () => void;
 }
 
 const pipelineStages = [
   { status: 'downloading', label: 'Download Audio', icon: Download, artifactKey: 'downloadedAudioId' },
-  { status: 'generating_image', label: 'Generate Image', icon: Image, artifactKey: 'generatedImageId' },
+  { status: 'generating_image', label: 'Generate Image', icon: ImageIcon, artifactKey: 'generatedImageId' },
   { status: 'cloning_voice_full', label: 'Clone Voice (Full)', icon: Music, artifactKey: 'generatedVocalsFullId' },
   { status: 'cloning_voice_isolated', label: 'Clone Voice (Isolated)', icon: Music, artifactKey: 'generatedVocalsIsolatedId' },
   { status: 'generating_video', label: 'Generate Video', icon: Video, artifactKey: 'generatedVideoId' },
   { status: 'stitching', label: 'Final Processing', icon: Loader2, artifactKey: null },
 ];
 
-export default function ProgressPanel({ progress, coverId, onCancel }: ProgressPanelProps) {
+export default function ProgressPanel({ progress, onCancel }: ProgressPanelProps) {
   const [expandedArtifact, setExpandedArtifact] = useState<string | null>(null);
   const [artifactUrls, setArtifactUrls] = useState<Record<string, string>>({});
 
@@ -54,9 +54,11 @@ export default function ProgressPanel({ progress, coverId, onCancel }: ProgressP
 
     if (artifactKey === 'generatedImageId') {
       return (
-        <img 
+        <Image 
           src={url} 
           alt="Character preview" 
+          width={400}
+          height={192}
           className="w-full h-48 object-cover rounded-lg"
         />
       );

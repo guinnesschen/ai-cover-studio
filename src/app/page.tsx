@@ -173,7 +173,6 @@ export default function Home() {
       {currentCoverId && progressUpdate && (
         <ProgressPanel 
           progress={progressUpdate} 
-          coverId={currentCoverId}
           onCancel={() => {
             setCurrentCoverId(null);
             setProgressUpdate(null);

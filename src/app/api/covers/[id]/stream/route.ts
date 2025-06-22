@@ -96,7 +96,7 @@ export async function GET(
   return new Response(stream.readable, { headers });
 }
 
-function getStatusMessage(status: string, artifacts: { type: string; url?: string; replicateId?: string }[]): string {
+function getStatusMessage(status: string, artifacts: { type: string; url: string; replicateId: string | null }[]): string {
   // For overall status messages
   if (status === 'completed') return 'Your cover is ready!';
   if (status === 'failed') return 'Something went wrong';
