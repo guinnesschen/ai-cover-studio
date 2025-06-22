@@ -120,10 +120,19 @@ export default function CreateCoverForm({ onSubmit, disabled }: CreateCoverFormP
             <span className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full spinner" />
             Creating...
           </span>
+        ) : disabled ? (
+          'Another cover is being processed...'
         ) : (
           'Create ✨'
         )}
       </button>
+      
+      {/* Info message when disabled */}
+      {disabled && !isSubmitting && (
+        <p className="text-sm text-muted text-center">
+          You can only create one cover at a time. Check the progress below.
+        </p>
+      )}
     </form>
   );
 }

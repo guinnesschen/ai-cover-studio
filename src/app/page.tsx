@@ -4,8 +4,10 @@ import { useState, useEffect } from 'react';
 import CreateCoverForm from '@/components/CreateCoverForm';
 import Gallery from '@/components/Gallery';
 import VideoPlayer from '@/components/VideoPlayer';
-import ProgressOverlay from '@/components/ProgressOverlay';
+import ProgressPanel from '@/components/ProgressPanel';
 import { Cover, ProgressUpdate, GalleryResponse } from '@/types';
+
+const CURRENT_JOB_KEY = 'vivid-cover-current-job';
 
 export default function Home() {
   const [covers, setCovers] = useState<Cover[]>([]);
@@ -14,9 +16,29 @@ export default function Home() {
   const [selectedCover, setSelectedCover] = useState<Cover | null>(null);
   const [isLoadingGallery, setIsLoadingGallery] = useState(true);
 
-  // Load gallery on mount
+  // Load gallery and check for existing job on mount
   useEffect(() => {
     loadGallery();
+    
+    // Check localStorage for existing job (only in browser)
+    if (typeof window !== 'undefined' && window.localStorage) {
+      const existingJobId = localStorage.getItem(CURRENT_JOB_KEY);
+      if (existingJobId) {
+        // Verify the job still exists and isn't completed
+        fetch(`/api/covers/${existingJobId}`)
+          .then(res => res.json())
+          .then(cover => {
+            if (cover && cover.status !== 'completed' && cover.status !== 'failed') {
+              setCurrentCoverId(existingJobId);
+            } else {
+              localStorage.removeItem(CURRENT_JOB_KEY);
+            }
+          })
+          .catch(() => {
+            localStorage.removeItem(CURRENT_JOB_KEY);
+          });
+      }
+    }
   }, []);
 
   // Subscribe to progress updates
@@ -34,10 +56,16 @@ export default function Home() {
         loadGallery();
         setCurrentCoverId(null);
         setProgressUpdate(null);
+        if (typeof window !== 'undefined' && window.localStorage) {
+          localStorage.removeItem(CURRENT_JOB_KEY);
+        }
       } else if (data.status === 'failed') {
         console.error('Cover generation failed:', data.error);
         setCurrentCoverId(null);
         setProgressUpdate(null);
+        if (typeof window !== 'undefined' && window.localStorage) {
+          localStorage.removeItem(CURRENT_JOB_KEY);
+        }
       }
     };
 
@@ -45,6 +73,9 @@ export default function Home() {
       eventSource.close();
       setCurrentCoverId(null);
       setProgressUpdate(null);
+      if (typeof window !== 'undefined' && window.localStorage) {
+        localStorage.removeItem(CURRENT_JOB_KEY);
+      }
     };
 
     return () => {
@@ -67,6 +98,9 @@ export default function Home() {
 
   const handleCreateCover = async (coverId: string) => {
     setCurrentCoverId(coverId);
+    if (typeof window !== 'undefined' && window.localStorage) {
+      localStorage.setItem(CURRENT_JOB_KEY, coverId);
+    }
   };
 
   const handleSelectCover = async (cover: Cover) => {
@@ -110,32 +144,6 @@ export default function Home() {
               />
             </div>
 
-            {/* Progress or Latest Cover */}
-            {currentCoverId && progressUpdate && (
-              <div className="bg-card rounded-lg border border-border p-6">
-                <h3 className="text-md font-medium mb-3">Creating Your Cover</h3>
-                <div className="space-y-2">
-                  <div className="flex justify-between text-sm">
-                    <span>{progressUpdate.message}</span>
-                    <span>{progressUpdate.progress}%</span>
-                  </div>
-                  <div className="w-full bg-gray-200 rounded-full h-2">
-                    <div 
-                      className="bg-accent h-2 rounded-full transition-all duration-500"
-                      style={{ width: `${progressUpdate.progress}%` }}
-                    />
-                  </div>
-                  
-                  {/* Show artifacts as they become available */}
-                  {progressUpdate.artifacts.generatedImageId && (
-                    <div className="mt-4">
-                      <p className="text-sm text-muted mb-2">Preview:</p>
-                      {/* You could load and display the image artifact here */}
-                    </div>
-                  )}
-                </div>
-              </div>
-            )}
           </div>
 
           {/* Right: Gallery */}
@@ -161,9 +169,19 @@ export default function Home() {
         </div>
       </main>
 
-      {/* Progress Overlay */}
+      {/* Progress Panel - Fixed at bottom */}
       {currentCoverId && progressUpdate && (
-        <ProgressOverlay progress={progressUpdate} />
+        <ProgressPanel 
+          progress={progressUpdate} 
+          coverId={currentCoverId}
+          onCancel={() => {
+            setCurrentCoverId(null);
+            setProgressUpdate(null);
+            if (typeof window !== 'undefined' && window.localStorage) {
+              localStorage.removeItem(CURRENT_JOB_KEY);
+            }
+          }}
+        />
       )}
 
       {/* Selected Cover Modal */}
