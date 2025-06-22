@@ -7,7 +7,7 @@ import VideoPlayer from '@/components/VideoPlayer';
 import ProgressPanel from '@/components/ProgressPanel';
 import { Cover, ProgressUpdate, GalleryResponse } from '@/types';
 
-const CURRENT_JOB_KEY = 'vivid-cover-current-job';
+const CURRENT_JOB_KEY = 'ai-coverlab-current-job';
 
 export default function Home() {
   const [covers, setCovers] = useState<Cover[]>([]);
@@ -139,7 +139,7 @@ export default function Home() {
       {/* Header */}
       <header className="border-b border-border bg-card">
         <div className="max-w-7xl mx-auto px-6 py-4">
-          <h1 className="text-2xl font-semibold">🎙️ Vivid Cover Studio</h1>
+          <h1 className="text-2xl font-semibold">🧪 AI CoverLab</h1>
           <p className="text-sm text-muted mt-1">
             Create AI-powered character covers of your favorite songs
           </p>
