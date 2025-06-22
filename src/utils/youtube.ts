@@ -21,8 +21,7 @@ function sanitizeJobId(jobId: string): string {
   return jobId.replace(/[^a-zA-Z0-9-_]/g, '');
 }
 
-// Maximum file size: 500MB
-const MAX_FILE_SIZE = 500 * 1024 * 1024;
+// File size limit is handled by yt-dlp with maxFilesize option
 
 export async function downloadYouTubeAudio(url: string, jobId: string): Promise<string> {
   // Validate inputs
@@ -38,7 +37,7 @@ export async function downloadYouTubeAudio(url: string, jobId: string): Promise<
   try {
     // Use youtube-dl-exec (yt-dlp) which is much more reliable
     // Download audio in its original format (usually webm/opus) 
-    const result = await youtubedl(url, {
+    await youtubedl(url, {
       format: 'bestaudio', // Download best audio format available
       output: outputPath,
       maxFilesize: '500M', // 500MB limit
