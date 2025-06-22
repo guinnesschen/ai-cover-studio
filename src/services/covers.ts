@@ -18,8 +18,11 @@ export class CoversService {
       },
     });
 
-    // Trigger processing (fire and forget)
-    processNextStep(cover.id).catch(error => {
+    // Trigger parallel processing for download and image generation (fire and forget)
+    Promise.all([
+      processNextStep(cover.id, 'downloading'),
+      processNextStep(cover.id, 'generating_image')
+    ]).catch(error => {
       console.error(`Failed to start processing for cover ${cover.id}:`, error);
       // Update cover with error
       this.updateStatus(cover.id, 'failed', { 

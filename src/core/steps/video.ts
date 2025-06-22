@@ -22,18 +22,17 @@ export async function generateVideo(cover: CoverWithArtifacts) {
 
   const webhookUrl = getWebhookUrl();
 
-  // Create video generation prediction
+  // Create video generation prediction using Sonic model
   const prediction = await replicate!.predictions.create({
-    model: 'cjwbw/sadtalker',
-    version: 'a519444a7cf00483017a1d0135402ed84e2c40d86aee96f94f0cf99315bb41f8',
+    model: 'zsxkib/sonic',
     input: {
-      source_image: imageArtifact.url,
-      driven_audio: vocalsArtifact.url,
-      preprocess: 'crop',
-      still: false,
-      expression_scale: 1,
-      pose_style: 0,
-      result_format: '.mp4',
+      image: imageArtifact.url,
+      audio: vocalsArtifact.url,
+      dynamic_scale: 1,
+      min_resolution: 512,
+      inference_steps: 25,
+      keep_resolution: false,
+      seed: 42,
     },
     webhook: webhookUrl,
     webhook_events_filter: ['completed'],
@@ -49,12 +48,5 @@ export async function generateVideo(cover: CoverWithArtifacts) {
     },
   });
 
-  // Update progress
-  await prisma.cover.update({
-    where: { id: cover.id },
-    data: {
-      status: 'generating_video',
-      progress: 85,
-    },
-  });
+  console.log('Video generation started');
 }

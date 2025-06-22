@@ -62,14 +62,7 @@ export async function cloneVoiceFull(cover: CoverWithArtifacts) {
     },
   });
 
-  // Update progress
-  await prisma.cover.update({
-    where: { id: cover.id },
-    data: {
-      status: 'cloning_voice_full',
-      progress: 50,
-    },
-  });
+  console.log('Voice cloning (full) started');
 }
 
 export async function cloneVoiceIsolated(cover: CoverWithArtifacts) {
@@ -126,12 +119,5 @@ export async function cloneVoiceIsolated(cover: CoverWithArtifacts) {
     },
   });
 
-  // Update progress
-  await prisma.cover.update({
-    where: { id: cover.id },
-    data: {
-      status: 'cloning_voice_isolated',
-      progress: 70,
-    },
-  });
+  console.log('Voice cloning (isolated) started');
 }

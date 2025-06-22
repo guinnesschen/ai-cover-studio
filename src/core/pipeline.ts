@@ -7,7 +7,7 @@ import { generateVideo } from './steps/video';
 import { stitchFinal } from './steps/stitch';
 
 // Main pipeline orchestrator - much simpler!
-export async function processNextStep(coverId: string) {
+export async function processNextStep(coverId: string, action?: CoverStatus) {
   try {
     const cover = await prisma.cover.findUnique({
       where: { id: coverId },
@@ -19,10 +19,12 @@ export async function processNextStep(coverId: string) {
       return;
     }
 
-    console.log(`Processing cover ${coverId} - Status: ${cover.status}`);
+    // Use provided action or fall back to cover status
+    const currentAction = action || cover.status;
+    console.log(`Processing cover ${coverId} - Action: ${currentAction}`);
 
-    // Route to the appropriate handler based on current status
-    switch (cover.status as CoverStatus) {
+    // Route to the appropriate handler based on action
+    switch (currentAction as CoverStatus) {
       case 'downloading':
         await downloadAudio(cover);
         break;

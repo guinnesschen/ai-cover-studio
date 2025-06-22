@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { prisma } from '@/clients/prisma';
 import { processNextStep } from '@/core/pipeline';
-import { ReplicatePrediction } from '@/types';
+import { ReplicatePrediction, ArtifactType } from '@/types';
 
 // POST /api/webhooks/replicate - Handle Replicate webhook callbacks
 export async function POST(request: NextRequest) {
@@ -49,8 +49,8 @@ export async function POST(request: NextRequest) {
         },
       });
 
-      // Process next step in the pipeline
-      await processNextStep(artifact.coverId);
+      // Check dependencies and process next steps
+      await checkDependenciesAndProceed(artifact.coverId, artifact.type);
       
     } else if (prediction.status === 'failed' || prediction.status === 'canceled') {
       // Mark cover as failed
@@ -71,4 +71,66 @@ export async function POST(request: NextRequest) {
       { status: 500 }
     );
   }
+}
+
+// Check if dependencies are met and trigger next steps
+async function checkDependenciesAndProceed(coverId: string, completedType: string) {
+  const cover = await prisma.cover.findUnique({
+    where: { id: coverId },
+    include: { artifacts: true },
+  });
+
+  if (!cover) return;
+
+  // Group artifacts by type
+  const artifactTypes = new Set(cover.artifacts.filter(a => a.url).map(a => a.type));
+  
+  // Update progress based on completed artifacts
+  const progress = calculateProgress(artifactTypes);
+  await prisma.cover.update({
+    where: { id: coverId },
+    data: { progress },
+  });
+  
+  // Check what we can start based on completed dependencies
+  switch (completedType as ArtifactType) {
+    case 'image':
+    case 'vocals_isolated':
+      // If both image and vocals_isolated are ready, start video generation
+      if (artifactTypes.has('image') && artifactTypes.has('vocals_isolated')) {
+        await prisma.cover.update({
+          where: { id: coverId },
+          data: { status: 'generating_video' },
+        });
+        await processNextStep(coverId, 'generating_video');
+      }
+      break;
+      
+    case 'video':
+    case 'vocals_full':
+      // If both video and vocals_full are ready, start stitching
+      if (artifactTypes.has('video') && artifactTypes.has('vocals_full')) {
+        await prisma.cover.update({
+          where: { id: coverId },
+          data: { status: 'stitching' },
+        });
+        await processNextStep(coverId, 'stitching');
+      }
+      break;
+  }
+}
+
+// Calculate progress based on completed artifacts
+function calculateProgress(completedArtifacts: Set<string>): number {
+  let progress = 0;
+  
+  // Each step contributes to overall progress
+  if (completedArtifacts.has('audio')) progress += 20;
+  if (completedArtifacts.has('image')) progress += 15;
+  if (completedArtifacts.has('vocals_full')) progress += 20;
+  if (completedArtifacts.has('vocals_isolated')) progress += 15;
+  if (completedArtifacts.has('video')) progress += 20;
+  // Note: Final 10% is added when status changes to 'completed' in stitch.ts
+  
+  return progress;
 }

@@ -40,12 +40,5 @@ export async function generateImage(cover: CoverWithArtifacts) {
     },
   });
 
-  // Update progress
-  await prisma.cover.update({
-    where: { id: cover.id },
-    data: {
-      status: 'generating_image',
-      progress: 30,
-    },
-  });
+  console.log('Image generation started');
 }
