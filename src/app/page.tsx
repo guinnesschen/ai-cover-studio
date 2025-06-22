@@ -41,45 +41,60 @@ export default function Home() {
     }
   }, []);
 
-  // Subscribe to progress updates
+  // Poll for progress updates
   useEffect(() => {
     if (!currentCoverId) return;
 
-    const eventSource = new EventSource(`/api/covers/${currentCoverId}/stream`);
+    let intervalId: NodeJS.Timeout;
+    let isActive = true;
 
-    eventSource.onmessage = (event) => {
-      const data: ProgressUpdate = JSON.parse(event.data);
-      setProgressUpdate(data);
+    const pollProgress = async () => {
+      try {
+        const response = await fetch(`/api/covers/${currentCoverId}/progress`);
+        if (!response.ok) {
+          throw new Error('Failed to fetch progress');
+        }
 
-      if (data.status === 'completed') {
-        // Reload gallery to show new cover
-        loadGallery();
-        setCurrentCoverId(null);
-        setProgressUpdate(null);
-        if (typeof window !== 'undefined' && window.localStorage) {
-          localStorage.removeItem(CURRENT_JOB_KEY);
+        const data: ProgressUpdate = await response.json();
+        
+        if (isActive) {
+          setProgressUpdate(data);
+
+          if (data.status === 'completed') {
+            // Stop polling and clean up
+            clearInterval(intervalId);
+            loadGallery();
+            setCurrentCoverId(null);
+            setProgressUpdate(null);
+            if (typeof window !== 'undefined' && window.localStorage) {
+              localStorage.removeItem(CURRENT_JOB_KEY);
+            }
+          } else if (data.status === 'failed') {
+            // Stop polling and clean up
+            clearInterval(intervalId);
+            console.error('Cover generation failed:', data.error);
+            setCurrentCoverId(null);
+            setProgressUpdate(null);
+            if (typeof window !== 'undefined' && window.localStorage) {
+              localStorage.removeItem(CURRENT_JOB_KEY);
+            }
+          }
         }
-      } else if (data.status === 'failed') {
-        console.error('Cover generation failed:', data.error);
-        setCurrentCoverId(null);
-        setProgressUpdate(null);
-        if (typeof window !== 'undefined' && window.localStorage) {
-          localStorage.removeItem(CURRENT_JOB_KEY);
-        }
+      } catch (error) {
+        console.error('Error polling progress:', error);
+        // Don't clear state on network errors - just keep trying
       }
     };
 
-    eventSource.onerror = () => {
-      eventSource.close();
-      setCurrentCoverId(null);
-      setProgressUpdate(null);
-      if (typeof window !== 'undefined' && window.localStorage) {
-        localStorage.removeItem(CURRENT_JOB_KEY);
-      }
-    };
+    // Poll immediately
+    pollProgress();
+
+    // Then poll every 2 seconds
+    intervalId = setInterval(pollProgress, 2000);
 
     return () => {
-      eventSource.close();
+      isActive = false;
+      clearInterval(intervalId);
     };
   }, [currentCoverId]);
 
