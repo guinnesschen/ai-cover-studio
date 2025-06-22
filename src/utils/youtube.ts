@@ -73,18 +73,23 @@ export async function downloadYouTubeAudio(url: string, jobId: string): Promise<
     
   } catch (error) {
     console.error('[YouTube Download] Failed:', error);
-    console.error('[YouTube Download] Error details:', {
+    // Type-safe error details extraction
+    const errorDetails: Record<string, unknown> = {
       message: error instanceof Error ? error.message : 'Unknown error',
       stack: error instanceof Error ? error.stack : undefined,
       name: error instanceof Error ? error.name : undefined,
-      // Log additional details for ChildProcessError
-      ...(error && typeof error === 'object' && 'stderr' in error && {
-        stderr: (error as any).stderr,
-        stdout: (error as any).stdout,
-        command: (error as any).command,
-        exitCode: (error as any).exitCode
-      })
-    });
+    };
+    
+    // Add ChildProcessError details if available
+    if (error && typeof error === 'object' && error !== null) {
+      const processError = error as Record<string, unknown>;
+      if ('stderr' in processError) errorDetails.stderr = processError.stderr;
+      if ('stdout' in processError) errorDetails.stdout = processError.stdout;
+      if ('command' in processError) errorDetails.command = processError.command;
+      if ('exitCode' in processError) errorDetails.exitCode = processError.exitCode;
+    }
+    
+    console.error('[YouTube Download] Error details:', errorDetails);
     
     // Clean up any partial files
     try {
