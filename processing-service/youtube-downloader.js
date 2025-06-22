@@ -54,7 +54,7 @@ class YouTubeDownloader {
     
     // Start with minimal working options
     const options = {
-      output: outputPath,
+      output: `${outputPath}.%(ext)s`, // Let yt-dlp add the correct extension
       format: 'best[ext=mp4]/best', // Simplified format that works
       userAgent: userAgent,
       referer: 'https://www.youtube.com/'
@@ -105,21 +105,19 @@ class YouTubeDownloader {
         
         console.log(`[YouTubeDownloader] yt-dlp completed successfully`);
         
-        // Check if file was created (might have different extension)
-        let actualPath = outputPath;
-        if (!fs.existsSync(outputPath)) {
-          // Check for files with same base name but different extension
-          const dir = path.dirname(outputPath);
-          const baseName = path.basename(outputPath, path.extname(outputPath));
-          const files = fs.readdirSync(dir).filter(f => f.startsWith(baseName));
-          
-          if (files.length > 0) {
-            actualPath = path.join(dir, files[0]);
-            console.log(`[YouTubeDownloader] File created with different name: ${actualPath}`);
-          } else {
-            throw new Error('Download completed but no file was created');
-          }
+        // Since we're using %(ext)s, the file will have the actual extension
+        // Check for files with the base name pattern
+        const dir = path.dirname(outputPath);
+        const baseName = path.basename(outputPath);
+        const files = fs.readdirSync(dir).filter(f => f.startsWith(baseName + '.'));
+        
+        if (files.length === 0) {
+          throw new Error('Download completed but no file was created');
         }
+        
+        // Get the actual file path
+        const actualPath = path.join(dir, files[0]);
+        console.log(`[YouTubeDownloader] File created: ${actualPath}`);
         
         // Verify file size
         const stats = fs.statSync(actualPath);
@@ -128,14 +126,8 @@ class YouTubeDownloader {
           throw new Error('Downloaded file is empty');
         }
         
-        // If we need the file at the expected path, rename it
-        if (actualPath !== outputPath && fs.existsSync(actualPath)) {
-          fs.renameSync(actualPath, outputPath);
-          console.log(`[YouTubeDownloader] Renamed to expected path: ${outputPath}`);
-        }
-        
         console.log(`[YouTubeDownloader] Success! Downloaded ${(stats.size / 1024 / 1024).toFixed(2)}MB`);
-        return { success: true, path: outputPath, size: stats.size };
+        return { success: true, path: actualPath, size: stats.size };
         
       } catch (error) {
         lastError = error;
@@ -173,7 +165,8 @@ class YouTubeDownloader {
   // Main download method
   async download(url, jobId) {
     const sanitizedJobId = jobId.replace(/[^a-zA-Z0-9-_]/g, '');
-    const outputPath = path.join(this.config.tempDir, `${sanitizedJobId}_audio.webm`);
+    // Don't specify extension - let yt-dlp decide based on the format
+    const outputPath = path.join(this.config.tempDir, `${sanitizedJobId}_audio`);
     
     console.log(`\n[YouTubeDownloader] Starting download for job ${sanitizedJobId}`);
     console.log(`[YouTubeDownloader] URL: ${url}`);
@@ -187,14 +180,9 @@ class YouTubeDownloader {
       
       // Clean up any partial files
       try {
-        if (fs.existsSync(outputPath)) {
-          fs.unlinkSync(outputPath);
-          console.log(`[YouTubeDownloader] Cleaned up partial file`);
-        }
-        
-        // Also clean up any files with the same base name
+        // Clean up any files with the same base name
         const dir = path.dirname(outputPath);
-        const baseName = path.basename(outputPath, path.extname(outputPath));
+        const baseName = path.basename(outputPath);
         const files = fs.readdirSync(dir).filter(f => f.startsWith(baseName));
         files.forEach(file => {
           const filePath = path.join(dir, file);
