@@ -34,13 +34,7 @@ export interface Artifact {
 }
 
 export type CoverStatus = 
-  | 'queued'
-  | 'downloading'
-  | 'generating_image'
-  | 'cloning_voice_full'
-  | 'cloning_voice_isolated' 
-  | 'generating_video'
-  | 'stitching'
+  | 'in-progress'
   | 'completed'
   | 'failed';
 

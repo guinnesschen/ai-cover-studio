@@ -98,10 +98,6 @@ async function checkDependenciesAndProceed(coverId: string, completedType: strin
     case 'vocals_isolated':
       // If both image and vocals_isolated are ready, start video generation
       if (artifactTypes.has('image') && artifactTypes.has('vocals_isolated')) {
-        await prisma.cover.update({
-          where: { id: coverId },
-          data: { status: 'generating_video' },
-        });
         await processNextStep(coverId, 'generating_video');
       }
       break;
@@ -110,10 +106,6 @@ async function checkDependenciesAndProceed(coverId: string, completedType: strin
     case 'vocals_full':
       // If both video and vocals_full are ready, start stitching
       if (artifactTypes.has('video') && artifactTypes.has('vocals_full')) {
-        await prisma.cover.update({
-          where: { id: coverId },
-          data: { status: 'stitching' },
-        });
         await processNextStep(coverId, 'stitching');
       }
       break;

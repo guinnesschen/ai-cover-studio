@@ -14,7 +14,7 @@ export class CoversService {
     const cover = await prisma.cover.create({
       data: {
         ...data,
-        status: 'downloading',
+        status: 'in-progress',
       },
     });
 
