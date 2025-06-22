@@ -1,10 +1,10 @@
-const express = require('express');
-const cors = require('cors');
-const fs = require('fs');
-const path = require('path');
-const youtubedl = require('youtube-dl-exec');
-const { FFmpeg } = require('@ffmpeg/ffmpeg');
-const { toBlobURL } = require('@ffmpeg/util');
+import express from 'express';
+import cors from 'cors';
+import fs from 'fs';
+import path from 'path';
+import youtubedl from 'youtube-dl-exec';
+import { FFmpeg } from '@ffmpeg/ffmpeg';
+import { toBlobURL } from '@ffmpeg/util';
 
 const app = express();
 const PORT = process.env.PORT || 3001;
