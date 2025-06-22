@@ -49,6 +49,13 @@ export async function downloadYouTubeAudio(url: string, jobId: string): Promise<
 
     if (!response.ok) {
       const errorData = await response.json().catch(() => ({ error: 'Unknown error' }));
+      
+      // Handle specific error types
+      if (response.status === 429) {
+        console.error('[YouTube Download] Bot detection triggered!');
+        throw new Error('YouTube bot detection triggered. Please try again later or contact support for authentication setup.');
+      }
+      
       throw new Error(`Processing service failed: ${errorData.error || response.statusText}`);
     }
 

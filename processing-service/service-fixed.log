@@ -1,0 +1,856 @@
+
+> ai-coverlab-processing@1.0.0 start
+> node server.js
+
+[YouTubeDownloader] Initialized with config: {
+  tempDir: '/tmp',
+  cookiesFile: null,
+  maxRetries: 3,
+  retryDelay: 2000,
+  rateLimitDelay: 1000,
+  verbose: true
+}
+🚀 Processing service running on port 3001
+📥 YouTube downloads: POST /download-youtube
+🎬 Video stitching: POST /stitch-video-audio
+❤️  Health check: GET /health
+
+[YouTube Download] Starting download for job test_0_1750586542302
+[YouTube Download] URL: https://www.youtube.com/watch?v=dQw4w9WgXcQ
+[YouTube Download] Using enhanced downloader with anti-bot detection
+
+[YouTubeDownloader] Starting download for job test_0_1750586542302
+[YouTubeDownloader] URL: https://www.youtube.com/watch?v=dQw4w9WgXcQ
+[YouTubeDownloader] Output path: /tmp/test_0_1750586542302_audio.webm
+
+[YouTubeDownloader] Download attempt 1/3 for job test_0_1750586542302
+[YouTubeDownloader] Building options for attempt 1
+[YouTubeDownloader] Using User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36
+[YouTubeDownloader] Starting yt-dlp with options: {
+  "output": "/tmp/test_0_1750586542302_audio.webm",
+  "format": "bestaudio[ext=webm]/bestaudio[ext=m4a]/bestaudio",
+  "userAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36",
+  "referer": "https://www.youtube.com/",
+  "addHeader": [
+    "Accept-Language:en-US,en;q=0.9",
+    "Accept:text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8",
+    "Accept-Encoding:gzip, deflate, br",
+    "Cache-Control:no-cache",
+    "Connection:keep-alive",
+    "Sec-Fetch-Dest:document",
+    "Sec-Fetch-Mode:navigate",
+    "Sec-Fetch-Site:none",
+    "Sec-Fetch-User:?1",
+    "Upgrade-Insecure-Requests:1"
+  ],
+  "extractorArgs": "youtube:player_client=web,android,ios",
+  "noPlaylist": true,
+  "noCheckCertificates": false,
+  "preferFreeFormats": false,
+  "noWarnings": false,
+  "sleepInterval": 2,
+  "maxSleepInterval": 4,
+  "sleepSubtitles": 1,
+  "verbose": true,
+  "printJson": true,
+  "dumpJson": true
+}
+[YouTubeDownloader] Attempt 1 failed: [debug] Command-line config: ['https://www.youtube.com/watch?v=dQw4w9WgXcQ', '--output', '/tmp/test_0_1750586542302_audio.webm', '--format', 'bestaudio[ext=webm]/bestaudio[ext=m4a]/bestaudio', '--user-agent', 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36', '--referer', 'https://www.youtube.com/', '--add-header', 'Accept-Language:en-US,en;q=0.9', '--add-header', 'Accept:text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8', '--add-header', 'Accept-Encoding:gzip, deflate, br', '--add-header', 'Cache-Control:no-cache', '--add-header', 'Connection:keep-alive', '--add-header', 'Sec-Fetch-Dest:document', '--add-header', 'Sec-Fetch-Mode:navigate', '--add-header', 'Sec-Fetch-Site:none', '--add-header', 'Sec-Fetch-User:?1', '--add-header', 'Upgrade-Insecure-Requests:1', '--extractor-args', 'youtube:player_client=web,android,ios', '--no-playlist', '--no-no-check-certificates', '--no-prefer-free-formats', '--no-no-warnings', '--sleep-interval', '2', '--max-sleep-interval', '4', '--sleep-subtitles', '1', '--verbose', '--print-json', '--dump-json']
+
+Usage: yt-dlp [OPTIONS] URL [URL...]
+
+yt-dlp: error: no such option: --no-no-check-certificates
+[YouTubeDownloader] yt-dlp stderr: [debug] Command-line config: ['https://www.youtube.com/watch?v=dQw4w9WgXcQ', '--output', '/tmp/test_0_1750586542302_audio.webm', '--format', 'bestaudio[ext=webm]/bestaudio[ext=m4a]/bestaudio', '--user-agent', 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36', '--referer', 'https://www.youtube.com/', '--add-header', 'Accept-Language:en-US,en;q=0.9', '--add-header', 'Accept:text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8', '--add-header', 'Accept-Encoding:gzip, deflate, br', '--add-header', 'Cache-Control:no-cache', '--add-header', 'Connection:keep-alive', '--add-header', 'Sec-Fetch-Dest:document', '--add-header', 'Sec-Fetch-Mode:navigate', '--add-header', 'Sec-Fetch-Site:none', '--add-header', 'Sec-Fetch-User:?1', '--add-header', 'Upgrade-Insecure-Requests:1', '--extractor-args', 'youtube:player_client=web,android,ios', '--no-playlist', '--no-no-check-certificates', '--no-prefer-free-formats', '--no-no-warnings', '--sleep-interval', '2', '--max-sleep-interval', '4', '--sleep-subtitles', '1', '--verbose', '--print-json', '--dump-json']
+
+Usage: yt-dlp [OPTIONS] URL [URL...]
+
+yt-dlp: error: no such option: --no-no-check-certificates
+[YouTubeDownloader] Waiting 2000ms before retry...
+
+[YouTubeDownloader] Download attempt 2/3 for job test_0_1750586542302
+[YouTubeDownloader] Building options for attempt 2
+[YouTubeDownloader] Using User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/119.0.0.0 Safari/537.36
+[YouTubeDownloader] Attempt 2: trying alternative strategies
+[YouTubeDownloader] Starting yt-dlp with options: {
+  "output": "/tmp/test_0_1750586542302_audio.webm",
+  "format": "bestaudio/best",
+  "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/119.0.0.0 Safari/537.36",
+  "referer": "https://www.youtube.com/",
+  "addHeader": [
+    "Accept-Language:en-US,en;q=0.9",
+    "Accept:text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8",
+    "Accept-Encoding:gzip, deflate, br",
+    "Cache-Control:no-cache",
+    "Connection:keep-alive",
+    "Sec-Fetch-Dest:document",
+    "Sec-Fetch-Mode:navigate",
+    "Sec-Fetch-Site:none",
+    "Sec-Fetch-User:?1",
+    "Upgrade-Insecure-Requests:1"
+  ],
+  "extractorArgs": "youtube:player_client=web,android,ios",
+  "noPlaylist": true,
+  "noCheckCertificates": false,
+  "preferFreeFormats": false,
+  "noWarnings": false,
+  "sleepInterval": 1,
+  "maxSleepInterval": 4,
+  "sleepSubtitles": 1,
+  "verbose": true,
+  "printJson": true,
+  "dumpJson": true
+}
+[YouTubeDownloader] Attempt 2 failed: [debug] Command-line config: ['https://www.youtube.com/watch?v=dQw4w9WgXcQ', '--output', '/tmp/test_0_1750586542302_audio.webm', '--format', 'bestaudio/best', '--user-agent', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/119.0.0.0 Safari/537.36', '--referer', 'https://www.youtube.com/', '--add-header', 'Accept-Language:en-US,en;q=0.9', '--add-header', 'Accept:text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8', '--add-header', 'Accept-Encoding:gzip, deflate, br', '--add-header', 'Cache-Control:no-cache', '--add-header', 'Connection:keep-alive', '--add-header', 'Sec-Fetch-Dest:document', '--add-header', 'Sec-Fetch-Mode:navigate', '--add-header', 'Sec-Fetch-Site:none', '--add-header', 'Sec-Fetch-User:?1', '--add-header', 'Upgrade-Insecure-Requests:1', '--extractor-args', 'youtube:player_client=web,android,ios', '--no-playlist', '--no-no-check-certificates', '--no-prefer-free-formats', '--no-no-warnings', '--sleep-interval', '1', '--max-sleep-interval', '4', '--sleep-subtitles', '1', '--verbose', '--print-json', '--dump-json']
+
+Usage: yt-dlp [OPTIONS] URL [URL...]
+
+yt-dlp: error: no such option: --no-no-check-certificates
+[YouTubeDownloader] yt-dlp stderr: [debug] Command-line config: ['https://www.youtube.com/watch?v=dQw4w9WgXcQ', '--output', '/tmp/test_0_1750586542302_audio.webm', '--format', 'bestaudio/best', '--user-agent', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/119.0.0.0 Safari/537.36', '--referer', 'https://www.youtube.com/', '--add-header', 'Accept-Language:en-US,en;q=0.9', '--add-header', 'Accept:text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8', '--add-header', 'Accept-Encoding:gzip, deflate, br', '--add-header', 'Cache-Control:no-cache', '--add-header', 'Connection:keep-alive', '--add-header', 'Sec-Fetch-Dest:document', '--add-header', 'Sec-Fetch-Mode:navigate', '--add-header', 'Sec-Fetch-Site:none', '--add-header', 'Sec-Fetch-User:?1', '--add-header', 'Upgrade-Insecure-Requests:1', '--extractor-args', 'youtube:player_client=web,android,ios', '--no-playlist', '--no-no-check-certificates', '--no-prefer-free-formats', '--no-no-warnings', '--sleep-interval', '1', '--max-sleep-interval', '4', '--sleep-subtitles', '1', '--verbose', '--print-json', '--dump-json']
+
+Usage: yt-dlp [OPTIONS] URL [URL...]
+
+yt-dlp: error: no such option: --no-no-check-certificates
+[YouTubeDownloader] Waiting 2000ms before retry...
+
+[YouTubeDownloader] Download attempt 3/3 for job test_0_1750586542302
+[YouTubeDownloader] Building options for attempt 3
+[YouTubeDownloader] Using User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36
+[YouTubeDownloader] Attempt 3: trying alternative strategies
+[YouTubeDownloader] Starting yt-dlp with options: {
+  "output": "/tmp/test_0_1750586542302_audio.webm",
+  "format": "bestaudio[ext=webm]/bestaudio[ext=m4a]/bestaudio",
+  "userAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36",
+  "referer": "https://www.youtube.com/",
+  "addHeader": [
+    "Accept-Language:en-US,en;q=0.9",
+    "Accept:text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8",
+    "Accept-Encoding:gzip, deflate, br",
+    "Cache-Control:no-cache",
+    "Connection:keep-alive",
+    "Sec-Fetch-Dest:document",
+    "Sec-Fetch-Mode:navigate",
+    "Sec-Fetch-Site:none",
+    "Sec-Fetch-User:?1",
+    "Upgrade-Insecure-Requests:1"
+  ],
+  "extractorArgs": "youtube:player_client=tv_embedded,web,android",
+  "noPlaylist": true,
+  "noCheckCertificates": false,
+  "preferFreeFormats": false,
+  "noWarnings": false,
+  "sleepInterval": 2,
+  "maxSleepInterval": 4,
+  "sleepSubtitles": 1,
+  "verbose": true,
+  "printJson": true,
+  "dumpJson": true
+}
+[YouTubeDownloader] Attempt 3 failed: [debug] Command-line config: ['https://www.youtube.com/watch?v=dQw4w9WgXcQ', '--output', '/tmp/test_0_1750586542302_audio.webm', '--format', 'bestaudio[ext=webm]/bestaudio[ext=m4a]/bestaudio', '--user-agent', 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36', '--referer', 'https://www.youtube.com/', '--add-header', 'Accept-Language:en-US,en;q=0.9', '--add-header', 'Accept:text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8', '--add-header', 'Accept-Encoding:gzip, deflate, br', '--add-header', 'Cache-Control:no-cache', '--add-header', 'Connection:keep-alive', '--add-header', 'Sec-Fetch-Dest:document', '--add-header', 'Sec-Fetch-Mode:navigate', '--add-header', 'Sec-Fetch-Site:none', '--add-header', 'Sec-Fetch-User:?1', '--add-header', 'Upgrade-Insecure-Requests:1', '--extractor-args', 'youtube:player_client=tv_embedded,web,android', '--no-playlist', '--no-no-check-certificates', '--no-prefer-free-formats', '--no-no-warnings', '--sleep-interval', '2', '--max-sleep-interval', '4', '--sleep-subtitles', '1', '--verbose', '--print-json', '--dump-json']
+
+Usage: yt-dlp [OPTIONS] URL [URL...]
+
+yt-dlp: error: no such option: --no-no-check-certificates
+[YouTubeDownloader] yt-dlp stderr: [debug] Command-line config: ['https://www.youtube.com/watch?v=dQw4w9WgXcQ', '--output', '/tmp/test_0_1750586542302_audio.webm', '--format', 'bestaudio[ext=webm]/bestaudio[ext=m4a]/bestaudio', '--user-agent', 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36', '--referer', 'https://www.youtube.com/', '--add-header', 'Accept-Language:en-US,en;q=0.9', '--add-header', 'Accept:text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8', '--add-header', 'Accept-Encoding:gzip, deflate, br', '--add-header', 'Cache-Control:no-cache', '--add-header', 'Connection:keep-alive', '--add-header', 'Sec-Fetch-Dest:document', '--add-header', 'Sec-Fetch-Mode:navigate', '--add-header', 'Sec-Fetch-Site:none', '--add-header', 'Sec-Fetch-User:?1', '--add-header', 'Upgrade-Insecure-Requests:1', '--extractor-args', 'youtube:player_client=tv_embedded,web,android', '--no-playlist', '--no-no-check-certificates', '--no-prefer-free-formats', '--no-no-warnings', '--sleep-interval', '2', '--max-sleep-interval', '4', '--sleep-subtitles', '1', '--verbose', '--print-json', '--dump-json']
+
+Usage: yt-dlp [OPTIONS] URL [URL...]
+
+yt-dlp: error: no such option: --no-no-check-certificates
+[YouTubeDownloader] Download failed for job test_0_1750586542302: Error: Failed after 3 attempts. Last error: [debug] Command-line config: ['https://www.youtube.com/watch?v=dQw4w9WgXcQ', '--output', '/tmp/test_0_1750586542302_audio.webm', '--format', 'bestaudio[ext=webm]/bestaudio[ext=m4a]/bestaudio', '--user-agent', 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36', '--referer', 'https://www.youtube.com/', '--add-header', 'Accept-Language:en-US,en;q=0.9', '--add-header', 'Accept:text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8', '--add-header', 'Accept-Encoding:gzip, deflate, br', '--add-header', 'Cache-Control:no-cache', '--add-header', 'Connection:keep-alive', '--add-header', 'Sec-Fetch-Dest:document', '--add-header', 'Sec-Fetch-Mode:navigate', '--add-header', 'Sec-Fetch-Site:none', '--add-header', 'Sec-Fetch-User:?1', '--add-header', 'Upgrade-Insecure-Requests:1', '--extractor-args', 'youtube:player_client=tv_embedded,web,android', '--no-playlist', '--no-no-check-certificates', '--no-prefer-free-formats', '--no-no-warnings', '--sleep-interval', '2', '--max-sleep-interval', '4', '--sleep-subtitles', '1', '--verbose', '--print-json', '--dump-json']
+
+Usage: yt-dlp [OPTIONS] URL [URL...]
+
+yt-dlp: error: no such option: --no-no-check-certificates
+    at YouTubeDownloader.downloadWithRetry (file:///code/processing-service/youtube-downloader.js:216:11)
+    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+    at async YouTubeDownloader.download (file:///code/processing-service/youtube-downloader.js:229:22)
+    at async file:///code/processing-service/server.js:77:22
+[YouTube Download] Download failed: Error: Failed after 3 attempts. Last error: [debug] Command-line config: ['https://www.youtube.com/watch?v=dQw4w9WgXcQ', '--output', '/tmp/test_0_1750586542302_audio.webm', '--format', 'bestaudio[ext=webm]/bestaudio[ext=m4a]/bestaudio', '--user-agent', 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36', '--referer', 'https://www.youtube.com/', '--add-header', 'Accept-Language:en-US,en;q=0.9', '--add-header', 'Accept:text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8', '--add-header', 'Accept-Encoding:gzip, deflate, br', '--add-header', 'Cache-Control:no-cache', '--add-header', 'Connection:keep-alive', '--add-header', 'Sec-Fetch-Dest:document', '--add-header', 'Sec-Fetch-Mode:navigate', '--add-header', 'Sec-Fetch-Site:none', '--add-header', 'Sec-Fetch-User:?1', '--add-header', 'Upgrade-Insecure-Requests:1', '--extractor-args', 'youtube:player_client=tv_embedded,web,android', '--no-playlist', '--no-no-check-certificates', '--no-prefer-free-formats', '--no-no-warnings', '--sleep-interval', '2', '--max-sleep-interval', '4', '--sleep-subtitles', '1', '--verbose', '--print-json', '--dump-json']
+
+Usage: yt-dlp [OPTIONS] URL [URL...]
+
+yt-dlp: error: no such option: --no-no-check-certificates
+    at YouTubeDownloader.downloadWithRetry (file:///code/processing-service/youtube-downloader.js:216:11)
+    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+    at async YouTubeDownloader.download (file:///code/processing-service/youtube-downloader.js:229:22)
+    at async file:///code/processing-service/server.js:77:22
+[YouTube Download] Failed: Error: Failed after 3 attempts. Last error: [debug] Command-line config: ['https://www.youtube.com/watch?v=dQw4w9WgXcQ', '--output', '/tmp/test_0_1750586542302_audio.webm', '--format', 'bestaudio[ext=webm]/bestaudio[ext=m4a]/bestaudio', '--user-agent', 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36', '--referer', 'https://www.youtube.com/', '--add-header', 'Accept-Language:en-US,en;q=0.9', '--add-header', 'Accept:text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8', '--add-header', 'Accept-Encoding:gzip, deflate, br', '--add-header', 'Cache-Control:no-cache', '--add-header', 'Connection:keep-alive', '--add-header', 'Sec-Fetch-Dest:document', '--add-header', 'Sec-Fetch-Mode:navigate', '--add-header', 'Sec-Fetch-Site:none', '--add-header', 'Sec-Fetch-User:?1', '--add-header', 'Upgrade-Insecure-Requests:1', '--extractor-args', 'youtube:player_client=tv_embedded,web,android', '--no-playlist', '--no-no-check-certificates', '--no-prefer-free-formats', '--no-no-warnings', '--sleep-interval', '2', '--max-sleep-interval', '4', '--sleep-subtitles', '1', '--verbose', '--print-json', '--dump-json']
+
+Usage: yt-dlp [OPTIONS] URL [URL...]
+
+yt-dlp: error: no such option: --no-no-check-certificates
+    at YouTubeDownloader.downloadWithRetry (file:///code/processing-service/youtube-downloader.js:216:11)
+    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+    at async YouTubeDownloader.download (file:///code/processing-service/youtube-downloader.js:229:22)
+    at async file:///code/processing-service/server.js:77:22
+
+[YouTube Download] Starting download for job test_1_1750586549360
+[YouTube Download] URL: https://www.youtube.com/watch?v=aqz-KE-bpKQ
+[YouTube Download] Using enhanced downloader with anti-bot detection
+
+[YouTubeDownloader] Starting download for job test_1_1750586549360
+[YouTubeDownloader] URL: https://www.youtube.com/watch?v=aqz-KE-bpKQ
+[YouTubeDownloader] Output path: /tmp/test_1_1750586549360_audio.webm
+
+[YouTubeDownloader] Download attempt 1/3 for job test_1_1750586549360
+[YouTubeDownloader] Building options for attempt 1
+[YouTubeDownloader] Using User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36
+[YouTubeDownloader] Starting yt-dlp with options: {
+  "output": "/tmp/test_1_1750586549360_audio.webm",
+  "format": "bestaudio[ext=webm]/bestaudio[ext=m4a]/bestaudio",
+  "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36",
+  "referer": "https://www.youtube.com/",
+  "addHeader": [
+    "Accept-Language:en-US,en;q=0.9",
+    "Accept:text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8",
+    "Accept-Encoding:gzip, deflate, br",
+    "Cache-Control:no-cache",
+    "Connection:keep-alive",
+    "Sec-Fetch-Dest:document",
+    "Sec-Fetch-Mode:navigate",
+    "Sec-Fetch-Site:none",
+    "Sec-Fetch-User:?1",
+    "Upgrade-Insecure-Requests:1"
+  ],
+  "extractorArgs": "youtube:player_client=web,android,ios",
+  "noPlaylist": true,
+  "noCheckCertificates": false,
+  "preferFreeFormats": false,
+  "noWarnings": false,
+  "sleepInterval": 1,
+  "maxSleepInterval": 3,
+  "sleepSubtitles": 1,
+  "verbose": true,
+  "printJson": true,
+  "dumpJson": true
+}
+[YouTubeDownloader] Attempt 1 failed: [debug] Command-line config: ['https://www.youtube.com/watch?v=aqz-KE-bpKQ', '--output', '/tmp/test_1_1750586549360_audio.webm', '--format', 'bestaudio[ext=webm]/bestaudio[ext=m4a]/bestaudio', '--user-agent', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36', '--referer', 'https://www.youtube.com/', '--add-header', 'Accept-Language:en-US,en;q=0.9', '--add-header', 'Accept:text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8', '--add-header', 'Accept-Encoding:gzip, deflate, br', '--add-header', 'Cache-Control:no-cache', '--add-header', 'Connection:keep-alive', '--add-header', 'Sec-Fetch-Dest:document', '--add-header', 'Sec-Fetch-Mode:navigate', '--add-header', 'Sec-Fetch-Site:none', '--add-header', 'Sec-Fetch-User:?1', '--add-header', 'Upgrade-Insecure-Requests:1', '--extractor-args', 'youtube:player_client=web,android,ios', '--no-playlist', '--no-no-check-certificates', '--no-prefer-free-formats', '--no-no-warnings', '--sleep-interval', '1', '--max-sleep-interval', '3', '--sleep-subtitles', '1', '--verbose', '--print-json', '--dump-json']
+
+Usage: yt-dlp [OPTIONS] URL [URL...]
+
+yt-dlp: error: no such option: --no-no-check-certificates
+[YouTubeDownloader] yt-dlp stderr: [debug] Command-line config: ['https://www.youtube.com/watch?v=aqz-KE-bpKQ', '--output', '/tmp/test_1_1750586549360_audio.webm', '--format', 'bestaudio[ext=webm]/bestaudio[ext=m4a]/bestaudio', '--user-agent', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36', '--referer', 'https://www.youtube.com/', '--add-header', 'Accept-Language:en-US,en;q=0.9', '--add-header', 'Accept:text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8', '--add-header', 'Accept-Encoding:gzip, deflate, br', '--add-header', 'Cache-Control:no-cache', '--add-header', 'Connection:keep-alive', '--add-header', 'Sec-Fetch-Dest:document', '--add-header', 'Sec-Fetch-Mode:navigate', '--add-header', 'Sec-Fetch-Site:none', '--add-header', 'Sec-Fetch-User:?1', '--add-header', 'Upgrade-Insecure-Requests:1', '--extractor-args', 'youtube:player_client=web,android,ios', '--no-playlist', '--no-no-check-certificates', '--no-prefer-free-formats', '--no-no-warnings', '--sleep-interval', '1', '--max-sleep-interval', '3', '--sleep-subtitles', '1', '--verbose', '--print-json', '--dump-json']
+
+Usage: yt-dlp [OPTIONS] URL [URL...]
+
+yt-dlp: error: no such option: --no-no-check-certificates
+[YouTubeDownloader] Waiting 2000ms before retry...
+
+[YouTubeDownloader] Download attempt 2/3 for job test_1_1750586549360
+[YouTubeDownloader] Building options for attempt 2
+[YouTubeDownloader] Using User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36
+[YouTubeDownloader] Attempt 2: trying alternative strategies
+[YouTubeDownloader] Starting yt-dlp with options: {
+  "output": "/tmp/test_1_1750586549360_audio.webm",
+  "format": "bestaudio/best",
+  "userAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36",
+  "referer": "https://www.youtube.com/",
+  "addHeader": [
+    "Accept-Language:en-US,en;q=0.9",
+    "Accept:text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8",
+    "Accept-Encoding:gzip, deflate, br",
+    "Cache-Control:no-cache",
+    "Connection:keep-alive",
+    "Sec-Fetch-Dest:document",
+    "Sec-Fetch-Mode:navigate",
+    "Sec-Fetch-Site:none",
+    "Sec-Fetch-User:?1",
+    "Upgrade-Insecure-Requests:1"
+  ],
+  "extractorArgs": "youtube:player_client=web,android,ios",
+  "noPlaylist": true,
+  "noCheckCertificates": false,
+  "preferFreeFormats": false,
+  "noWarnings": false,
+  "sleepInterval": 2,
+  "maxSleepInterval": 3,
+  "sleepSubtitles": 1,
+  "verbose": true,
+  "printJson": true,
+  "dumpJson": true
+}
+[YouTubeDownloader] Attempt 2 failed: [debug] Command-line config: ['https://www.youtube.com/watch?v=aqz-KE-bpKQ', '--output', '/tmp/test_1_1750586549360_audio.webm', '--format', 'bestaudio/best', '--user-agent', 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36', '--referer', 'https://www.youtube.com/', '--add-header', 'Accept-Language:en-US,en;q=0.9', '--add-header', 'Accept:text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8', '--add-header', 'Accept-Encoding:gzip, deflate, br', '--add-header', 'Cache-Control:no-cache', '--add-header', 'Connection:keep-alive', '--add-header', 'Sec-Fetch-Dest:document', '--add-header', 'Sec-Fetch-Mode:navigate', '--add-header', 'Sec-Fetch-Site:none', '--add-header', 'Sec-Fetch-User:?1', '--add-header', 'Upgrade-Insecure-Requests:1', '--extractor-args', 'youtube:player_client=web,android,ios', '--no-playlist', '--no-no-check-certificates', '--no-prefer-free-formats', '--no-no-warnings', '--sleep-interval', '2', '--max-sleep-interval', '3', '--sleep-subtitles', '1', '--verbose', '--print-json', '--dump-json']
+
+Usage: yt-dlp [OPTIONS] URL [URL...]
+
+yt-dlp: error: no such option: --no-no-check-certificates
+[YouTubeDownloader] yt-dlp stderr: [debug] Command-line config: ['https://www.youtube.com/watch?v=aqz-KE-bpKQ', '--output', '/tmp/test_1_1750586549360_audio.webm', '--format', 'bestaudio/best', '--user-agent', 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36', '--referer', 'https://www.youtube.com/', '--add-header', 'Accept-Language:en-US,en;q=0.9', '--add-header', 'Accept:text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8', '--add-header', 'Accept-Encoding:gzip, deflate, br', '--add-header', 'Cache-Control:no-cache', '--add-header', 'Connection:keep-alive', '--add-header', 'Sec-Fetch-Dest:document', '--add-header', 'Sec-Fetch-Mode:navigate', '--add-header', 'Sec-Fetch-Site:none', '--add-header', 'Sec-Fetch-User:?1', '--add-header', 'Upgrade-Insecure-Requests:1', '--extractor-args', 'youtube:player_client=web,android,ios', '--no-playlist', '--no-no-check-certificates', '--no-prefer-free-formats', '--no-no-warnings', '--sleep-interval', '2', '--max-sleep-interval', '3', '--sleep-subtitles', '1', '--verbose', '--print-json', '--dump-json']
+
+Usage: yt-dlp [OPTIONS] URL [URL...]
+
+yt-dlp: error: no such option: --no-no-check-certificates
+[YouTubeDownloader] Waiting 2000ms before retry...
+
+[YouTubeDownloader] Download attempt 3/3 for job test_1_1750586549360
+[YouTubeDownloader] Building options for attempt 3
+[YouTubeDownloader] Using User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36
+[YouTubeDownloader] Attempt 3: trying alternative strategies
+[YouTubeDownloader] Starting yt-dlp with options: {
+  "output": "/tmp/test_1_1750586549360_audio.webm",
+  "format": "bestaudio[ext=webm]/bestaudio[ext=m4a]/bestaudio",
+  "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36",
+  "referer": "https://www.youtube.com/",
+  "addHeader": [
+    "Accept-Language:en-US,en;q=0.9",
+    "Accept:text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8",
+    "Accept-Encoding:gzip, deflate, br",
+    "Cache-Control:no-cache",
+    "Connection:keep-alive",
+    "Sec-Fetch-Dest:document",
+    "Sec-Fetch-Mode:navigate",
+    "Sec-Fetch-Site:none",
+    "Sec-Fetch-User:?1",
+    "Upgrade-Insecure-Requests:1"
+  ],
+  "extractorArgs": "youtube:player_client=tv_embedded,web,android",
+  "noPlaylist": true,
+  "noCheckCertificates": false,
+  "preferFreeFormats": false,
+  "noWarnings": false,
+  "sleepInterval": 1,
+  "maxSleepInterval": 4,
+  "sleepSubtitles": 1,
+  "verbose": true,
+  "printJson": true,
+  "dumpJson": true
+}
+[YouTubeDownloader] Attempt 3 failed: [debug] Command-line config: ['https://www.youtube.com/watch?v=aqz-KE-bpKQ', '--output', '/tmp/test_1_1750586549360_audio.webm', '--format', 'bestaudio[ext=webm]/bestaudio[ext=m4a]/bestaudio', '--user-agent', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36', '--referer', 'https://www.youtube.com/', '--add-header', 'Accept-Language:en-US,en;q=0.9', '--add-header', 'Accept:text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8', '--add-header', 'Accept-Encoding:gzip, deflate, br', '--add-header', 'Cache-Control:no-cache', '--add-header', 'Connection:keep-alive', '--add-header', 'Sec-Fetch-Dest:document', '--add-header', 'Sec-Fetch-Mode:navigate', '--add-header', 'Sec-Fetch-Site:none', '--add-header', 'Sec-Fetch-User:?1', '--add-header', 'Upgrade-Insecure-Requests:1', '--extractor-args', 'youtube:player_client=tv_embedded,web,android', '--no-playlist', '--no-no-check-certificates', '--no-prefer-free-formats', '--no-no-warnings', '--sleep-interval', '1', '--max-sleep-interval', '4', '--sleep-subtitles', '1', '--verbose', '--print-json', '--dump-json']
+
+Usage: yt-dlp [OPTIONS] URL [URL...]
+
+yt-dlp: error: no such option: --no-no-check-certificates
+[YouTubeDownloader] yt-dlp stderr: [debug] Command-line config: ['https://www.youtube.com/watch?v=aqz-KE-bpKQ', '--output', '/tmp/test_1_1750586549360_audio.webm', '--format', 'bestaudio[ext=webm]/bestaudio[ext=m4a]/bestaudio', '--user-agent', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36', '--referer', 'https://www.youtube.com/', '--add-header', 'Accept-Language:en-US,en;q=0.9', '--add-header', 'Accept:text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8', '--add-header', 'Accept-Encoding:gzip, deflate, br', '--add-header', 'Cache-Control:no-cache', '--add-header', 'Connection:keep-alive', '--add-header', 'Sec-Fetch-Dest:document', '--add-header', 'Sec-Fetch-Mode:navigate', '--add-header', 'Sec-Fetch-Site:none', '--add-header', 'Sec-Fetch-User:?1', '--add-header', 'Upgrade-Insecure-Requests:1', '--extractor-args', 'youtube:player_client=tv_embedded,web,android', '--no-playlist', '--no-no-check-certificates', '--no-prefer-free-formats', '--no-no-warnings', '--sleep-interval', '1', '--max-sleep-interval', '4', '--sleep-subtitles', '1', '--verbose', '--print-json', '--dump-json']
+
+Usage: yt-dlp [OPTIONS] URL [URL...]
+
+yt-dlp: error: no such option: --no-no-check-certificates
+[YouTubeDownloader] Download failed for job test_1_1750586549360: Error: Failed after 3 attempts. Last error: [debug] Command-line config: ['https://www.youtube.com/watch?v=aqz-KE-bpKQ', '--output', '/tmp/test_1_1750586549360_audio.webm', '--format', 'bestaudio[ext=webm]/bestaudio[ext=m4a]/bestaudio', '--user-agent', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36', '--referer', 'https://www.youtube.com/', '--add-header', 'Accept-Language:en-US,en;q=0.9', '--add-header', 'Accept:text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8', '--add-header', 'Accept-Encoding:gzip, deflate, br', '--add-header', 'Cache-Control:no-cache', '--add-header', 'Connection:keep-alive', '--add-header', 'Sec-Fetch-Dest:document', '--add-header', 'Sec-Fetch-Mode:navigate', '--add-header', 'Sec-Fetch-Site:none', '--add-header', 'Sec-Fetch-User:?1', '--add-header', 'Upgrade-Insecure-Requests:1', '--extractor-args', 'youtube:player_client=tv_embedded,web,android', '--no-playlist', '--no-no-check-certificates', '--no-prefer-free-formats', '--no-no-warnings', '--sleep-interval', '1', '--max-sleep-interval', '4', '--sleep-subtitles', '1', '--verbose', '--print-json', '--dump-json']
+
+Usage: yt-dlp [OPTIONS] URL [URL...]
+
+yt-dlp: error: no such option: --no-no-check-certificates
+    at YouTubeDownloader.downloadWithRetry (file:///code/processing-service/youtube-downloader.js:216:11)
+    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+    at async YouTubeDownloader.download (file:///code/processing-service/youtube-downloader.js:229:22)
+    at async file:///code/processing-service/server.js:77:22
+[YouTube Download] Download failed: Error: Failed after 3 attempts. Last error: [debug] Command-line config: ['https://www.youtube.com/watch?v=aqz-KE-bpKQ', '--output', '/tmp/test_1_1750586549360_audio.webm', '--format', 'bestaudio[ext=webm]/bestaudio[ext=m4a]/bestaudio', '--user-agent', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36', '--referer', 'https://www.youtube.com/', '--add-header', 'Accept-Language:en-US,en;q=0.9', '--add-header', 'Accept:text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8', '--add-header', 'Accept-Encoding:gzip, deflate, br', '--add-header', 'Cache-Control:no-cache', '--add-header', 'Connection:keep-alive', '--add-header', 'Sec-Fetch-Dest:document', '--add-header', 'Sec-Fetch-Mode:navigate', '--add-header', 'Sec-Fetch-Site:none', '--add-header', 'Sec-Fetch-User:?1', '--add-header', 'Upgrade-Insecure-Requests:1', '--extractor-args', 'youtube:player_client=tv_embedded,web,android', '--no-playlist', '--no-no-check-certificates', '--no-prefer-free-formats', '--no-no-warnings', '--sleep-interval', '1', '--max-sleep-interval', '4', '--sleep-subtitles', '1', '--verbose', '--print-json', '--dump-json']
+
+Usage: yt-dlp [OPTIONS] URL [URL...]
+
+yt-dlp: error: no such option: --no-no-check-certificates
+    at YouTubeDownloader.downloadWithRetry (file:///code/processing-service/youtube-downloader.js:216:11)
+    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+    at async YouTubeDownloader.download (file:///code/processing-service/youtube-downloader.js:229:22)
+    at async file:///code/processing-service/server.js:77:22
+[YouTube Download] Failed: Error: Failed after 3 attempts. Last error: [debug] Command-line config: ['https://www.youtube.com/watch?v=aqz-KE-bpKQ', '--output', '/tmp/test_1_1750586549360_audio.webm', '--format', 'bestaudio[ext=webm]/bestaudio[ext=m4a]/bestaudio', '--user-agent', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36', '--referer', 'https://www.youtube.com/', '--add-header', 'Accept-Language:en-US,en;q=0.9', '--add-header', 'Accept:text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8', '--add-header', 'Accept-Encoding:gzip, deflate, br', '--add-header', 'Cache-Control:no-cache', '--add-header', 'Connection:keep-alive', '--add-header', 'Sec-Fetch-Dest:document', '--add-header', 'Sec-Fetch-Mode:navigate', '--add-header', 'Sec-Fetch-Site:none', '--add-header', 'Sec-Fetch-User:?1', '--add-header', 'Upgrade-Insecure-Requests:1', '--extractor-args', 'youtube:player_client=tv_embedded,web,android', '--no-playlist', '--no-no-check-certificates', '--no-prefer-free-formats', '--no-no-warnings', '--sleep-interval', '1', '--max-sleep-interval', '4', '--sleep-subtitles', '1', '--verbose', '--print-json', '--dump-json']
+
+Usage: yt-dlp [OPTIONS] URL [URL...]
+
+yt-dlp: error: no such option: --no-no-check-certificates
+    at YouTubeDownloader.downloadWithRetry (file:///code/processing-service/youtube-downloader.js:216:11)
+    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+    at async YouTubeDownloader.download (file:///code/processing-service/youtube-downloader.js:229:22)
+    at async file:///code/processing-service/server.js:77:22
+
+[YouTube Download] Starting download for job test_2_1750586556342
+[YouTube Download] URL: https://www.youtube.com/watch?v=eRsGyueVLvQ
+[YouTube Download] Using enhanced downloader with anti-bot detection
+
+[YouTubeDownloader] Starting download for job test_2_1750586556342
+[YouTubeDownloader] URL: https://www.youtube.com/watch?v=eRsGyueVLvQ
+[YouTubeDownloader] Output path: /tmp/test_2_1750586556342_audio.webm
+
+[YouTubeDownloader] Download attempt 1/3 for job test_2_1750586556342
+[YouTubeDownloader] Building options for attempt 1
+[YouTubeDownloader] Using User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:121.0) Gecko/20100101 Firefox/121.0
+[YouTubeDownloader] Starting yt-dlp with options: {
+  "output": "/tmp/test_2_1750586556342_audio.webm",
+  "format": "bestaudio[ext=webm]/bestaudio[ext=m4a]/bestaudio",
+  "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:121.0) Gecko/20100101 Firefox/121.0",
+  "referer": "https://www.youtube.com/",
+  "addHeader": [
+    "Accept-Language:en-US,en;q=0.9",
+    "Accept:text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8",
+    "Accept-Encoding:gzip, deflate, br",
+    "Cache-Control:no-cache",
+    "Connection:keep-alive",
+    "Sec-Fetch-Dest:document",
+    "Sec-Fetch-Mode:navigate",
+    "Sec-Fetch-Site:none",
+    "Sec-Fetch-User:?1",
+    "Upgrade-Insecure-Requests:1"
+  ],
+  "extractorArgs": "youtube:player_client=web,android,ios",
+  "noPlaylist": true,
+  "noCheckCertificates": false,
+  "preferFreeFormats": false,
+  "noWarnings": false,
+  "sleepInterval": 1,
+  "maxSleepInterval": 4,
+  "sleepSubtitles": 1,
+  "verbose": true,
+  "printJson": true,
+  "dumpJson": true
+}
+[YouTubeDownloader] Attempt 1 failed: [debug] Command-line config: ['https://www.youtube.com/watch?v=eRsGyueVLvQ', '--output', '/tmp/test_2_1750586556342_audio.webm', '--format', 'bestaudio[ext=webm]/bestaudio[ext=m4a]/bestaudio', '--user-agent', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:121.0) Gecko/20100101 Firefox/121.0', '--referer', 'https://www.youtube.com/', '--add-header', 'Accept-Language:en-US,en;q=0.9', '--add-header', 'Accept:text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8', '--add-header', 'Accept-Encoding:gzip, deflate, br', '--add-header', 'Cache-Control:no-cache', '--add-header', 'Connection:keep-alive', '--add-header', 'Sec-Fetch-Dest:document', '--add-header', 'Sec-Fetch-Mode:navigate', '--add-header', 'Sec-Fetch-Site:none', '--add-header', 'Sec-Fetch-User:?1', '--add-header', 'Upgrade-Insecure-Requests:1', '--extractor-args', 'youtube:player_client=web,android,ios', '--no-playlist', '--no-no-check-certificates', '--no-prefer-free-formats', '--no-no-warnings', '--sleep-interval', '1', '--max-sleep-interval', '4', '--sleep-subtitles', '1', '--verbose', '--print-json', '--dump-json']
+
+Usage: yt-dlp [OPTIONS] URL [URL...]
+
+yt-dlp: error: no such option: --no-no-check-certificates
+[YouTubeDownloader] yt-dlp stderr: [debug] Command-line config: ['https://www.youtube.com/watch?v=eRsGyueVLvQ', '--output', '/tmp/test_2_1750586556342_audio.webm', '--format', 'bestaudio[ext=webm]/bestaudio[ext=m4a]/bestaudio', '--user-agent', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:121.0) Gecko/20100101 Firefox/121.0', '--referer', 'https://www.youtube.com/', '--add-header', 'Accept-Language:en-US,en;q=0.9', '--add-header', 'Accept:text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8', '--add-header', 'Accept-Encoding:gzip, deflate, br', '--add-header', 'Cache-Control:no-cache', '--add-header', 'Connection:keep-alive', '--add-header', 'Sec-Fetch-Dest:document', '--add-header', 'Sec-Fetch-Mode:navigate', '--add-header', 'Sec-Fetch-Site:none', '--add-header', 'Sec-Fetch-User:?1', '--add-header', 'Upgrade-Insecure-Requests:1', '--extractor-args', 'youtube:player_client=web,android,ios', '--no-playlist', '--no-no-check-certificates', '--no-prefer-free-formats', '--no-no-warnings', '--sleep-interval', '1', '--max-sleep-interval', '4', '--sleep-subtitles', '1', '--verbose', '--print-json', '--dump-json']
+
+Usage: yt-dlp [OPTIONS] URL [URL...]
+
+yt-dlp: error: no such option: --no-no-check-certificates
+[YouTubeDownloader] Waiting 2000ms before retry...
+
+[YouTubeDownloader] Download attempt 2/3 for job test_2_1750586556342
+[YouTubeDownloader] Building options for attempt 2
+[YouTubeDownloader] Using User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/119.0.0.0 Safari/537.36
+[YouTubeDownloader] Attempt 2: trying alternative strategies
+[YouTubeDownloader] Starting yt-dlp with options: {
+  "output": "/tmp/test_2_1750586556342_audio.webm",
+  "format": "bestaudio/best",
+  "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/119.0.0.0 Safari/537.36",
+  "referer": "https://www.youtube.com/",
+  "addHeader": [
+    "Accept-Language:en-US,en;q=0.9",
+    "Accept:text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8",
+    "Accept-Encoding:gzip, deflate, br",
+    "Cache-Control:no-cache",
+    "Connection:keep-alive",
+    "Sec-Fetch-Dest:document",
+    "Sec-Fetch-Mode:navigate",
+    "Sec-Fetch-Site:none",
+    "Sec-Fetch-User:?1",
+    "Upgrade-Insecure-Requests:1"
+  ],
+  "extractorArgs": "youtube:player_client=web,android,ios",
+  "noPlaylist": true,
+  "noCheckCertificates": false,
+  "preferFreeFormats": false,
+  "noWarnings": false,
+  "sleepInterval": 2,
+  "maxSleepInterval": 4,
+  "sleepSubtitles": 1,
+  "verbose": true,
+  "printJson": true,
+  "dumpJson": true
+}
+[YouTubeDownloader] Attempt 2 failed: [debug] Command-line config: ['https://www.youtube.com/watch?v=eRsGyueVLvQ', '--output', '/tmp/test_2_1750586556342_audio.webm', '--format', 'bestaudio/best', '--user-agent', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/119.0.0.0 Safari/537.36', '--referer', 'https://www.youtube.com/', '--add-header', 'Accept-Language:en-US,en;q=0.9', '--add-header', 'Accept:text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8', '--add-header', 'Accept-Encoding:gzip, deflate, br', '--add-header', 'Cache-Control:no-cache', '--add-header', 'Connection:keep-alive', '--add-header', 'Sec-Fetch-Dest:document', '--add-header', 'Sec-Fetch-Mode:navigate', '--add-header', 'Sec-Fetch-Site:none', '--add-header', 'Sec-Fetch-User:?1', '--add-header', 'Upgrade-Insecure-Requests:1', '--extractor-args', 'youtube:player_client=web,android,ios', '--no-playlist', '--no-no-check-certificates', '--no-prefer-free-formats', '--no-no-warnings', '--sleep-interval', '2', '--max-sleep-interval', '4', '--sleep-subtitles', '1', '--verbose', '--print-json', '--dump-json']
+
+Usage: yt-dlp [OPTIONS] URL [URL...]
+
+yt-dlp: error: no such option: --no-no-check-certificates
+[YouTubeDownloader] yt-dlp stderr: [debug] Command-line config: ['https://www.youtube.com/watch?v=eRsGyueVLvQ', '--output', '/tmp/test_2_1750586556342_audio.webm', '--format', 'bestaudio/best', '--user-agent', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/119.0.0.0 Safari/537.36', '--referer', 'https://www.youtube.com/', '--add-header', 'Accept-Language:en-US,en;q=0.9', '--add-header', 'Accept:text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8', '--add-header', 'Accept-Encoding:gzip, deflate, br', '--add-header', 'Cache-Control:no-cache', '--add-header', 'Connection:keep-alive', '--add-header', 'Sec-Fetch-Dest:document', '--add-header', 'Sec-Fetch-Mode:navigate', '--add-header', 'Sec-Fetch-Site:none', '--add-header', 'Sec-Fetch-User:?1', '--add-header', 'Upgrade-Insecure-Requests:1', '--extractor-args', 'youtube:player_client=web,android,ios', '--no-playlist', '--no-no-check-certificates', '--no-prefer-free-formats', '--no-no-warnings', '--sleep-interval', '2', '--max-sleep-interval', '4', '--sleep-subtitles', '1', '--verbose', '--print-json', '--dump-json']
+
+Usage: yt-dlp [OPTIONS] URL [URL...]
+
+yt-dlp: error: no such option: --no-no-check-certificates
+[YouTubeDownloader] Waiting 2000ms before retry...
+
+[YouTubeDownloader] Download attempt 3/3 for job test_2_1750586556342
+[YouTubeDownloader] Building options for attempt 3
+[YouTubeDownloader] Using User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/119.0.0.0 Safari/537.36
+[YouTubeDownloader] Attempt 3: trying alternative strategies
+[YouTubeDownloader] Starting yt-dlp with options: {
+  "output": "/tmp/test_2_1750586556342_audio.webm",
+  "format": "bestaudio[ext=webm]/bestaudio[ext=m4a]/bestaudio",
+  "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/119.0.0.0 Safari/537.36",
+  "referer": "https://www.youtube.com/",
+  "addHeader": [
+    "Accept-Language:en-US,en;q=0.9",
+    "Accept:text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8",
+    "Accept-Encoding:gzip, deflate, br",
+    "Cache-Control:no-cache",
+    "Connection:keep-alive",
+    "Sec-Fetch-Dest:document",
+    "Sec-Fetch-Mode:navigate",
+    "Sec-Fetch-Site:none",
+    "Sec-Fetch-User:?1",
+    "Upgrade-Insecure-Requests:1"
+  ],
+  "extractorArgs": "youtube:player_client=tv_embedded,web,android",
+  "noPlaylist": true,
+  "noCheckCertificates": false,
+  "preferFreeFormats": false,
+  "noWarnings": false,
+  "sleepInterval": 1,
+  "maxSleepInterval": 4,
+  "sleepSubtitles": 1,
+  "verbose": true,
+  "printJson": true,
+  "dumpJson": true
+}
+[YouTubeDownloader] Attempt 3 failed: [debug] Command-line config: ['https://www.youtube.com/watch?v=eRsGyueVLvQ', '--output', '/tmp/test_2_1750586556342_audio.webm', '--format', 'bestaudio[ext=webm]/bestaudio[ext=m4a]/bestaudio', '--user-agent', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/119.0.0.0 Safari/537.36', '--referer', 'https://www.youtube.com/', '--add-header', 'Accept-Language:en-US,en;q=0.9', '--add-header', 'Accept:text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8', '--add-header', 'Accept-Encoding:gzip, deflate, br', '--add-header', 'Cache-Control:no-cache', '--add-header', 'Connection:keep-alive', '--add-header', 'Sec-Fetch-Dest:document', '--add-header', 'Sec-Fetch-Mode:navigate', '--add-header', 'Sec-Fetch-Site:none', '--add-header', 'Sec-Fetch-User:?1', '--add-header', 'Upgrade-Insecure-Requests:1', '--extractor-args', 'youtube:player_client=tv_embedded,web,android', '--no-playlist', '--no-no-check-certificates', '--no-prefer-free-formats', '--no-no-warnings', '--sleep-interval', '1', '--max-sleep-interval', '4', '--sleep-subtitles', '1', '--verbose', '--print-json', '--dump-json']
+
+Usage: yt-dlp [OPTIONS] URL [URL...]
+
+yt-dlp: error: no such option: --no-no-check-certificates
+[YouTubeDownloader] yt-dlp stderr: [debug] Command-line config: ['https://www.youtube.com/watch?v=eRsGyueVLvQ', '--output', '/tmp/test_2_1750586556342_audio.webm', '--format', 'bestaudio[ext=webm]/bestaudio[ext=m4a]/bestaudio', '--user-agent', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/119.0.0.0 Safari/537.36', '--referer', 'https://www.youtube.com/', '--add-header', 'Accept-Language:en-US,en;q=0.9', '--add-header', 'Accept:text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8', '--add-header', 'Accept-Encoding:gzip, deflate, br', '--add-header', 'Cache-Control:no-cache', '--add-header', 'Connection:keep-alive', '--add-header', 'Sec-Fetch-Dest:document', '--add-header', 'Sec-Fetch-Mode:navigate', '--add-header', 'Sec-Fetch-Site:none', '--add-header', 'Sec-Fetch-User:?1', '--add-header', 'Upgrade-Insecure-Requests:1', '--extractor-args', 'youtube:player_client=tv_embedded,web,android', '--no-playlist', '--no-no-check-certificates', '--no-prefer-free-formats', '--no-no-warnings', '--sleep-interval', '1', '--max-sleep-interval', '4', '--sleep-subtitles', '1', '--verbose', '--print-json', '--dump-json']
+
+Usage: yt-dlp [OPTIONS] URL [URL...]
+
+yt-dlp: error: no such option: --no-no-check-certificates
+[YouTubeDownloader] Download failed for job test_2_1750586556342: Error: Failed after 3 attempts. Last error: [debug] Command-line config: ['https://www.youtube.com/watch?v=eRsGyueVLvQ', '--output', '/tmp/test_2_1750586556342_audio.webm', '--format', 'bestaudio[ext=webm]/bestaudio[ext=m4a]/bestaudio', '--user-agent', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/119.0.0.0 Safari/537.36', '--referer', 'https://www.youtube.com/', '--add-header', 'Accept-Language:en-US,en;q=0.9', '--add-header', 'Accept:text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8', '--add-header', 'Accept-Encoding:gzip, deflate, br', '--add-header', 'Cache-Control:no-cache', '--add-header', 'Connection:keep-alive', '--add-header', 'Sec-Fetch-Dest:document', '--add-header', 'Sec-Fetch-Mode:navigate', '--add-header', 'Sec-Fetch-Site:none', '--add-header', 'Sec-Fetch-User:?1', '--add-header', 'Upgrade-Insecure-Requests:1', '--extractor-args', 'youtube:player_client=tv_embedded,web,android', '--no-playlist', '--no-no-check-certificates', '--no-prefer-free-formats', '--no-no-warnings', '--sleep-interval', '1', '--max-sleep-interval', '4', '--sleep-subtitles', '1', '--verbose', '--print-json', '--dump-json']
+
+Usage: yt-dlp [OPTIONS] URL [URL...]
+
+yt-dlp: error: no such option: --no-no-check-certificates
+    at YouTubeDownloader.downloadWithRetry (file:///code/processing-service/youtube-downloader.js:216:11)
+    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+    at async YouTubeDownloader.download (file:///code/processing-service/youtube-downloader.js:229:22)
+    at async file:///code/processing-service/server.js:77:22
+[YouTube Download] Download failed: Error: Failed after 3 attempts. Last error: [debug] Command-line config: ['https://www.youtube.com/watch?v=eRsGyueVLvQ', '--output', '/tmp/test_2_1750586556342_audio.webm', '--format', 'bestaudio[ext=webm]/bestaudio[ext=m4a]/bestaudio', '--user-agent', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/119.0.0.0 Safari/537.36', '--referer', 'https://www.youtube.com/', '--add-header', 'Accept-Language:en-US,en;q=0.9', '--add-header', 'Accept:text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8', '--add-header', 'Accept-Encoding:gzip, deflate, br', '--add-header', 'Cache-Control:no-cache', '--add-header', 'Connection:keep-alive', '--add-header', 'Sec-Fetch-Dest:document', '--add-header', 'Sec-Fetch-Mode:navigate', '--add-header', 'Sec-Fetch-Site:none', '--add-header', 'Sec-Fetch-User:?1', '--add-header', 'Upgrade-Insecure-Requests:1', '--extractor-args', 'youtube:player_client=tv_embedded,web,android', '--no-playlist', '--no-no-check-certificates', '--no-prefer-free-formats', '--no-no-warnings', '--sleep-interval', '1', '--max-sleep-interval', '4', '--sleep-subtitles', '1', '--verbose', '--print-json', '--dump-json']
+
+Usage: yt-dlp [OPTIONS] URL [URL...]
+
+yt-dlp: error: no such option: --no-no-check-certificates
+    at YouTubeDownloader.downloadWithRetry (file:///code/processing-service/youtube-downloader.js:216:11)
+    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+    at async YouTubeDownloader.download (file:///code/processing-service/youtube-downloader.js:229:22)
+    at async file:///code/processing-service/server.js:77:22
+[YouTube Download] Failed: Error: Failed after 3 attempts. Last error: [debug] Command-line config: ['https://www.youtube.com/watch?v=eRsGyueVLvQ', '--output', '/tmp/test_2_1750586556342_audio.webm', '--format', 'bestaudio[ext=webm]/bestaudio[ext=m4a]/bestaudio', '--user-agent', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/119.0.0.0 Safari/537.36', '--referer', 'https://www.youtube.com/', '--add-header', 'Accept-Language:en-US,en;q=0.9', '--add-header', 'Accept:text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8', '--add-header', 'Accept-Encoding:gzip, deflate, br', '--add-header', 'Cache-Control:no-cache', '--add-header', 'Connection:keep-alive', '--add-header', 'Sec-Fetch-Dest:document', '--add-header', 'Sec-Fetch-Mode:navigate', '--add-header', 'Sec-Fetch-Site:none', '--add-header', 'Sec-Fetch-User:?1', '--add-header', 'Upgrade-Insecure-Requests:1', '--extractor-args', 'youtube:player_client=tv_embedded,web,android', '--no-playlist', '--no-no-check-certificates', '--no-prefer-free-formats', '--no-no-warnings', '--sleep-interval', '1', '--max-sleep-interval', '4', '--sleep-subtitles', '1', '--verbose', '--print-json', '--dump-json']
+
+Usage: yt-dlp [OPTIONS] URL [URL...]
+
+yt-dlp: error: no such option: --no-no-check-certificates
+    at YouTubeDownloader.downloadWithRetry (file:///code/processing-service/youtube-downloader.js:216:11)
+    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+    at async YouTubeDownloader.download (file:///code/processing-service/youtube-downloader.js:229:22)
+    at async file:///code/processing-service/server.js:77:22
+
+[YouTube Download] Starting download for job test_3_1750586563258
+[YouTube Download] URL: https://www.youtube.com/watch?v=jNQXAC9IVRw
+[YouTube Download] Using enhanced downloader with anti-bot detection
+
+[YouTubeDownloader] Starting download for job test_3_1750586563258
+[YouTubeDownloader] URL: https://www.youtube.com/watch?v=jNQXAC9IVRw
+[YouTubeDownloader] Output path: /tmp/test_3_1750586563258_audio.webm
+
+[YouTubeDownloader] Download attempt 1/3 for job test_3_1750586563258
+[YouTubeDownloader] Building options for attempt 1
+[YouTubeDownloader] Using User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/119.0.0.0 Safari/537.36
+[YouTubeDownloader] Starting yt-dlp with options: {
+  "output": "/tmp/test_3_1750586563258_audio.webm",
+  "format": "bestaudio[ext=webm]/bestaudio[ext=m4a]/bestaudio",
+  "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/119.0.0.0 Safari/537.36",
+  "referer": "https://www.youtube.com/",
+  "addHeader": [
+    "Accept-Language:en-US,en;q=0.9",
+    "Accept:text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8",
+    "Accept-Encoding:gzip, deflate, br",
+    "Cache-Control:no-cache",
+    "Connection:keep-alive",
+    "Sec-Fetch-Dest:document",
+    "Sec-Fetch-Mode:navigate",
+    "Sec-Fetch-Site:none",
+    "Sec-Fetch-User:?1",
+    "Upgrade-Insecure-Requests:1"
+  ],
+  "extractorArgs": "youtube:player_client=web,android,ios",
+  "noPlaylist": true,
+  "noCheckCertificates": false,
+  "preferFreeFormats": false,
+  "noWarnings": false,
+  "sleepInterval": 1,
+  "maxSleepInterval": 3,
+  "sleepSubtitles": 1,
+  "verbose": true,
+  "printJson": true,
+  "dumpJson": true
+}
+[YouTubeDownloader] Attempt 1 failed: [debug] Command-line config: ['https://www.youtube.com/watch?v=jNQXAC9IVRw', '--output', '/tmp/test_3_1750586563258_audio.webm', '--format', 'bestaudio[ext=webm]/bestaudio[ext=m4a]/bestaudio', '--user-agent', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/119.0.0.0 Safari/537.36', '--referer', 'https://www.youtube.com/', '--add-header', 'Accept-Language:en-US,en;q=0.9', '--add-header', 'Accept:text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8', '--add-header', 'Accept-Encoding:gzip, deflate, br', '--add-header', 'Cache-Control:no-cache', '--add-header', 'Connection:keep-alive', '--add-header', 'Sec-Fetch-Dest:document', '--add-header', 'Sec-Fetch-Mode:navigate', '--add-header', 'Sec-Fetch-Site:none', '--add-header', 'Sec-Fetch-User:?1', '--add-header', 'Upgrade-Insecure-Requests:1', '--extractor-args', 'youtube:player_client=web,android,ios', '--no-playlist', '--no-no-check-certificates', '--no-prefer-free-formats', '--no-no-warnings', '--sleep-interval', '1', '--max-sleep-interval', '3', '--sleep-subtitles', '1', '--verbose', '--print-json', '--dump-json']
+
+Usage: yt-dlp [OPTIONS] URL [URL...]
+
+yt-dlp: error: no such option: --no-no-check-certificates
+[YouTubeDownloader] yt-dlp stderr: [debug] Command-line config: ['https://www.youtube.com/watch?v=jNQXAC9IVRw', '--output', '/tmp/test_3_1750586563258_audio.webm', '--format', 'bestaudio[ext=webm]/bestaudio[ext=m4a]/bestaudio', '--user-agent', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/119.0.0.0 Safari/537.36', '--referer', 'https://www.youtube.com/', '--add-header', 'Accept-Language:en-US,en;q=0.9', '--add-header', 'Accept:text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8', '--add-header', 'Accept-Encoding:gzip, deflate, br', '--add-header', 'Cache-Control:no-cache', '--add-header', 'Connection:keep-alive', '--add-header', 'Sec-Fetch-Dest:document', '--add-header', 'Sec-Fetch-Mode:navigate', '--add-header', 'Sec-Fetch-Site:none', '--add-header', 'Sec-Fetch-User:?1', '--add-header', 'Upgrade-Insecure-Requests:1', '--extractor-args', 'youtube:player_client=web,android,ios', '--no-playlist', '--no-no-check-certificates', '--no-prefer-free-formats', '--no-no-warnings', '--sleep-interval', '1', '--max-sleep-interval', '3', '--sleep-subtitles', '1', '--verbose', '--print-json', '--dump-json']
+
+Usage: yt-dlp [OPTIONS] URL [URL...]
+
+yt-dlp: error: no such option: --no-no-check-certificates
+[YouTubeDownloader] Waiting 2000ms before retry...
+
+[YouTubeDownloader] Download attempt 2/3 for job test_3_1750586563258
+[YouTubeDownloader] Building options for attempt 2
+[YouTubeDownloader] Using User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36
+[YouTubeDownloader] Attempt 2: trying alternative strategies
+[YouTubeDownloader] Starting yt-dlp with options: {
+  "output": "/tmp/test_3_1750586563258_audio.webm",
+  "format": "bestaudio/best",
+  "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36",
+  "referer": "https://www.youtube.com/",
+  "addHeader": [
+    "Accept-Language:en-US,en;q=0.9",
+    "Accept:text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8",
+    "Accept-Encoding:gzip, deflate, br",
+    "Cache-Control:no-cache",
+    "Connection:keep-alive",
+    "Sec-Fetch-Dest:document",
+    "Sec-Fetch-Mode:navigate",
+    "Sec-Fetch-Site:none",
+    "Sec-Fetch-User:?1",
+    "Upgrade-Insecure-Requests:1"
+  ],
+  "extractorArgs": "youtube:player_client=web,android,ios",
+  "noPlaylist": true,
+  "noCheckCertificates": false,
+  "preferFreeFormats": false,
+  "noWarnings": false,
+  "sleepInterval": 1,
+  "maxSleepInterval": 3,
+  "sleepSubtitles": 1,
+  "verbose": true,
+  "printJson": true,
+  "dumpJson": true
+}
+[YouTubeDownloader] Attempt 2 failed: [debug] Command-line config: ['https://www.youtube.com/watch?v=jNQXAC9IVRw', '--output', '/tmp/test_3_1750586563258_audio.webm', '--format', 'bestaudio/best', '--user-agent', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36', '--referer', 'https://www.youtube.com/', '--add-header', 'Accept-Language:en-US,en;q=0.9', '--add-header', 'Accept:text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8', '--add-header', 'Accept-Encoding:gzip, deflate, br', '--add-header', 'Cache-Control:no-cache', '--add-header', 'Connection:keep-alive', '--add-header', 'Sec-Fetch-Dest:document', '--add-header', 'Sec-Fetch-Mode:navigate', '--add-header', 'Sec-Fetch-Site:none', '--add-header', 'Sec-Fetch-User:?1', '--add-header', 'Upgrade-Insecure-Requests:1', '--extractor-args', 'youtube:player_client=web,android,ios', '--no-playlist', '--no-no-check-certificates', '--no-prefer-free-formats', '--no-no-warnings', '--sleep-interval', '1', '--max-sleep-interval', '3', '--sleep-subtitles', '1', '--verbose', '--print-json', '--dump-json']
+
+Usage: yt-dlp [OPTIONS] URL [URL...]
+
+yt-dlp: error: no such option: --no-no-check-certificates
+[YouTubeDownloader] yt-dlp stderr: [debug] Command-line config: ['https://www.youtube.com/watch?v=jNQXAC9IVRw', '--output', '/tmp/test_3_1750586563258_audio.webm', '--format', 'bestaudio/best', '--user-agent', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36', '--referer', 'https://www.youtube.com/', '--add-header', 'Accept-Language:en-US,en;q=0.9', '--add-header', 'Accept:text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8', '--add-header', 'Accept-Encoding:gzip, deflate, br', '--add-header', 'Cache-Control:no-cache', '--add-header', 'Connection:keep-alive', '--add-header', 'Sec-Fetch-Dest:document', '--add-header', 'Sec-Fetch-Mode:navigate', '--add-header', 'Sec-Fetch-Site:none', '--add-header', 'Sec-Fetch-User:?1', '--add-header', 'Upgrade-Insecure-Requests:1', '--extractor-args', 'youtube:player_client=web,android,ios', '--no-playlist', '--no-no-check-certificates', '--no-prefer-free-formats', '--no-no-warnings', '--sleep-interval', '1', '--max-sleep-interval', '3', '--sleep-subtitles', '1', '--verbose', '--print-json', '--dump-json']
+
+Usage: yt-dlp [OPTIONS] URL [URL...]
+
+yt-dlp: error: no such option: --no-no-check-certificates
+[YouTubeDownloader] Waiting 2000ms before retry...
+
+[YouTubeDownloader] Download attempt 3/3 for job test_3_1750586563258
+[YouTubeDownloader] Building options for attempt 3
+[YouTubeDownloader] Using User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36
+[YouTubeDownloader] Attempt 3: trying alternative strategies
+[YouTubeDownloader] Starting yt-dlp with options: {
+  "output": "/tmp/test_3_1750586563258_audio.webm",
+  "format": "bestaudio[ext=webm]/bestaudio[ext=m4a]/bestaudio",
+  "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36",
+  "referer": "https://www.youtube.com/",
+  "addHeader": [
+    "Accept-Language:en-US,en;q=0.9",
+    "Accept:text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8",
+    "Accept-Encoding:gzip, deflate, br",
+    "Cache-Control:no-cache",
+    "Connection:keep-alive",
+    "Sec-Fetch-Dest:document",
+    "Sec-Fetch-Mode:navigate",
+    "Sec-Fetch-Site:none",
+    "Sec-Fetch-User:?1",
+    "Upgrade-Insecure-Requests:1"
+  ],
+  "extractorArgs": "youtube:player_client=tv_embedded,web,android",
+  "noPlaylist": true,
+  "noCheckCertificates": false,
+  "preferFreeFormats": false,
+  "noWarnings": false,
+  "sleepInterval": 2,
+  "maxSleepInterval": 4,
+  "sleepSubtitles": 1,
+  "verbose": true,
+  "printJson": true,
+  "dumpJson": true
+}
+[YouTubeDownloader] Attempt 3 failed: [debug] Command-line config: ['https://www.youtube.com/watch?v=jNQXAC9IVRw', '--output', '/tmp/test_3_1750586563258_audio.webm', '--format', 'bestaudio[ext=webm]/bestaudio[ext=m4a]/bestaudio', '--user-agent', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36', '--referer', 'https://www.youtube.com/', '--add-header', 'Accept-Language:en-US,en;q=0.9', '--add-header', 'Accept:text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8', '--add-header', 'Accept-Encoding:gzip, deflate, br', '--add-header', 'Cache-Control:no-cache', '--add-header', 'Connection:keep-alive', '--add-header', 'Sec-Fetch-Dest:document', '--add-header', 'Sec-Fetch-Mode:navigate', '--add-header', 'Sec-Fetch-Site:none', '--add-header', 'Sec-Fetch-User:?1', '--add-header', 'Upgrade-Insecure-Requests:1', '--extractor-args', 'youtube:player_client=tv_embedded,web,android', '--no-playlist', '--no-no-check-certificates', '--no-prefer-free-formats', '--no-no-warnings', '--sleep-interval', '2', '--max-sleep-interval', '4', '--sleep-subtitles', '1', '--verbose', '--print-json', '--dump-json']
+
+Usage: yt-dlp [OPTIONS] URL [URL...]
+
+yt-dlp: error: no such option: --no-no-check-certificates
+[YouTubeDownloader] yt-dlp stderr: [debug] Command-line config: ['https://www.youtube.com/watch?v=jNQXAC9IVRw', '--output', '/tmp/test_3_1750586563258_audio.webm', '--format', 'bestaudio[ext=webm]/bestaudio[ext=m4a]/bestaudio', '--user-agent', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36', '--referer', 'https://www.youtube.com/', '--add-header', 'Accept-Language:en-US,en;q=0.9', '--add-header', 'Accept:text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8', '--add-header', 'Accept-Encoding:gzip, deflate, br', '--add-header', 'Cache-Control:no-cache', '--add-header', 'Connection:keep-alive', '--add-header', 'Sec-Fetch-Dest:document', '--add-header', 'Sec-Fetch-Mode:navigate', '--add-header', 'Sec-Fetch-Site:none', '--add-header', 'Sec-Fetch-User:?1', '--add-header', 'Upgrade-Insecure-Requests:1', '--extractor-args', 'youtube:player_client=tv_embedded,web,android', '--no-playlist', '--no-no-check-certificates', '--no-prefer-free-formats', '--no-no-warnings', '--sleep-interval', '2', '--max-sleep-interval', '4', '--sleep-subtitles', '1', '--verbose', '--print-json', '--dump-json']
+
+Usage: yt-dlp [OPTIONS] URL [URL...]
+
+yt-dlp: error: no such option: --no-no-check-certificates
+[YouTubeDownloader] Download failed for job test_3_1750586563258: Error: Failed after 3 attempts. Last error: [debug] Command-line config: ['https://www.youtube.com/watch?v=jNQXAC9IVRw', '--output', '/tmp/test_3_1750586563258_audio.webm', '--format', 'bestaudio[ext=webm]/bestaudio[ext=m4a]/bestaudio', '--user-agent', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36', '--referer', 'https://www.youtube.com/', '--add-header', 'Accept-Language:en-US,en;q=0.9', '--add-header', 'Accept:text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8', '--add-header', 'Accept-Encoding:gzip, deflate, br', '--add-header', 'Cache-Control:no-cache', '--add-header', 'Connection:keep-alive', '--add-header', 'Sec-Fetch-Dest:document', '--add-header', 'Sec-Fetch-Mode:navigate', '--add-header', 'Sec-Fetch-Site:none', '--add-header', 'Sec-Fetch-User:?1', '--add-header', 'Upgrade-Insecure-Requests:1', '--extractor-args', 'youtube:player_client=tv_embedded,web,android', '--no-playlist', '--no-no-check-certificates', '--no-prefer-free-formats', '--no-no-warnings', '--sleep-interval', '2', '--max-sleep-interval', '4', '--sleep-subtitles', '1', '--verbose', '--print-json', '--dump-json']
+
+Usage: yt-dlp [OPTIONS] URL [URL...]
+
+yt-dlp: error: no such option: --no-no-check-certificates
+    at YouTubeDownloader.downloadWithRetry (file:///code/processing-service/youtube-downloader.js:216:11)
+    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+    at async YouTubeDownloader.download (file:///code/processing-service/youtube-downloader.js:229:22)
+    at async file:///code/processing-service/server.js:77:22
+[YouTube Download] Download failed: Error: Failed after 3 attempts. Last error: [debug] Command-line config: ['https://www.youtube.com/watch?v=jNQXAC9IVRw', '--output', '/tmp/test_3_1750586563258_audio.webm', '--format', 'bestaudio[ext=webm]/bestaudio[ext=m4a]/bestaudio', '--user-agent', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36', '--referer', 'https://www.youtube.com/', '--add-header', 'Accept-Language:en-US,en;q=0.9', '--add-header', 'Accept:text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8', '--add-header', 'Accept-Encoding:gzip, deflate, br', '--add-header', 'Cache-Control:no-cache', '--add-header', 'Connection:keep-alive', '--add-header', 'Sec-Fetch-Dest:document', '--add-header', 'Sec-Fetch-Mode:navigate', '--add-header', 'Sec-Fetch-Site:none', '--add-header', 'Sec-Fetch-User:?1', '--add-header', 'Upgrade-Insecure-Requests:1', '--extractor-args', 'youtube:player_client=tv_embedded,web,android', '--no-playlist', '--no-no-check-certificates', '--no-prefer-free-formats', '--no-no-warnings', '--sleep-interval', '2', '--max-sleep-interval', '4', '--sleep-subtitles', '1', '--verbose', '--print-json', '--dump-json']
+
+Usage: yt-dlp [OPTIONS] URL [URL...]
+
+yt-dlp: error: no such option: --no-no-check-certificates
+    at YouTubeDownloader.downloadWithRetry (file:///code/processing-service/youtube-downloader.js:216:11)
+    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+    at async YouTubeDownloader.download (file:///code/processing-service/youtube-downloader.js:229:22)
+    at async file:///code/processing-service/server.js:77:22
+[YouTube Download] Failed: Error: Failed after 3 attempts. Last error: [debug] Command-line config: ['https://www.youtube.com/watch?v=jNQXAC9IVRw', '--output', '/tmp/test_3_1750586563258_audio.webm', '--format', 'bestaudio[ext=webm]/bestaudio[ext=m4a]/bestaudio', '--user-agent', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36', '--referer', 'https://www.youtube.com/', '--add-header', 'Accept-Language:en-US,en;q=0.9', '--add-header', 'Accept:text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8', '--add-header', 'Accept-Encoding:gzip, deflate, br', '--add-header', 'Cache-Control:no-cache', '--add-header', 'Connection:keep-alive', '--add-header', 'Sec-Fetch-Dest:document', '--add-header', 'Sec-Fetch-Mode:navigate', '--add-header', 'Sec-Fetch-Site:none', '--add-header', 'Sec-Fetch-User:?1', '--add-header', 'Upgrade-Insecure-Requests:1', '--extractor-args', 'youtube:player_client=tv_embedded,web,android', '--no-playlist', '--no-no-check-certificates', '--no-prefer-free-formats', '--no-no-warnings', '--sleep-interval', '2', '--max-sleep-interval', '4', '--sleep-subtitles', '1', '--verbose', '--print-json', '--dump-json']
+
+Usage: yt-dlp [OPTIONS] URL [URL...]
+
+yt-dlp: error: no such option: --no-no-check-certificates
+    at YouTubeDownloader.downloadWithRetry (file:///code/processing-service/youtube-downloader.js:216:11)
+    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+    at async YouTubeDownloader.download (file:///code/processing-service/youtube-downloader.js:229:22)
+    at async file:///code/processing-service/server.js:77:22
+
+[YouTube Download] Starting download for job test_4_1750586570173
+[YouTube Download] URL: https://www.youtube.com/watch?v=9bZkp7q19f0
+[YouTube Download] Using enhanced downloader with anti-bot detection
+
+[YouTubeDownloader] Starting download for job test_4_1750586570173
+[YouTubeDownloader] URL: https://www.youtube.com/watch?v=9bZkp7q19f0
+[YouTubeDownloader] Output path: /tmp/test_4_1750586570173_audio.webm
+
+[YouTubeDownloader] Download attempt 1/3 for job test_4_1750586570173
+[YouTubeDownloader] Building options for attempt 1
+[YouTubeDownloader] Using User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36
+[YouTubeDownloader] Starting yt-dlp with options: {
+  "output": "/tmp/test_4_1750586570173_audio.webm",
+  "format": "bestaudio[ext=webm]/bestaudio[ext=m4a]/bestaudio",
+  "userAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36",
+  "referer": "https://www.youtube.com/",
+  "addHeader": [
+    "Accept-Language:en-US,en;q=0.9",
+    "Accept:text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8",
+    "Accept-Encoding:gzip, deflate, br",
+    "Cache-Control:no-cache",
+    "Connection:keep-alive",
+    "Sec-Fetch-Dest:document",
+    "Sec-Fetch-Mode:navigate",
+    "Sec-Fetch-Site:none",
+    "Sec-Fetch-User:?1",
+    "Upgrade-Insecure-Requests:1"
+  ],
+  "extractorArgs": "youtube:player_client=web,android,ios",
+  "noPlaylist": true,
+  "noCheckCertificates": false,
+  "preferFreeFormats": false,
+  "noWarnings": false,
+  "sleepInterval": 2,
+  "maxSleepInterval": 3,
+  "sleepSubtitles": 1,
+  "verbose": true,
+  "printJson": true,
+  "dumpJson": true
+}
+[YouTubeDownloader] Attempt 1 failed: [debug] Command-line config: ['https://www.youtube.com/watch?v=9bZkp7q19f0', '--output', '/tmp/test_4_1750586570173_audio.webm', '--format', 'bestaudio[ext=webm]/bestaudio[ext=m4a]/bestaudio', '--user-agent', 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36', '--referer', 'https://www.youtube.com/', '--add-header', 'Accept-Language:en-US,en;q=0.9', '--add-header', 'Accept:text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8', '--add-header', 'Accept-Encoding:gzip, deflate, br', '--add-header', 'Cache-Control:no-cache', '--add-header', 'Connection:keep-alive', '--add-header', 'Sec-Fetch-Dest:document', '--add-header', 'Sec-Fetch-Mode:navigate', '--add-header', 'Sec-Fetch-Site:none', '--add-header', 'Sec-Fetch-User:?1', '--add-header', 'Upgrade-Insecure-Requests:1', '--extractor-args', 'youtube:player_client=web,android,ios', '--no-playlist', '--no-no-check-certificates', '--no-prefer-free-formats', '--no-no-warnings', '--sleep-interval', '2', '--max-sleep-interval', '3', '--sleep-subtitles', '1', '--verbose', '--print-json', '--dump-json']
+
+Usage: yt-dlp [OPTIONS] URL [URL...]
+
+yt-dlp: error: no such option: --no-no-check-certificates
+[YouTubeDownloader] yt-dlp stderr: [debug] Command-line config: ['https://www.youtube.com/watch?v=9bZkp7q19f0', '--output', '/tmp/test_4_1750586570173_audio.webm', '--format', 'bestaudio[ext=webm]/bestaudio[ext=m4a]/bestaudio', '--user-agent', 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36', '--referer', 'https://www.youtube.com/', '--add-header', 'Accept-Language:en-US,en;q=0.9', '--add-header', 'Accept:text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8', '--add-header', 'Accept-Encoding:gzip, deflate, br', '--add-header', 'Cache-Control:no-cache', '--add-header', 'Connection:keep-alive', '--add-header', 'Sec-Fetch-Dest:document', '--add-header', 'Sec-Fetch-Mode:navigate', '--add-header', 'Sec-Fetch-Site:none', '--add-header', 'Sec-Fetch-User:?1', '--add-header', 'Upgrade-Insecure-Requests:1', '--extractor-args', 'youtube:player_client=web,android,ios', '--no-playlist', '--no-no-check-certificates', '--no-prefer-free-formats', '--no-no-warnings', '--sleep-interval', '2', '--max-sleep-interval', '3', '--sleep-subtitles', '1', '--verbose', '--print-json', '--dump-json']
+
+Usage: yt-dlp [OPTIONS] URL [URL...]
+
+yt-dlp: error: no such option: --no-no-check-certificates
+[YouTubeDownloader] Waiting 2000ms before retry...
+
+[YouTubeDownloader] Download attempt 2/3 for job test_4_1750586570173
+[YouTubeDownloader] Building options for attempt 2
+[YouTubeDownloader] Using User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:121.0) Gecko/20100101 Firefox/121.0
+[YouTubeDownloader] Attempt 2: trying alternative strategies
+[YouTubeDownloader] Starting yt-dlp with options: {
+  "output": "/tmp/test_4_1750586570173_audio.webm",
+  "format": "bestaudio/best",
+  "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:121.0) Gecko/20100101 Firefox/121.0",
+  "referer": "https://www.youtube.com/",
+  "addHeader": [
+    "Accept-Language:en-US,en;q=0.9",
+    "Accept:text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8",
+    "Accept-Encoding:gzip, deflate, br",
+    "Cache-Control:no-cache",
+    "Connection:keep-alive",
+    "Sec-Fetch-Dest:document",
+    "Sec-Fetch-Mode:navigate",
+    "Sec-Fetch-Site:none",
+    "Sec-Fetch-User:?1",
+    "Upgrade-Insecure-Requests:1"
+  ],
+  "extractorArgs": "youtube:player_client=web,android,ios",
+  "noPlaylist": true,
+  "noCheckCertificates": false,
+  "preferFreeFormats": false,
+  "noWarnings": false,
+  "sleepInterval": 1,
+  "maxSleepInterval": 3,
+  "sleepSubtitles": 1,
+  "verbose": true,
+  "printJson": true,
+  "dumpJson": true
+}
+[YouTubeDownloader] Attempt 2 failed: [debug] Command-line config: ['https://www.youtube.com/watch?v=9bZkp7q19f0', '--output', '/tmp/test_4_1750586570173_audio.webm', '--format', 'bestaudio/best', '--user-agent', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:121.0) Gecko/20100101 Firefox/121.0', '--referer', 'https://www.youtube.com/', '--add-header', 'Accept-Language:en-US,en;q=0.9', '--add-header', 'Accept:text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8', '--add-header', 'Accept-Encoding:gzip, deflate, br', '--add-header', 'Cache-Control:no-cache', '--add-header', 'Connection:keep-alive', '--add-header', 'Sec-Fetch-Dest:document', '--add-header', 'Sec-Fetch-Mode:navigate', '--add-header', 'Sec-Fetch-Site:none', '--add-header', 'Sec-Fetch-User:?1', '--add-header', 'Upgrade-Insecure-Requests:1', '--extractor-args', 'youtube:player_client=web,android,ios', '--no-playlist', '--no-no-check-certificates', '--no-prefer-free-formats', '--no-no-warnings', '--sleep-interval', '1', '--max-sleep-interval', '3', '--sleep-subtitles', '1', '--verbose', '--print-json', '--dump-json']
+
+Usage: yt-dlp [OPTIONS] URL [URL...]
+
+yt-dlp: error: no such option: --no-no-check-certificates
+[YouTubeDownloader] yt-dlp stderr: [debug] Command-line config: ['https://www.youtube.com/watch?v=9bZkp7q19f0', '--output', '/tmp/test_4_1750586570173_audio.webm', '--format', 'bestaudio/best', '--user-agent', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:121.0) Gecko/20100101 Firefox/121.0', '--referer', 'https://www.youtube.com/', '--add-header', 'Accept-Language:en-US,en;q=0.9', '--add-header', 'Accept:text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8', '--add-header', 'Accept-Encoding:gzip, deflate, br', '--add-header', 'Cache-Control:no-cache', '--add-header', 'Connection:keep-alive', '--add-header', 'Sec-Fetch-Dest:document', '--add-header', 'Sec-Fetch-Mode:navigate', '--add-header', 'Sec-Fetch-Site:none', '--add-header', 'Sec-Fetch-User:?1', '--add-header', 'Upgrade-Insecure-Requests:1', '--extractor-args', 'youtube:player_client=web,android,ios', '--no-playlist', '--no-no-check-certificates', '--no-prefer-free-formats', '--no-no-warnings', '--sleep-interval', '1', '--max-sleep-interval', '3', '--sleep-subtitles', '1', '--verbose', '--print-json', '--dump-json']
+
+Usage: yt-dlp [OPTIONS] URL [URL...]
+
+yt-dlp: error: no such option: --no-no-check-certificates
+[YouTubeDownloader] Waiting 2000ms before retry...
+
+[YouTubeDownloader] Download attempt 3/3 for job test_4_1750586570173
+[YouTubeDownloader] Building options for attempt 3
+[YouTubeDownloader] Using User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/119.0.0.0 Safari/537.36
+[YouTubeDownloader] Attempt 3: trying alternative strategies
+[YouTubeDownloader] Starting yt-dlp with options: {
+  "output": "/tmp/test_4_1750586570173_audio.webm",
+  "format": "bestaudio[ext=webm]/bestaudio[ext=m4a]/bestaudio",
+  "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/119.0.0.0 Safari/537.36",
+  "referer": "https://www.youtube.com/",
+  "addHeader": [
+    "Accept-Language:en-US,en;q=0.9",
+    "Accept:text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8",
+    "Accept-Encoding:gzip, deflate, br",
+    "Cache-Control:no-cache",
+    "Connection:keep-alive",
+    "Sec-Fetch-Dest:document",
+    "Sec-Fetch-Mode:navigate",
+    "Sec-Fetch-Site:none",
+    "Sec-Fetch-User:?1",
+    "Upgrade-Insecure-Requests:1"
+  ],
+  "extractorArgs": "youtube:player_client=tv_embedded,web,android",
+  "noPlaylist": true,
+  "noCheckCertificates": false,
+  "preferFreeFormats": false,
+  "noWarnings": false,
+  "sleepInterval": 2,
+  "maxSleepInterval": 3,
+  "sleepSubtitles": 1,
+  "verbose": true,
+  "printJson": true,
+  "dumpJson": true
+}
+[YouTubeDownloader] Attempt 3 failed: [debug] Command-line config: ['https://www.youtube.com/watch?v=9bZkp7q19f0', '--output', '/tmp/test_4_1750586570173_audio.webm', '--format', 'bestaudio[ext=webm]/bestaudio[ext=m4a]/bestaudio', '--user-agent', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/119.0.0.0 Safari/537.36', '--referer', 'https://www.youtube.com/', '--add-header', 'Accept-Language:en-US,en;q=0.9', '--add-header', 'Accept:text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8', '--add-header', 'Accept-Encoding:gzip, deflate, br', '--add-header', 'Cache-Control:no-cache', '--add-header', 'Connection:keep-alive', '--add-header', 'Sec-Fetch-Dest:document', '--add-header', 'Sec-Fetch-Mode:navigate', '--add-header', 'Sec-Fetch-Site:none', '--add-header', 'Sec-Fetch-User:?1', '--add-header', 'Upgrade-Insecure-Requests:1', '--extractor-args', 'youtube:player_client=tv_embedded,web,android', '--no-playlist', '--no-no-check-certificates', '--no-prefer-free-formats', '--no-no-warnings', '--sleep-interval', '2', '--max-sleep-interval', '3', '--sleep-subtitles', '1', '--verbose', '--print-json', '--dump-json']
+
+Usage: yt-dlp [OPTIONS] URL [URL...]
+
+yt-dlp: error: no such option: --no-no-check-certificates
+[YouTubeDownloader] yt-dlp stderr: [debug] Command-line config: ['https://www.youtube.com/watch?v=9bZkp7q19f0', '--output', '/tmp/test_4_1750586570173_audio.webm', '--format', 'bestaudio[ext=webm]/bestaudio[ext=m4a]/bestaudio', '--user-agent', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/119.0.0.0 Safari/537.36', '--referer', 'https://www.youtube.com/', '--add-header', 'Accept-Language:en-US,en;q=0.9', '--add-header', 'Accept:text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8', '--add-header', 'Accept-Encoding:gzip, deflate, br', '--add-header', 'Cache-Control:no-cache', '--add-header', 'Connection:keep-alive', '--add-header', 'Sec-Fetch-Dest:document', '--add-header', 'Sec-Fetch-Mode:navigate', '--add-header', 'Sec-Fetch-Site:none', '--add-header', 'Sec-Fetch-User:?1', '--add-header', 'Upgrade-Insecure-Requests:1', '--extractor-args', 'youtube:player_client=tv_embedded,web,android', '--no-playlist', '--no-no-check-certificates', '--no-prefer-free-formats', '--no-no-warnings', '--sleep-interval', '2', '--max-sleep-interval', '3', '--sleep-subtitles', '1', '--verbose', '--print-json', '--dump-json']
+
+Usage: yt-dlp [OPTIONS] URL [URL...]
+
+yt-dlp: error: no such option: --no-no-check-certificates
+[YouTubeDownloader] Download failed for job test_4_1750586570173: Error: Failed after 3 attempts. Last error: [debug] Command-line config: ['https://www.youtube.com/watch?v=9bZkp7q19f0', '--output', '/tmp/test_4_1750586570173_audio.webm', '--format', 'bestaudio[ext=webm]/bestaudio[ext=m4a]/bestaudio', '--user-agent', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/119.0.0.0 Safari/537.36', '--referer', 'https://www.youtube.com/', '--add-header', 'Accept-Language:en-US,en;q=0.9', '--add-header', 'Accept:text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8', '--add-header', 'Accept-Encoding:gzip, deflate, br', '--add-header', 'Cache-Control:no-cache', '--add-header', 'Connection:keep-alive', '--add-header', 'Sec-Fetch-Dest:document', '--add-header', 'Sec-Fetch-Mode:navigate', '--add-header', 'Sec-Fetch-Site:none', '--add-header', 'Sec-Fetch-User:?1', '--add-header', 'Upgrade-Insecure-Requests:1', '--extractor-args', 'youtube:player_client=tv_embedded,web,android', '--no-playlist', '--no-no-check-certificates', '--no-prefer-free-formats', '--no-no-warnings', '--sleep-interval', '2', '--max-sleep-interval', '3', '--sleep-subtitles', '1', '--verbose', '--print-json', '--dump-json']
+
+Usage: yt-dlp [OPTIONS] URL [URL...]
+
+yt-dlp: error: no such option: --no-no-check-certificates
+    at YouTubeDownloader.downloadWithRetry (file:///code/processing-service/youtube-downloader.js:216:11)
+    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+    at async YouTubeDownloader.download (file:///code/processing-service/youtube-downloader.js:229:22)
+    at async file:///code/processing-service/server.js:77:22
+[YouTube Download] Download failed: Error: Failed after 3 attempts. Last error: [debug] Command-line config: ['https://www.youtube.com/watch?v=9bZkp7q19f0', '--output', '/tmp/test_4_1750586570173_audio.webm', '--format', 'bestaudio[ext=webm]/bestaudio[ext=m4a]/bestaudio', '--user-agent', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/119.0.0.0 Safari/537.36', '--referer', 'https://www.youtube.com/', '--add-header', 'Accept-Language:en-US,en;q=0.9', '--add-header', 'Accept:text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8', '--add-header', 'Accept-Encoding:gzip, deflate, br', '--add-header', 'Cache-Control:no-cache', '--add-header', 'Connection:keep-alive', '--add-header', 'Sec-Fetch-Dest:document', '--add-header', 'Sec-Fetch-Mode:navigate', '--add-header', 'Sec-Fetch-Site:none', '--add-header', 'Sec-Fetch-User:?1', '--add-header', 'Upgrade-Insecure-Requests:1', '--extractor-args', 'youtube:player_client=tv_embedded,web,android', '--no-playlist', '--no-no-check-certificates', '--no-prefer-free-formats', '--no-no-warnings', '--sleep-interval', '2', '--max-sleep-interval', '3', '--sleep-subtitles', '1', '--verbose', '--print-json', '--dump-json']
+
+Usage: yt-dlp [OPTIONS] URL [URL...]
+
+yt-dlp: error: no such option: --no-no-check-certificates
+    at YouTubeDownloader.downloadWithRetry (file:///code/processing-service/youtube-downloader.js:216:11)
+    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+    at async YouTubeDownloader.download (file:///code/processing-service/youtube-downloader.js:229:22)
+    at async file:///code/processing-service/server.js:77:22
+[YouTube Download] Failed: Error: Failed after 3 attempts. Last error: [debug] Command-line config: ['https://www.youtube.com/watch?v=9bZkp7q19f0', '--output', '/tmp/test_4_1750586570173_audio.webm', '--format', 'bestaudio[ext=webm]/bestaudio[ext=m4a]/bestaudio', '--user-agent', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/119.0.0.0 Safari/537.36', '--referer', 'https://www.youtube.com/', '--add-header', 'Accept-Language:en-US,en;q=0.9', '--add-header', 'Accept:text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8', '--add-header', 'Accept-Encoding:gzip, deflate, br', '--add-header', 'Cache-Control:no-cache', '--add-header', 'Connection:keep-alive', '--add-header', 'Sec-Fetch-Dest:document', '--add-header', 'Sec-Fetch-Mode:navigate', '--add-header', 'Sec-Fetch-Site:none', '--add-header', 'Sec-Fetch-User:?1', '--add-header', 'Upgrade-Insecure-Requests:1', '--extractor-args', 'youtube:player_client=tv_embedded,web,android', '--no-playlist', '--no-no-check-certificates', '--no-prefer-free-formats', '--no-no-warnings', '--sleep-interval', '2', '--max-sleep-interval', '3', '--sleep-subtitles', '1', '--verbose', '--print-json', '--dump-json']
+
+Usage: yt-dlp [OPTIONS] URL [URL...]
+
+yt-dlp: error: no such option: --no-no-check-certificates
+    at YouTubeDownloader.downloadWithRetry (file:///code/processing-service/youtube-downloader.js:216:11)
+    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+    at async YouTubeDownloader.download (file:///code/processing-service/youtube-downloader.js:229:22)
+    at async file:///code/processing-service/server.js:77:22

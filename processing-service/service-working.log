@@ -1,0 +1,121 @@
+
+> ai-coverlab-processing@1.0.0 start
+> node server.js
+
+[YouTubeDownloader] Initialized with config: {
+  tempDir: '/tmp',
+  cookiesFile: null,
+  maxRetries: 3,
+  retryDelay: 2000,
+  rateLimitDelay: 1000,
+  verbose: true
+}
+🚀 Processing service running on port 3001
+📥 YouTube downloads: POST /download-youtube
+🎬 Video stitching: POST /stitch-video-audio
+❤️  Health check: GET /health
+
+[YouTube Download] Starting download for job test_0_1750586802879
+[YouTube Download] URL: https://www.youtube.com/watch?v=dQw4w9WgXcQ
+[YouTube Download] Using enhanced downloader with anti-bot detection
+
+[YouTubeDownloader] Starting download for job test_0_1750586802879
+[YouTubeDownloader] URL: https://www.youtube.com/watch?v=dQw4w9WgXcQ
+[YouTubeDownloader] Output path: /tmp/test_0_1750586802879_audio.webm
+
+[YouTubeDownloader] Download attempt 1/3 for job test_0_1750586802879
+[YouTubeDownloader] Building options for attempt 1
+[YouTubeDownloader] Using User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36
+[YouTubeDownloader] Starting yt-dlp with options: {
+  "output": "/tmp/test_0_1750586802879_audio.webm",
+  "format": "best[ext=mp4]/best",
+  "userAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36",
+  "referer": "https://www.youtube.com/"
+}
+[YouTubeDownloader] yt-dlp completed successfully
+[YouTubeDownloader] Success! Downloaded 11.21MB
+[YouTube Download] Successfully sent 11.21MB to client
+
+[YouTube Download] Starting download for job test_1_1750586813037
+[YouTube Download] URL: https://www.youtube.com/watch?v=aqz-KE-bpKQ
+[YouTube Download] Using enhanced downloader with anti-bot detection
+
+[YouTubeDownloader] Starting download for job test_1_1750586813037
+[YouTubeDownloader] URL: https://www.youtube.com/watch?v=aqz-KE-bpKQ
+[YouTubeDownloader] Output path: /tmp/test_1_1750586813037_audio.webm
+
+[YouTubeDownloader] Download attempt 1/3 for job test_1_1750586813037
+[YouTubeDownloader] Building options for attempt 1
+[YouTubeDownloader] Using User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36
+[YouTubeDownloader] Starting yt-dlp with options: {
+  "output": "/tmp/test_1_1750586813037_audio.webm",
+  "format": "best[ext=mp4]/best",
+  "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36",
+  "referer": "https://www.youtube.com/"
+}
+[YouTubeDownloader] yt-dlp completed successfully
+[YouTubeDownloader] Success! Downloaded 27.20MB
+[YouTube Download] Successfully sent 27.20MB to client
+
+[YouTube Download] Starting download for job test_2_1750586822033
+[YouTube Download] URL: https://www.youtube.com/watch?v=eRsGyueVLvQ
+[YouTube Download] Using enhanced downloader with anti-bot detection
+
+[YouTubeDownloader] Starting download for job test_2_1750586822033
+[YouTubeDownloader] URL: https://www.youtube.com/watch?v=eRsGyueVLvQ
+[YouTubeDownloader] Output path: /tmp/test_2_1750586822033_audio.webm
+
+[YouTubeDownloader] Download attempt 1/3 for job test_2_1750586822033
+[YouTubeDownloader] Building options for attempt 1
+[YouTubeDownloader] Using User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36
+[YouTubeDownloader] Starting yt-dlp with options: {
+  "output": "/tmp/test_2_1750586822033_audio.webm",
+  "format": "best[ext=mp4]/best",
+  "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36",
+  "referer": "https://www.youtube.com/"
+}
+[YouTubeDownloader] yt-dlp completed successfully
+[YouTubeDownloader] Success! Downloaded 49.09MB
+[YouTube Download] Successfully sent 49.09MB to client
+
+[YouTube Download] Starting download for job test_3_1750586837208
+[YouTube Download] URL: https://www.youtube.com/watch?v=jNQXAC9IVRw
+[YouTube Download] Using enhanced downloader with anti-bot detection
+
+[YouTubeDownloader] Starting download for job test_3_1750586837208
+[YouTubeDownloader] URL: https://www.youtube.com/watch?v=jNQXAC9IVRw
+[YouTubeDownloader] Output path: /tmp/test_3_1750586837208_audio.webm
+
+[YouTubeDownloader] Download attempt 1/3 for job test_3_1750586837208
+[YouTubeDownloader] Building options for attempt 1
+[YouTubeDownloader] Using User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36
+[YouTubeDownloader] Starting yt-dlp with options: {
+  "output": "/tmp/test_3_1750586837208_audio.webm",
+  "format": "best[ext=mp4]/best",
+  "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36",
+  "referer": "https://www.youtube.com/"
+}
+[YouTubeDownloader] yt-dlp completed successfully
+[YouTubeDownloader] Success! Downloaded 0.75MB
+[YouTube Download] Successfully sent 0.75MB to client
+
+[YouTube Download] Starting download for job test_4_1750586841908
+[YouTube Download] URL: https://www.youtube.com/watch?v=9bZkp7q19f0
+[YouTube Download] Using enhanced downloader with anti-bot detection
+
+[YouTubeDownloader] Starting download for job test_4_1750586841908
+[YouTubeDownloader] URL: https://www.youtube.com/watch?v=9bZkp7q19f0
+[YouTubeDownloader] Output path: /tmp/test_4_1750586841908_audio.webm
+
+[YouTubeDownloader] Download attempt 1/3 for job test_4_1750586841908
+[YouTubeDownloader] Building options for attempt 1
+[YouTubeDownloader] Using User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36
+[YouTubeDownloader] Starting yt-dlp with options: {
+  "output": "/tmp/test_4_1750586841908_audio.webm",
+  "format": "best[ext=mp4]/best",
+  "userAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36",
+  "referer": "https://www.youtube.com/"
+}
+[YouTubeDownloader] yt-dlp completed successfully
+[YouTubeDownloader] Success! Downloaded 14.95MB
+[YouTube Download] Successfully sent 14.95MB to client

@@ -1,0 +1,766 @@
+
+> ai-coverlab-processing@1.0.0 start
+> node server.js
+
+[YouTubeDownloader] Initialized with config: {
+  tempDir: '/tmp',
+  cookiesFile: null,
+  maxRetries: 3,
+  retryDelay: 2000,
+  rateLimitDelay: 1000,
+  verbose: true
+}
+🚀 Processing service running on port 3001
+📥 YouTube downloads: POST /download-youtube
+🎬 Video stitching: POST /stitch-video-audio
+❤️  Health check: GET /health
+
+[YouTube Download] Starting download for job test_0_1750586453722
+[YouTube Download] URL: https://www.youtube.com/watch?v=dQw4w9WgXcQ
+[YouTube Download] Using enhanced downloader with anti-bot detection
+
+[YouTubeDownloader] Starting download for job test_0_1750586453722
+[YouTubeDownloader] URL: https://www.youtube.com/watch?v=dQw4w9WgXcQ
+[YouTubeDownloader] Output path: /tmp/test_0_1750586453722_audio.webm
+
+[YouTubeDownloader] Download attempt 1/3 for job test_0_1750586453722
+[YouTubeDownloader] Building options for attempt 1
+[YouTubeDownloader] Using User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36
+[YouTubeDownloader] Starting yt-dlp with options: {
+  "output": "/tmp/test_0_1750586453722_audio.webm",
+  "format": "bestaudio[ext=webm]/bestaudio[ext=m4a]/bestaudio",
+  "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36",
+  "referer": "https://www.youtube.com/",
+  "addHeader": [
+    "Accept-Language:en-US,en;q=0.9",
+    "Accept:text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8",
+    "Accept-Encoding:gzip, deflate, br",
+    "Cache-Control:no-cache",
+    "Connection:keep-alive",
+    "Sec-Fetch-Dest:document",
+    "Sec-Fetch-Mode:navigate",
+    "Sec-Fetch-Site:none",
+    "Sec-Fetch-User:?1",
+    "Upgrade-Insecure-Requests:1"
+  ],
+  "extractorArgs": "{\"youtube\":{\"player_client\":[\"web\",\"android\",\"ios\"],\"player_skip\":[],\"po_token\":null}}",
+  "noPlaylist": true,
+  "noCheckCertificates": false,
+  "preferFreeFormats": false,
+  "noWarnings": false,
+  "sleepInterval": 1,
+  "maxSleepInterval": 4,
+  "sleepSubtitles": 1,
+  "verbose": true,
+  "printJson": true,
+  "dumpJson": true
+}
+[YouTubeDownloader] Attempt 1 failed: Usage: yt-dlp [OPTIONS] URL [URL...]
+
+yt-dlp: error: wrong --extractor-args formatting; it should be IE_KEY:ARGS, not "{"youtube":{"player_client":["web","android","ios"],"player_skip":[],"po_token":null}}"
+[YouTubeDownloader] yt-dlp stderr: Usage: yt-dlp [OPTIONS] URL [URL...]
+
+yt-dlp: error: wrong --extractor-args formatting; it should be IE_KEY:ARGS, not "{"youtube":{"player_client":["web","android","ios"],"player_skip":[],"po_token":null}}"
+[YouTubeDownloader] Waiting 2000ms before retry...
+
+[YouTubeDownloader] Download attempt 2/3 for job test_0_1750586453722
+[YouTubeDownloader] Building options for attempt 2
+[YouTubeDownloader] Using User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36
+[YouTubeDownloader] Attempt 2: trying alternative strategies
+[YouTubeDownloader] Starting yt-dlp with options: {
+  "output": "/tmp/test_0_1750586453722_audio.webm",
+  "format": "bestaudio/best",
+  "userAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36",
+  "referer": "https://www.youtube.com/",
+  "addHeader": [
+    "Accept-Language:en-US,en;q=0.9",
+    "Accept:text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8",
+    "Accept-Encoding:gzip, deflate, br",
+    "Cache-Control:no-cache",
+    "Connection:keep-alive",
+    "Sec-Fetch-Dest:document",
+    "Sec-Fetch-Mode:navigate",
+    "Sec-Fetch-Site:none",
+    "Sec-Fetch-User:?1",
+    "Upgrade-Insecure-Requests:1"
+  ],
+  "extractorArgs": "{\"youtube\":{\"player_client\":[\"web\",\"android\",\"ios\"],\"player_skip\":[],\"po_token\":null}}",
+  "noPlaylist": true,
+  "noCheckCertificates": false,
+  "preferFreeFormats": false,
+  "noWarnings": false,
+  "sleepInterval": 1,
+  "maxSleepInterval": 4,
+  "sleepSubtitles": 1,
+  "verbose": true,
+  "printJson": true,
+  "dumpJson": true
+}
+[YouTubeDownloader] Attempt 2 failed: Usage: yt-dlp [OPTIONS] URL [URL...]
+
+yt-dlp: error: wrong --extractor-args formatting; it should be IE_KEY:ARGS, not "{"youtube":{"player_client":["web","android","ios"],"player_skip":[],"po_token":null}}"
+[YouTubeDownloader] yt-dlp stderr: Usage: yt-dlp [OPTIONS] URL [URL...]
+
+yt-dlp: error: wrong --extractor-args formatting; it should be IE_KEY:ARGS, not "{"youtube":{"player_client":["web","android","ios"],"player_skip":[],"po_token":null}}"
+[YouTubeDownloader] Waiting 2000ms before retry...
+
+[YouTubeDownloader] Download attempt 3/3 for job test_0_1750586453722
+[YouTubeDownloader] Building options for attempt 3
+[YouTubeDownloader] Using User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/119.0.0.0 Safari/537.36
+[YouTubeDownloader] Attempt 3: trying alternative strategies
+[YouTubeDownloader] Starting yt-dlp with options: {
+  "output": "/tmp/test_0_1750586453722_audio.webm",
+  "format": "bestaudio[ext=webm]/bestaudio[ext=m4a]/bestaudio",
+  "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/119.0.0.0 Safari/537.36",
+  "referer": "https://www.youtube.com/",
+  "addHeader": [
+    "Accept-Language:en-US,en;q=0.9",
+    "Accept:text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8",
+    "Accept-Encoding:gzip, deflate, br",
+    "Cache-Control:no-cache",
+    "Connection:keep-alive",
+    "Sec-Fetch-Dest:document",
+    "Sec-Fetch-Mode:navigate",
+    "Sec-Fetch-Site:none",
+    "Sec-Fetch-User:?1",
+    "Upgrade-Insecure-Requests:1"
+  ],
+  "extractorArgs": "{\"youtube\":{\"player_client\":[\"tv_embedded\",\"web\",\"android\"],\"player_skip\":[],\"po_token\":null}}",
+  "noPlaylist": true,
+  "noCheckCertificates": false,
+  "preferFreeFormats": false,
+  "noWarnings": false,
+  "sleepInterval": 1,
+  "maxSleepInterval": 4,
+  "sleepSubtitles": 1,
+  "verbose": true,
+  "printJson": true,
+  "dumpJson": true
+}
+[YouTubeDownloader] Attempt 3 failed: Usage: yt-dlp [OPTIONS] URL [URL...]
+
+yt-dlp: error: wrong --extractor-args formatting; it should be IE_KEY:ARGS, not "{"youtube":{"player_client":["tv_embedded","web","android"],"player_skip":[],"po_token":null}}"
+[YouTubeDownloader] yt-dlp stderr: Usage: yt-dlp [OPTIONS] URL [URL...]
+
+yt-dlp: error: wrong --extractor-args formatting; it should be IE_KEY:ARGS, not "{"youtube":{"player_client":["tv_embedded","web","android"],"player_skip":[],"po_token":null}}"
+[YouTubeDownloader] Download failed for job test_0_1750586453722: Error: Failed after 3 attempts. Last error: Usage: yt-dlp [OPTIONS] URL [URL...]
+
+yt-dlp: error: wrong --extractor-args formatting; it should be IE_KEY:ARGS, not "{"youtube":{"player_client":["tv_embedded","web","android"],"player_skip":[],"po_token":null}}"
+    at YouTubeDownloader.downloadWithRetry (file:///code/processing-service/youtube-downloader.js:222:11)
+    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+    at async YouTubeDownloader.download (file:///code/processing-service/youtube-downloader.js:235:22)
+    at async file:///code/processing-service/server.js:77:22
+[YouTube Download] Download failed: Error: Failed after 3 attempts. Last error: Usage: yt-dlp [OPTIONS] URL [URL...]
+
+yt-dlp: error: wrong --extractor-args formatting; it should be IE_KEY:ARGS, not "{"youtube":{"player_client":["tv_embedded","web","android"],"player_skip":[],"po_token":null}}"
+    at YouTubeDownloader.downloadWithRetry (file:///code/processing-service/youtube-downloader.js:222:11)
+    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+    at async YouTubeDownloader.download (file:///code/processing-service/youtube-downloader.js:235:22)
+    at async file:///code/processing-service/server.js:77:22
+[YouTube Download] Failed: Error: Failed after 3 attempts. Last error: Usage: yt-dlp [OPTIONS] URL [URL...]
+
+yt-dlp: error: wrong --extractor-args formatting; it should be IE_KEY:ARGS, not "{"youtube":{"player_client":["tv_embedded","web","android"],"player_skip":[],"po_token":null}}"
+    at YouTubeDownloader.downloadWithRetry (file:///code/processing-service/youtube-downloader.js:222:11)
+    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+    at async YouTubeDownloader.download (file:///code/processing-service/youtube-downloader.js:235:22)
+    at async file:///code/processing-service/server.js:77:22
+
+[YouTube Download] Starting download for job test_1_1750586460853
+[YouTube Download] URL: https://www.youtube.com/watch?v=aqz-KE-bpKQ
+[YouTube Download] Using enhanced downloader with anti-bot detection
+
+[YouTubeDownloader] Starting download for job test_1_1750586460853
+[YouTubeDownloader] URL: https://www.youtube.com/watch?v=aqz-KE-bpKQ
+[YouTubeDownloader] Output path: /tmp/test_1_1750586460853_audio.webm
+
+[YouTubeDownloader] Download attempt 1/3 for job test_1_1750586460853
+[YouTubeDownloader] Building options for attempt 1
+[YouTubeDownloader] Using User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:121.0) Gecko/20100101 Firefox/121.0
+[YouTubeDownloader] Starting yt-dlp with options: {
+  "output": "/tmp/test_1_1750586460853_audio.webm",
+  "format": "bestaudio[ext=webm]/bestaudio[ext=m4a]/bestaudio",
+  "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:121.0) Gecko/20100101 Firefox/121.0",
+  "referer": "https://www.youtube.com/",
+  "addHeader": [
+    "Accept-Language:en-US,en;q=0.9",
+    "Accept:text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8",
+    "Accept-Encoding:gzip, deflate, br",
+    "Cache-Control:no-cache",
+    "Connection:keep-alive",
+    "Sec-Fetch-Dest:document",
+    "Sec-Fetch-Mode:navigate",
+    "Sec-Fetch-Site:none",
+    "Sec-Fetch-User:?1",
+    "Upgrade-Insecure-Requests:1"
+  ],
+  "extractorArgs": "{\"youtube\":{\"player_client\":[\"web\",\"android\",\"ios\"],\"player_skip\":[],\"po_token\":null}}",
+  "noPlaylist": true,
+  "noCheckCertificates": false,
+  "preferFreeFormats": false,
+  "noWarnings": false,
+  "sleepInterval": 1,
+  "maxSleepInterval": 3,
+  "sleepSubtitles": 1,
+  "verbose": true,
+  "printJson": true,
+  "dumpJson": true
+}
+[YouTubeDownloader] Attempt 1 failed: Usage: yt-dlp [OPTIONS] URL [URL...]
+
+yt-dlp: error: wrong --extractor-args formatting; it should be IE_KEY:ARGS, not "{"youtube":{"player_client":["web","android","ios"],"player_skip":[],"po_token":null}}"
+[YouTubeDownloader] yt-dlp stderr: Usage: yt-dlp [OPTIONS] URL [URL...]
+
+yt-dlp: error: wrong --extractor-args formatting; it should be IE_KEY:ARGS, not "{"youtube":{"player_client":["web","android","ios"],"player_skip":[],"po_token":null}}"
+[YouTubeDownloader] Waiting 2000ms before retry...
+
+[YouTubeDownloader] Download attempt 2/3 for job test_1_1750586460853
+[YouTubeDownloader] Building options for attempt 2
+[YouTubeDownloader] Using User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:121.0) Gecko/20100101 Firefox/121.0
+[YouTubeDownloader] Attempt 2: trying alternative strategies
+[YouTubeDownloader] Starting yt-dlp with options: {
+  "output": "/tmp/test_1_1750586460853_audio.webm",
+  "format": "bestaudio/best",
+  "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:121.0) Gecko/20100101 Firefox/121.0",
+  "referer": "https://www.youtube.com/",
+  "addHeader": [
+    "Accept-Language:en-US,en;q=0.9",
+    "Accept:text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8",
+    "Accept-Encoding:gzip, deflate, br",
+    "Cache-Control:no-cache",
+    "Connection:keep-alive",
+    "Sec-Fetch-Dest:document",
+    "Sec-Fetch-Mode:navigate",
+    "Sec-Fetch-Site:none",
+    "Sec-Fetch-User:?1",
+    "Upgrade-Insecure-Requests:1"
+  ],
+  "extractorArgs": "{\"youtube\":{\"player_client\":[\"web\",\"android\",\"ios\"],\"player_skip\":[],\"po_token\":null}}",
+  "noPlaylist": true,
+  "noCheckCertificates": false,
+  "preferFreeFormats": false,
+  "noWarnings": false,
+  "sleepInterval": 1,
+  "maxSleepInterval": 4,
+  "sleepSubtitles": 1,
+  "verbose": true,
+  "printJson": true,
+  "dumpJson": true
+}
+[YouTubeDownloader] Attempt 2 failed: Usage: yt-dlp [OPTIONS] URL [URL...]
+
+yt-dlp: error: wrong --extractor-args formatting; it should be IE_KEY:ARGS, not "{"youtube":{"player_client":["web","android","ios"],"player_skip":[],"po_token":null}}"
+[YouTubeDownloader] yt-dlp stderr: Usage: yt-dlp [OPTIONS] URL [URL...]
+
+yt-dlp: error: wrong --extractor-args formatting; it should be IE_KEY:ARGS, not "{"youtube":{"player_client":["web","android","ios"],"player_skip":[],"po_token":null}}"
+[YouTubeDownloader] Waiting 2000ms before retry...
+
+[YouTubeDownloader] Download attempt 3/3 for job test_1_1750586460853
+[YouTubeDownloader] Building options for attempt 3
+[YouTubeDownloader] Using User-Agent: Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36
+[YouTubeDownloader] Attempt 3: trying alternative strategies
+[YouTubeDownloader] Starting yt-dlp with options: {
+  "output": "/tmp/test_1_1750586460853_audio.webm",
+  "format": "bestaudio[ext=webm]/bestaudio[ext=m4a]/bestaudio",
+  "userAgent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36",
+  "referer": "https://www.youtube.com/",
+  "addHeader": [
+    "Accept-Language:en-US,en;q=0.9",
+    "Accept:text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8",
+    "Accept-Encoding:gzip, deflate, br",
+    "Cache-Control:no-cache",
+    "Connection:keep-alive",
+    "Sec-Fetch-Dest:document",
+    "Sec-Fetch-Mode:navigate",
+    "Sec-Fetch-Site:none",
+    "Sec-Fetch-User:?1",
+    "Upgrade-Insecure-Requests:1"
+  ],
+  "extractorArgs": "{\"youtube\":{\"player_client\":[\"tv_embedded\",\"web\",\"android\"],\"player_skip\":[],\"po_token\":null}}",
+  "noPlaylist": true,
+  "noCheckCertificates": false,
+  "preferFreeFormats": false,
+  "noWarnings": false,
+  "sleepInterval": 1,
+  "maxSleepInterval": 3,
+  "sleepSubtitles": 1,
+  "verbose": true,
+  "printJson": true,
+  "dumpJson": true
+}
+[YouTubeDownloader] Attempt 3 failed: Usage: yt-dlp [OPTIONS] URL [URL...]
+
+yt-dlp: error: wrong --extractor-args formatting; it should be IE_KEY:ARGS, not "{"youtube":{"player_client":["tv_embedded","web","android"],"player_skip":[],"po_token":null}}"
+[YouTubeDownloader] yt-dlp stderr: Usage: yt-dlp [OPTIONS] URL [URL...]
+
+yt-dlp: error: wrong --extractor-args formatting; it should be IE_KEY:ARGS, not "{"youtube":{"player_client":["tv_embedded","web","android"],"player_skip":[],"po_token":null}}"
+[YouTubeDownloader] Download failed for job test_1_1750586460853: Error: Failed after 3 attempts. Last error: Usage: yt-dlp [OPTIONS] URL [URL...]
+
+yt-dlp: error: wrong --extractor-args formatting; it should be IE_KEY:ARGS, not "{"youtube":{"player_client":["tv_embedded","web","android"],"player_skip":[],"po_token":null}}"
+    at YouTubeDownloader.downloadWithRetry (file:///code/processing-service/youtube-downloader.js:222:11)
+    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+    at async YouTubeDownloader.download (file:///code/processing-service/youtube-downloader.js:235:22)
+    at async file:///code/processing-service/server.js:77:22
+[YouTube Download] Download failed: Error: Failed after 3 attempts. Last error: Usage: yt-dlp [OPTIONS] URL [URL...]
+
+yt-dlp: error: wrong --extractor-args formatting; it should be IE_KEY:ARGS, not "{"youtube":{"player_client":["tv_embedded","web","android"],"player_skip":[],"po_token":null}}"
+    at YouTubeDownloader.downloadWithRetry (file:///code/processing-service/youtube-downloader.js:222:11)
+    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+    at async YouTubeDownloader.download (file:///code/processing-service/youtube-downloader.js:235:22)
+    at async file:///code/processing-service/server.js:77:22
+[YouTube Download] Failed: Error: Failed after 3 attempts. Last error: Usage: yt-dlp [OPTIONS] URL [URL...]
+
+yt-dlp: error: wrong --extractor-args formatting; it should be IE_KEY:ARGS, not "{"youtube":{"player_client":["tv_embedded","web","android"],"player_skip":[],"po_token":null}}"
+    at YouTubeDownloader.downloadWithRetry (file:///code/processing-service/youtube-downloader.js:222:11)
+    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+    at async YouTubeDownloader.download (file:///code/processing-service/youtube-downloader.js:235:22)
+    at async file:///code/processing-service/server.js:77:22
+
+[YouTube Download] Starting download for job test_2_1750586467913
+[YouTube Download] URL: https://www.youtube.com/watch?v=eRsGyueVLvQ
+[YouTube Download] Using enhanced downloader with anti-bot detection
+
+[YouTubeDownloader] Starting download for job test_2_1750586467913
+[YouTubeDownloader] URL: https://www.youtube.com/watch?v=eRsGyueVLvQ
+[YouTubeDownloader] Output path: /tmp/test_2_1750586467913_audio.webm
+
+[YouTubeDownloader] Download attempt 1/3 for job test_2_1750586467913
+[YouTubeDownloader] Building options for attempt 1
+[YouTubeDownloader] Using User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36
+[YouTubeDownloader] Starting yt-dlp with options: {
+  "output": "/tmp/test_2_1750586467913_audio.webm",
+  "format": "bestaudio[ext=webm]/bestaudio[ext=m4a]/bestaudio",
+  "userAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36",
+  "referer": "https://www.youtube.com/",
+  "addHeader": [
+    "Accept-Language:en-US,en;q=0.9",
+    "Accept:text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8",
+    "Accept-Encoding:gzip, deflate, br",
+    "Cache-Control:no-cache",
+    "Connection:keep-alive",
+    "Sec-Fetch-Dest:document",
+    "Sec-Fetch-Mode:navigate",
+    "Sec-Fetch-Site:none",
+    "Sec-Fetch-User:?1",
+    "Upgrade-Insecure-Requests:1"
+  ],
+  "extractorArgs": "{\"youtube\":{\"player_client\":[\"web\",\"android\",\"ios\"],\"player_skip\":[],\"po_token\":null}}",
+  "noPlaylist": true,
+  "noCheckCertificates": false,
+  "preferFreeFormats": false,
+  "noWarnings": false,
+  "sleepInterval": 2,
+  "maxSleepInterval": 4,
+  "sleepSubtitles": 1,
+  "verbose": true,
+  "printJson": true,
+  "dumpJson": true
+}
+[YouTubeDownloader] Attempt 1 failed: Usage: yt-dlp [OPTIONS] URL [URL...]
+
+yt-dlp: error: wrong --extractor-args formatting; it should be IE_KEY:ARGS, not "{"youtube":{"player_client":["web","android","ios"],"player_skip":[],"po_token":null}}"
+[YouTubeDownloader] yt-dlp stderr: Usage: yt-dlp [OPTIONS] URL [URL...]
+
+yt-dlp: error: wrong --extractor-args formatting; it should be IE_KEY:ARGS, not "{"youtube":{"player_client":["web","android","ios"],"player_skip":[],"po_token":null}}"
+[YouTubeDownloader] Waiting 2000ms before retry...
+
+[YouTubeDownloader] Download attempt 2/3 for job test_2_1750586467913
+[YouTubeDownloader] Building options for attempt 2
+[YouTubeDownloader] Using User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36
+[YouTubeDownloader] Attempt 2: trying alternative strategies
+[YouTubeDownloader] Starting yt-dlp with options: {
+  "output": "/tmp/test_2_1750586467913_audio.webm",
+  "format": "bestaudio/best",
+  "userAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36",
+  "referer": "https://www.youtube.com/",
+  "addHeader": [
+    "Accept-Language:en-US,en;q=0.9",
+    "Accept:text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8",
+    "Accept-Encoding:gzip, deflate, br",
+    "Cache-Control:no-cache",
+    "Connection:keep-alive",
+    "Sec-Fetch-Dest:document",
+    "Sec-Fetch-Mode:navigate",
+    "Sec-Fetch-Site:none",
+    "Sec-Fetch-User:?1",
+    "Upgrade-Insecure-Requests:1"
+  ],
+  "extractorArgs": "{\"youtube\":{\"player_client\":[\"web\",\"android\",\"ios\"],\"player_skip\":[],\"po_token\":null}}",
+  "noPlaylist": true,
+  "noCheckCertificates": false,
+  "preferFreeFormats": false,
+  "noWarnings": false,
+  "sleepInterval": 1,
+  "maxSleepInterval": 4,
+  "sleepSubtitles": 1,
+  "verbose": true,
+  "printJson": true,
+  "dumpJson": true
+}
+[YouTubeDownloader] Attempt 2 failed: Usage: yt-dlp [OPTIONS] URL [URL...]
+
+yt-dlp: error: wrong --extractor-args formatting; it should be IE_KEY:ARGS, not "{"youtube":{"player_client":["web","android","ios"],"player_skip":[],"po_token":null}}"
+[YouTubeDownloader] yt-dlp stderr: Usage: yt-dlp [OPTIONS] URL [URL...]
+
+yt-dlp: error: wrong --extractor-args formatting; it should be IE_KEY:ARGS, not "{"youtube":{"player_client":["web","android","ios"],"player_skip":[],"po_token":null}}"
+[YouTubeDownloader] Waiting 2000ms before retry...
+
+[YouTubeDownloader] Download attempt 3/3 for job test_2_1750586467913
+[YouTubeDownloader] Building options for attempt 3
+[YouTubeDownloader] Using User-Agent: Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36
+[YouTubeDownloader] Attempt 3: trying alternative strategies
+[YouTubeDownloader] Starting yt-dlp with options: {
+  "output": "/tmp/test_2_1750586467913_audio.webm",
+  "format": "bestaudio[ext=webm]/bestaudio[ext=m4a]/bestaudio",
+  "userAgent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36",
+  "referer": "https://www.youtube.com/",
+  "addHeader": [
+    "Accept-Language:en-US,en;q=0.9",
+    "Accept:text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8",
+    "Accept-Encoding:gzip, deflate, br",
+    "Cache-Control:no-cache",
+    "Connection:keep-alive",
+    "Sec-Fetch-Dest:document",
+    "Sec-Fetch-Mode:navigate",
+    "Sec-Fetch-Site:none",
+    "Sec-Fetch-User:?1",
+    "Upgrade-Insecure-Requests:1"
+  ],
+  "extractorArgs": "{\"youtube\":{\"player_client\":[\"tv_embedded\",\"web\",\"android\"],\"player_skip\":[],\"po_token\":null}}",
+  "noPlaylist": true,
+  "noCheckCertificates": false,
+  "preferFreeFormats": false,
+  "noWarnings": false,
+  "sleepInterval": 1,
+  "maxSleepInterval": 4,
+  "sleepSubtitles": 1,
+  "verbose": true,
+  "printJson": true,
+  "dumpJson": true
+}
+[YouTubeDownloader] Attempt 3 failed: Usage: yt-dlp [OPTIONS] URL [URL...]
+
+yt-dlp: error: wrong --extractor-args formatting; it should be IE_KEY:ARGS, not "{"youtube":{"player_client":["tv_embedded","web","android"],"player_skip":[],"po_token":null}}"
+[YouTubeDownloader] yt-dlp stderr: Usage: yt-dlp [OPTIONS] URL [URL...]
+
+yt-dlp: error: wrong --extractor-args formatting; it should be IE_KEY:ARGS, not "{"youtube":{"player_client":["tv_embedded","web","android"],"player_skip":[],"po_token":null}}"
+[YouTubeDownloader] Download failed for job test_2_1750586467913: Error: Failed after 3 attempts. Last error: Usage: yt-dlp [OPTIONS] URL [URL...]
+
+yt-dlp: error: wrong --extractor-args formatting; it should be IE_KEY:ARGS, not "{"youtube":{"player_client":["tv_embedded","web","android"],"player_skip":[],"po_token":null}}"
+    at YouTubeDownloader.downloadWithRetry (file:///code/processing-service/youtube-downloader.js:222:11)
+    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+    at async YouTubeDownloader.download (file:///code/processing-service/youtube-downloader.js:235:22)
+    at async file:///code/processing-service/server.js:77:22
+[YouTube Download] Download failed: Error: Failed after 3 attempts. Last error: Usage: yt-dlp [OPTIONS] URL [URL...]
+
+yt-dlp: error: wrong --extractor-args formatting; it should be IE_KEY:ARGS, not "{"youtube":{"player_client":["tv_embedded","web","android"],"player_skip":[],"po_token":null}}"
+    at YouTubeDownloader.downloadWithRetry (file:///code/processing-service/youtube-downloader.js:222:11)
+    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+    at async YouTubeDownloader.download (file:///code/processing-service/youtube-downloader.js:235:22)
+    at async file:///code/processing-service/server.js:77:22
+[YouTube Download] Failed: Error: Failed after 3 attempts. Last error: Usage: yt-dlp [OPTIONS] URL [URL...]
+
+yt-dlp: error: wrong --extractor-args formatting; it should be IE_KEY:ARGS, not "{"youtube":{"player_client":["tv_embedded","web","android"],"player_skip":[],"po_token":null}}"
+    at YouTubeDownloader.downloadWithRetry (file:///code/processing-service/youtube-downloader.js:222:11)
+    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+    at async YouTubeDownloader.download (file:///code/processing-service/youtube-downloader.js:235:22)
+    at async file:///code/processing-service/server.js:77:22
+
+[YouTube Download] Starting download for job test_3_1750586475256
+[YouTube Download] URL: https://www.youtube.com/watch?v=jNQXAC9IVRw
+[YouTube Download] Using enhanced downloader with anti-bot detection
+
+[YouTubeDownloader] Starting download for job test_3_1750586475256
+[YouTubeDownloader] URL: https://www.youtube.com/watch?v=jNQXAC9IVRw
+[YouTubeDownloader] Output path: /tmp/test_3_1750586475256_audio.webm
+
+[YouTubeDownloader] Download attempt 1/3 for job test_3_1750586475256
+[YouTubeDownloader] Building options for attempt 1
+[YouTubeDownloader] Using User-Agent: Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36
+[YouTubeDownloader] Starting yt-dlp with options: {
+  "output": "/tmp/test_3_1750586475256_audio.webm",
+  "format": "bestaudio[ext=webm]/bestaudio[ext=m4a]/bestaudio",
+  "userAgent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36",
+  "referer": "https://www.youtube.com/",
+  "addHeader": [
+    "Accept-Language:en-US,en;q=0.9",
+    "Accept:text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8",
+    "Accept-Encoding:gzip, deflate, br",
+    "Cache-Control:no-cache",
+    "Connection:keep-alive",
+    "Sec-Fetch-Dest:document",
+    "Sec-Fetch-Mode:navigate",
+    "Sec-Fetch-Site:none",
+    "Sec-Fetch-User:?1",
+    "Upgrade-Insecure-Requests:1"
+  ],
+  "extractorArgs": "{\"youtube\":{\"player_client\":[\"web\",\"android\",\"ios\"],\"player_skip\":[],\"po_token\":null}}",
+  "noPlaylist": true,
+  "noCheckCertificates": false,
+  "preferFreeFormats": false,
+  "noWarnings": false,
+  "sleepInterval": 2,
+  "maxSleepInterval": 4,
+  "sleepSubtitles": 1,
+  "verbose": true,
+  "printJson": true,
+  "dumpJson": true
+}
+[YouTubeDownloader] Attempt 1 failed: Usage: yt-dlp [OPTIONS] URL [URL...]
+
+yt-dlp: error: wrong --extractor-args formatting; it should be IE_KEY:ARGS, not "{"youtube":{"player_client":["web","android","ios"],"player_skip":[],"po_token":null}}"
+[YouTubeDownloader] yt-dlp stderr: Usage: yt-dlp [OPTIONS] URL [URL...]
+
+yt-dlp: error: wrong --extractor-args formatting; it should be IE_KEY:ARGS, not "{"youtube":{"player_client":["web","android","ios"],"player_skip":[],"po_token":null}}"
+[YouTubeDownloader] Waiting 2000ms before retry...
+
+[YouTubeDownloader] Download attempt 2/3 for job test_3_1750586475256
+[YouTubeDownloader] Building options for attempt 2
+[YouTubeDownloader] Using User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/119.0.0.0 Safari/537.36
+[YouTubeDownloader] Attempt 2: trying alternative strategies
+[YouTubeDownloader] Starting yt-dlp with options: {
+  "output": "/tmp/test_3_1750586475256_audio.webm",
+  "format": "bestaudio/best",
+  "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/119.0.0.0 Safari/537.36",
+  "referer": "https://www.youtube.com/",
+  "addHeader": [
+    "Accept-Language:en-US,en;q=0.9",
+    "Accept:text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8",
+    "Accept-Encoding:gzip, deflate, br",
+    "Cache-Control:no-cache",
+    "Connection:keep-alive",
+    "Sec-Fetch-Dest:document",
+    "Sec-Fetch-Mode:navigate",
+    "Sec-Fetch-Site:none",
+    "Sec-Fetch-User:?1",
+    "Upgrade-Insecure-Requests:1"
+  ],
+  "extractorArgs": "{\"youtube\":{\"player_client\":[\"web\",\"android\",\"ios\"],\"player_skip\":[],\"po_token\":null}}",
+  "noPlaylist": true,
+  "noCheckCertificates": false,
+  "preferFreeFormats": false,
+  "noWarnings": false,
+  "sleepInterval": 1,
+  "maxSleepInterval": 3,
+  "sleepSubtitles": 1,
+  "verbose": true,
+  "printJson": true,
+  "dumpJson": true
+}
+[YouTubeDownloader] Attempt 2 failed: Usage: yt-dlp [OPTIONS] URL [URL...]
+
+yt-dlp: error: wrong --extractor-args formatting; it should be IE_KEY:ARGS, not "{"youtube":{"player_client":["web","android","ios"],"player_skip":[],"po_token":null}}"
+[YouTubeDownloader] yt-dlp stderr: Usage: yt-dlp [OPTIONS] URL [URL...]
+
+yt-dlp: error: wrong --extractor-args formatting; it should be IE_KEY:ARGS, not "{"youtube":{"player_client":["web","android","ios"],"player_skip":[],"po_token":null}}"
+[YouTubeDownloader] Waiting 2000ms before retry...
+
+[YouTubeDownloader] Download attempt 3/3 for job test_3_1750586475256
+[YouTubeDownloader] Building options for attempt 3
+[YouTubeDownloader] Using User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36
+[YouTubeDownloader] Attempt 3: trying alternative strategies
+[YouTubeDownloader] Starting yt-dlp with options: {
+  "output": "/tmp/test_3_1750586475256_audio.webm",
+  "format": "bestaudio[ext=webm]/bestaudio[ext=m4a]/bestaudio",
+  "userAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36",
+  "referer": "https://www.youtube.com/",
+  "addHeader": [
+    "Accept-Language:en-US,en;q=0.9",
+    "Accept:text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8",
+    "Accept-Encoding:gzip, deflate, br",
+    "Cache-Control:no-cache",
+    "Connection:keep-alive",
+    "Sec-Fetch-Dest:document",
+    "Sec-Fetch-Mode:navigate",
+    "Sec-Fetch-Site:none",
+    "Sec-Fetch-User:?1",
+    "Upgrade-Insecure-Requests:1"
+  ],
+  "extractorArgs": "{\"youtube\":{\"player_client\":[\"tv_embedded\",\"web\",\"android\"],\"player_skip\":[],\"po_token\":null}}",
+  "noPlaylist": true,
+  "noCheckCertificates": false,
+  "preferFreeFormats": false,
+  "noWarnings": false,
+  "sleepInterval": 1,
+  "maxSleepInterval": 3,
+  "sleepSubtitles": 1,
+  "verbose": true,
+  "printJson": true,
+  "dumpJson": true
+}
+[YouTubeDownloader] Attempt 3 failed: Usage: yt-dlp [OPTIONS] URL [URL...]
+
+yt-dlp: error: wrong --extractor-args formatting; it should be IE_KEY:ARGS, not "{"youtube":{"player_client":["tv_embedded","web","android"],"player_skip":[],"po_token":null}}"
+[YouTubeDownloader] yt-dlp stderr: Usage: yt-dlp [OPTIONS] URL [URL...]
+
+yt-dlp: error: wrong --extractor-args formatting; it should be IE_KEY:ARGS, not "{"youtube":{"player_client":["tv_embedded","web","android"],"player_skip":[],"po_token":null}}"
+[YouTubeDownloader] Download failed for job test_3_1750586475256: Error: Failed after 3 attempts. Last error: Usage: yt-dlp [OPTIONS] URL [URL...]
+
+yt-dlp: error: wrong --extractor-args formatting; it should be IE_KEY:ARGS, not "{"youtube":{"player_client":["tv_embedded","web","android"],"player_skip":[],"po_token":null}}"
+    at YouTubeDownloader.downloadWithRetry (file:///code/processing-service/youtube-downloader.js:222:11)
+    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+    at async YouTubeDownloader.download (file:///code/processing-service/youtube-downloader.js:235:22)
+    at async file:///code/processing-service/server.js:77:22
+[YouTube Download] Download failed: Error: Failed after 3 attempts. Last error: Usage: yt-dlp [OPTIONS] URL [URL...]
+
+yt-dlp: error: wrong --extractor-args formatting; it should be IE_KEY:ARGS, not "{"youtube":{"player_client":["tv_embedded","web","android"],"player_skip":[],"po_token":null}}"
+    at YouTubeDownloader.downloadWithRetry (file:///code/processing-service/youtube-downloader.js:222:11)
+    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+    at async YouTubeDownloader.download (file:///code/processing-service/youtube-downloader.js:235:22)
+    at async file:///code/processing-service/server.js:77:22
+[YouTube Download] Failed: Error: Failed after 3 attempts. Last error: Usage: yt-dlp [OPTIONS] URL [URL...]
+
+yt-dlp: error: wrong --extractor-args formatting; it should be IE_KEY:ARGS, not "{"youtube":{"player_client":["tv_embedded","web","android"],"player_skip":[],"po_token":null}}"
+    at YouTubeDownloader.downloadWithRetry (file:///code/processing-service/youtube-downloader.js:222:11)
+    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+    at async YouTubeDownloader.download (file:///code/processing-service/youtube-downloader.js:235:22)
+    at async file:///code/processing-service/server.js:77:22
+
+[YouTube Download] Starting download for job test_4_1750586482285
+[YouTube Download] URL: https://www.youtube.com/watch?v=9bZkp7q19f0
+[YouTube Download] Using enhanced downloader with anti-bot detection
+
+[YouTubeDownloader] Starting download for job test_4_1750586482285
+[YouTubeDownloader] URL: https://www.youtube.com/watch?v=9bZkp7q19f0
+[YouTubeDownloader] Output path: /tmp/test_4_1750586482285_audio.webm
+
+[YouTubeDownloader] Download attempt 1/3 for job test_4_1750586482285
+[YouTubeDownloader] Building options for attempt 1
+[YouTubeDownloader] Using User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:121.0) Gecko/20100101 Firefox/121.0
+[YouTubeDownloader] Starting yt-dlp with options: {
+  "output": "/tmp/test_4_1750586482285_audio.webm",
+  "format": "bestaudio[ext=webm]/bestaudio[ext=m4a]/bestaudio",
+  "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:121.0) Gecko/20100101 Firefox/121.0",
+  "referer": "https://www.youtube.com/",
+  "addHeader": [
+    "Accept-Language:en-US,en;q=0.9",
+    "Accept:text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8",
+    "Accept-Encoding:gzip, deflate, br",
+    "Cache-Control:no-cache",
+    "Connection:keep-alive",
+    "Sec-Fetch-Dest:document",
+    "Sec-Fetch-Mode:navigate",
+    "Sec-Fetch-Site:none",
+    "Sec-Fetch-User:?1",
+    "Upgrade-Insecure-Requests:1"
+  ],
+  "extractorArgs": "{\"youtube\":{\"player_client\":[\"web\",\"android\",\"ios\"],\"player_skip\":[],\"po_token\":null}}",
+  "noPlaylist": true,
+  "noCheckCertificates": false,
+  "preferFreeFormats": false,
+  "noWarnings": false,
+  "sleepInterval": 2,
+  "maxSleepInterval": 3,
+  "sleepSubtitles": 1,
+  "verbose": true,
+  "printJson": true,
+  "dumpJson": true
+}
+[YouTubeDownloader] Attempt 1 failed: Usage: yt-dlp [OPTIONS] URL [URL...]
+
+yt-dlp: error: wrong --extractor-args formatting; it should be IE_KEY:ARGS, not "{"youtube":{"player_client":["web","android","ios"],"player_skip":[],"po_token":null}}"
+[YouTubeDownloader] yt-dlp stderr: Usage: yt-dlp [OPTIONS] URL [URL...]
+
+yt-dlp: error: wrong --extractor-args formatting; it should be IE_KEY:ARGS, not "{"youtube":{"player_client":["web","android","ios"],"player_skip":[],"po_token":null}}"
+[YouTubeDownloader] Waiting 2000ms before retry...
+
+[YouTubeDownloader] Download attempt 2/3 for job test_4_1750586482285
+[YouTubeDownloader] Building options for attempt 2
+[YouTubeDownloader] Using User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36
+[YouTubeDownloader] Attempt 2: trying alternative strategies
+[YouTubeDownloader] Starting yt-dlp with options: {
+  "output": "/tmp/test_4_1750586482285_audio.webm",
+  "format": "bestaudio/best",
+  "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36",
+  "referer": "https://www.youtube.com/",
+  "addHeader": [
+    "Accept-Language:en-US,en;q=0.9",
+    "Accept:text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8",
+    "Accept-Encoding:gzip, deflate, br",
+    "Cache-Control:no-cache",
+    "Connection:keep-alive",
+    "Sec-Fetch-Dest:document",
+    "Sec-Fetch-Mode:navigate",
+    "Sec-Fetch-Site:none",
+    "Sec-Fetch-User:?1",
+    "Upgrade-Insecure-Requests:1"
+  ],
+  "extractorArgs": "{\"youtube\":{\"player_client\":[\"web\",\"android\",\"ios\"],\"player_skip\":[],\"po_token\":null}}",
+  "noPlaylist": true,
+  "noCheckCertificates": false,
+  "preferFreeFormats": false,
+  "noWarnings": false,
+  "sleepInterval": 2,
+  "maxSleepInterval": 3,
+  "sleepSubtitles": 1,
+  "verbose": true,
+  "printJson": true,
+  "dumpJson": true
+}
+[YouTubeDownloader] Attempt 2 failed: Usage: yt-dlp [OPTIONS] URL [URL...]
+
+yt-dlp: error: wrong --extractor-args formatting; it should be IE_KEY:ARGS, not "{"youtube":{"player_client":["web","android","ios"],"player_skip":[],"po_token":null}}"
+[YouTubeDownloader] yt-dlp stderr: Usage: yt-dlp [OPTIONS] URL [URL...]
+
+yt-dlp: error: wrong --extractor-args formatting; it should be IE_KEY:ARGS, not "{"youtube":{"player_client":["web","android","ios"],"player_skip":[],"po_token":null}}"
+[YouTubeDownloader] Waiting 2000ms before retry...
+
+[YouTubeDownloader] Download attempt 3/3 for job test_4_1750586482285
+[YouTubeDownloader] Building options for attempt 3
+[YouTubeDownloader] Using User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:121.0) Gecko/20100101 Firefox/121.0
+[YouTubeDownloader] Attempt 3: trying alternative strategies
+[YouTubeDownloader] Starting yt-dlp with options: {
+  "output": "/tmp/test_4_1750586482285_audio.webm",
+  "format": "bestaudio[ext=webm]/bestaudio[ext=m4a]/bestaudio",
+  "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:121.0) Gecko/20100101 Firefox/121.0",
+  "referer": "https://www.youtube.com/",
+  "addHeader": [
+    "Accept-Language:en-US,en;q=0.9",
+    "Accept:text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8",
+    "Accept-Encoding:gzip, deflate, br",
+    "Cache-Control:no-cache",
+    "Connection:keep-alive",
+    "Sec-Fetch-Dest:document",
+    "Sec-Fetch-Mode:navigate",
+    "Sec-Fetch-Site:none",
+    "Sec-Fetch-User:?1",
+    "Upgrade-Insecure-Requests:1"
+  ],
+  "extractorArgs": "{\"youtube\":{\"player_client\":[\"tv_embedded\",\"web\",\"android\"],\"player_skip\":[],\"po_token\":null}}",
+  "noPlaylist": true,
+  "noCheckCertificates": false,
+  "preferFreeFormats": false,
+  "noWarnings": false,
+  "sleepInterval": 1,
+  "maxSleepInterval": 3,
+  "sleepSubtitles": 1,
+  "verbose": true,
+  "printJson": true,
+  "dumpJson": true
+}
+[YouTubeDownloader] Attempt 3 failed: Usage: yt-dlp [OPTIONS] URL [URL...]
+
+yt-dlp: error: wrong --extractor-args formatting; it should be IE_KEY:ARGS, not "{"youtube":{"player_client":["tv_embedded","web","android"],"player_skip":[],"po_token":null}}"
+[YouTubeDownloader] yt-dlp stderr: Usage: yt-dlp [OPTIONS] URL [URL...]
+
+yt-dlp: error: wrong --extractor-args formatting; it should be IE_KEY:ARGS, not "{"youtube":{"player_client":["tv_embedded","web","android"],"player_skip":[],"po_token":null}}"
+[YouTubeDownloader] Download failed for job test_4_1750586482285: Error: Failed after 3 attempts. Last error: Usage: yt-dlp [OPTIONS] URL [URL...]
+
+yt-dlp: error: wrong --extractor-args formatting; it should be IE_KEY:ARGS, not "{"youtube":{"player_client":["tv_embedded","web","android"],"player_skip":[],"po_token":null}}"
+    at YouTubeDownloader.downloadWithRetry (file:///code/processing-service/youtube-downloader.js:222:11)
+    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+    at async YouTubeDownloader.download (file:///code/processing-service/youtube-downloader.js:235:22)
+    at async file:///code/processing-service/server.js:77:22
+[YouTube Download] Download failed: Error: Failed after 3 attempts. Last error: Usage: yt-dlp [OPTIONS] URL [URL...]
+
+yt-dlp: error: wrong --extractor-args formatting; it should be IE_KEY:ARGS, not "{"youtube":{"player_client":["tv_embedded","web","android"],"player_skip":[],"po_token":null}}"
+    at YouTubeDownloader.downloadWithRetry (file:///code/processing-service/youtube-downloader.js:222:11)
+    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+    at async YouTubeDownloader.download (file:///code/processing-service/youtube-downloader.js:235:22)
+    at async file:///code/processing-service/server.js:77:22
+[YouTube Download] Failed: Error: Failed after 3 attempts. Last error: Usage: yt-dlp [OPTIONS] URL [URL...]
+
+yt-dlp: error: wrong --extractor-args formatting; it should be IE_KEY:ARGS, not "{"youtube":{"player_client":["tv_embedded","web","android"],"player_skip":[],"po_token":null}}"
+    at YouTubeDownloader.downloadWithRetry (file:///code/processing-service/youtube-downloader.js:222:11)
+    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+    at async YouTubeDownloader.download (file:///code/processing-service/youtube-downloader.js:235:22)
+    at async file:///code/processing-service/server.js:77:22

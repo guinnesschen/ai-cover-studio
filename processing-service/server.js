@@ -2,9 +2,9 @@ import express from 'express';
 import cors from 'cors';
 import fs from 'fs';
 import path from 'path';
-import youtubedl from 'youtube-dl-exec';
 import { FFmpeg } from '@ffmpeg/ffmpeg';
 import { toBlobURL } from '@ffmpeg/util';
+import YouTubeDownloader from './youtube-downloader.js';
 
 const app = express();
 const PORT = process.env.PORT || 3001;
@@ -15,6 +15,16 @@ app.use(express.json());
 
 // Temp directory for file processing
 const TEMP_DIR = '/tmp';
+
+// Initialize YouTube downloader with anti-bot detection measures
+const ytDownloader = new YouTubeDownloader({
+  tempDir: TEMP_DIR,
+  cookiesFile: process.env.YOUTUBE_COOKIES_FILE || null,
+  maxRetries: 3,
+  retryDelay: 2000,
+  rateLimitDelay: 1000,
+  verbose: true
+});
 
 // Helper functions
 function validateYouTubeUrl(url) {
@@ -47,7 +57,7 @@ async function initFFmpeg() {
   return ffmpegInstance;
 }
 
-// YouTube Download Endpoint
+// YouTube Download Endpoint with improved anti-bot detection
 app.post('/download-youtube', async (req, res) => {
   try {
     const { url, jobId } = req.body;
@@ -58,196 +68,52 @@ app.post('/download-youtube', async (req, res) => {
 
     const sanitizedJobId = sanitizeJobId(jobId);
     
-    console.log(`[YouTube Download] Starting download for job ${sanitizedJobId}`);
-
-    // Use a fixed webm extension since that's what YouTube typically provides for audio
-    const outputPath = path.join(TEMP_DIR, `${sanitizedJobId}_audio.webm`);
-    
-    console.log(`[YouTube Download] Attempting download with yt-dlp...`);
-    console.log(`[YouTube Download] Output path: ${outputPath}`);
+    console.log(`\n[YouTube Download] Starting download for job ${sanitizedJobId}`);
     console.log(`[YouTube Download] URL: ${url}`);
-    
-    // HYPOTHESIS TESTING: 3 possible reasons why tmp dir is empty after yt-dlp claims success
-    console.log(`\n=== HYPOTHESIS TESTING STARTS ===`);
-    
-    // Pre-download baseline
-    console.log(`[BASELINE] Pre-download state:`);
-    console.log(`[BASELINE] Current working directory: ${process.cwd()}`);
-    console.log(`[BASELINE] TEMP_DIR value: ${TEMP_DIR}`);
-    console.log(`[BASELINE] /tmp exists: ${fs.existsSync('/tmp')}`);
-    
-    const preDownloadFiles = fs.readdirSync('/tmp');
-    const preDownloadCount = preDownloadFiles.length;
-    console.log(`[BASELINE] Files in /tmp before download (${preDownloadCount}):`, preDownloadFiles);
-    
-    // Test yt-dlp availability
-    console.log(`[BASELINE] Testing yt-dlp availability...`);
-    try {
-      const versionOutput = await youtubedl('--version');
-      console.log(`[BASELINE] yt-dlp version: ${versionOutput}`);
-    } catch (versionError) {
-      console.error(`[BASELINE] yt-dlp version check failed:`, versionError);
-      throw new Error(`yt-dlp not available: ${versionError.message}`);
-    }
-    
-    // HYPOTHESIS 1: yt-dlp writing to wrong directory
-    console.log(`\n[HYPOTHESIS 1] Testing: yt-dlp writes to wrong directory`);
-    console.log(`[HYPOTHESIS 1] Expected output path: ${outputPath}`);
-    console.log(`[HYPOTHESIS 1] Expected directory: ${path.dirname(outputPath)}`);
-    console.log(`[HYPOTHESIS 1] Working directory: ${process.cwd()}`);
-    
-    // HYPOTHESIS 2: yt-dlp failing silently
-    console.log(`\n[HYPOTHESIS 2] Testing: yt-dlp fails silently`);
-    let ytdlResult = null;
-    let ytdlError = null;
-    let ytdlStdout = '';
-    let ytdlStderr = '';
-    
-    // HYPOTHESIS 3: Files created then immediately deleted
-    console.log(`\n[HYPOTHESIS 3] Testing: files created then deleted`);
-    const startTime = Date.now();
+    console.log(`[YouTube Download] Using enhanced downloader with anti-bot detection`);
     
     try {
-      console.log(`[DOWNLOAD] Starting yt-dlp with options:`, {
-        format: 'bestaudio',
-        output: outputPath,
-        noPlaylist: true,
-        verbose: true,
-        printJson: true
+      // Use the new downloader with anti-bot detection
+      const result = await ytDownloader.download(url, sanitizedJobId);
+      
+      // Read the downloaded file
+      const fileData = fs.readFileSync(result.path);
+      const base64Data = fileData.toString('base64');
+      
+      // Clean up the file
+      fs.unlinkSync(result.path);
+      
+      console.log(`[YouTube Download] Successfully sent ${(result.size / 1024 / 1024).toFixed(2)}MB to client`);
+      
+      res.json({
+        success: true,
+        fileData: base64Data,
+        fileName: path.basename(result.path),
+        size: result.size
       });
       
-      // Run yt-dlp and capture everything
-      ytdlResult = await youtubedl(url, {
-        format: 'bestaudio',
-        output: outputPath,
-        noPlaylist: true,
-        verbose: true,
-        printJson: true
-      });
+    } catch (downloadError) {
+      console.error(`[YouTube Download] Download failed:`, downloadError);
       
-      console.log(`[DOWNLOAD] yt-dlp returned successfully`);
-      console.log(`[DOWNLOAD] Result type:`, typeof ytdlResult);
-      console.log(`[DOWNLOAD] Result content:`, ytdlResult);
-      
-    } catch (error) {
-      console.log(`[DOWNLOAD] yt-dlp threw an error`);
-      ytdlError = error;
-      console.error(`[DOWNLOAD] Error details:`, error);
-      console.error(`[DOWNLOAD] Error message:`, error.message);
-      console.error(`[DOWNLOAD] Error stack:`, error.stack);
-      
-      // Don't throw yet, continue with hypothesis testing
+      // Check if it's a bot detection error
+      if (downloadError.message.includes('Sign in to confirm') || 
+          downloadError.message.includes('bot') || 
+          downloadError.message.includes('429')) {
+        console.error(`[YouTube Download] Bot detection triggered!`);
+        
+        // Log additional debug info
+        console.log(`[YouTube Download] Consider using cookies from a logged-in browser session`);
+        console.log(`[YouTube Download] Set YOUTUBE_COOKIES_FILE environment variable to cookies file path`);
+        
+        res.status(429).json({
+          error: 'YouTube bot detection triggered. Please try again later or use authentication cookies.',
+          details: downloadError.message
+        });
+      } else {
+        throw downloadError;
+      }
     }
     
-    const endTime = Date.now();
-    const downloadDuration = endTime - startTime;
-    
-    // IMMEDIATE post-download checks (HYPOTHESIS 3)
-    console.log(`\n[HYPOTHESIS 3] Immediate post-download checks (${downloadDuration}ms after start):`);
-    const immediatePostFiles = fs.readdirSync('/tmp');
-    const immediatePostCount = immediatePostFiles.length;
-    console.log(`[HYPOTHESIS 3] Files in /tmp immediately after (${immediatePostCount}):`, immediatePostFiles);
-    console.log(`[HYPOTHESIS 3] File count change: ${preDownloadCount} → ${immediatePostCount} (${immediatePostCount - preDownloadCount > 0 ? '+' : ''}${immediatePostCount - preDownloadCount})`);
-    
-    // Check for expected file specifically
-    const expectedFileExists = fs.existsSync(outputPath);
-    console.log(`[HYPOTHESIS 3] Expected file exists at ${outputPath}: ${expectedFileExists}`);
-    
-    // Check for any new files (HYPOTHESIS 1 & 3)
-    const newFiles = immediatePostFiles.filter(file => !preDownloadFiles.includes(file));
-    console.log(`[HYPOTHESIS 3] New files created: ${newFiles.length > 0 ? newFiles : 'NONE'}`);
-    
-    if (newFiles.length > 0) {
-      console.log(`[HYPOTHESIS 1] SUCCESS - Files were created, checking locations:`);
-      newFiles.forEach(file => {
-        const filePath = path.join('/tmp', file);
-        const stats = fs.statSync(filePath);
-        console.log(`[HYPOTHESIS 1] - ${file}: ${stats.size} bytes, created ${new Date(stats.birthtime).toISOString()}`);
-      });
-    } else {
-      console.log(`[HYPOTHESIS 1] FAILED - No new files created anywhere in /tmp`);
-    }
-    
-    // Wait a moment and check again (HYPOTHESIS 3)
-    console.log(`[HYPOTHESIS 3] Waiting 2 seconds to check for file deletion...`);
-    await new Promise(resolve => setTimeout(resolve, 2000));
-    
-    const delayedPostFiles = fs.readdirSync('/tmp');
-    const delayedPostCount = delayedPostFiles.length;
-    console.log(`[HYPOTHESIS 3] Files in /tmp after 2s delay (${delayedPostCount}):`, delayedPostFiles);
-    
-    const filesDeletedAfterDelay = newFiles.filter(file => !delayedPostFiles.includes(file));
-    if (filesDeletedAfterDelay.length > 0) {
-      console.log(`[HYPOTHESIS 3] SUCCESS - Files were deleted after creation:`, filesDeletedAfterDelay);
-    } else if (newFiles.length > 0 && delayedPostFiles.filter(file => newFiles.includes(file)).length > 0) {
-      console.log(`[HYPOTHESIS 3] FAILED - Files still exist after delay`);
-    } else {
-      console.log(`[HYPOTHESIS 3] INDETERMINATE - No files were created to test deletion`);
-    }
-    
-    // HYPOTHESIS 2 evaluation
-    console.log(`\n[HYPOTHESIS 2] Evaluating silent failure:`);
-    if (ytdlError) {
-      console.log(`[HYPOTHESIS 2] FAILED - yt-dlp threw visible error:`, ytdlError.message);
-      throw ytdlError; // Rethrow the original error
-    } else if (newFiles.length === 0) {
-      console.log(`[HYPOTHESIS 2] SUCCESS - yt-dlp claimed success but created no files`);
-      console.log(`[HYPOTHESIS 2] This indicates yt-dlp failed silently or returned false success`);
-      throw new Error('yt-dlp claimed success but created no files (silent failure)');
-    } else {
-      console.log(`[HYPOTHESIS 2] FAILED - yt-dlp succeeded and created files`);
-    }
-    
-    console.log(`\n=== HYPOTHESIS TESTING COMPLETE ===\n`)
-
-    // Determine which file to use based on hypothesis testing results
-    let actualPath;
-    let actualFileName;
-    
-    if (newFiles.length === 0) {
-      // This should have been caught by hypothesis testing above
-      throw new Error('No files were created during download');
-    }
-    
-    // Check if the file was created at the expected location
-    if (fs.existsSync(outputPath)) {
-      console.log(`[File Resolution] Using expected file: ${outputPath}`);
-      actualPath = outputPath;
-      actualFileName = path.basename(outputPath);
-    } else {
-      // Use the first new file we found (they were already logged in hypothesis testing)
-      console.log(`[File Resolution] Expected file not found, using first new file: ${newFiles[0]}`);
-      actualPath = path.join(TEMP_DIR, newFiles[0]);
-      actualFileName = newFiles[0];
-    }
-
-    // Verify file
-    if (!fs.existsSync(actualPath)) {
-      throw new Error('Failed to create audio file');
-    }
-
-    const stats = fs.statSync(actualPath);
-    if (stats.size === 0) {
-      fs.unlinkSync(actualPath);
-      throw new Error('Downloaded file is empty');
-    }
-
-    console.log(`[YouTube Download] Success! Downloaded ${(stats.size / 1024 / 1024).toFixed(2)}MB`);
-
-    // Return file as base64 for easy transport
-    const fileData = fs.readFileSync(actualPath);
-    const base64Data = fileData.toString('base64');
-
-    // Clean up
-    fs.unlinkSync(actualPath);
-
-    res.json({
-      success: true,
-      fileData: base64Data,
-      fileName: actualFileName,
-      size: stats.size
-    });
-
   } catch (error) {
     console.error('[YouTube Download] Failed:', error);
     
@@ -336,9 +202,53 @@ app.post('/stitch-video-audio', async (req, res) => {
   }
 });
 
+// Cookie update endpoint
+app.post('/update-cookies', (req, res) => {
+  try {
+    const { cookiesPath, cookiesContent } = req.body;
+    
+    if (cookiesPath) {
+      // Update with file path
+      ytDownloader.updateCookies(cookiesPath);
+      res.json({ 
+        success: true, 
+        message: `Cookies updated from file: ${cookiesPath}` 
+      });
+    } else if (cookiesContent) {
+      // Save content to temp file and update
+      const tempCookiesPath = path.join(TEMP_DIR, 'youtube-cookies.txt');
+      fs.writeFileSync(tempCookiesPath, cookiesContent);
+      ytDownloader.updateCookies(tempCookiesPath);
+      res.json({ 
+        success: true, 
+        message: 'Cookies updated from content',
+        path: tempCookiesPath 
+      });
+    } else {
+      res.status(400).json({ 
+        error: 'Either cookiesPath or cookiesContent must be provided' 
+      });
+    }
+  } catch (error) {
+    console.error('[Cookie Update] Failed:', error);
+    res.status(500).json({ 
+      error: `Failed to update cookies: ${error.message}` 
+    });
+  }
+});
+
 // Health check endpoint
 app.get('/health', (req, res) => {
-  res.json({ status: 'OK', service: 'AI Cover Lab Processing Service' });
+  res.json({ 
+    status: 'OK', 
+    service: 'AI Cover Lab Processing Service',
+    features: {
+      antiBot: true,
+      cookieSupport: !!process.env.YOUTUBE_COOKIES_FILE,
+      retryLogic: true,
+      userAgentRotation: true
+    }
+  });
 });
 
 // Start server
