@@ -53,8 +53,8 @@ Once deployed, your YouTube downloads will automatically use the processing serv
 
 ## Benefits of This Setup
 
-✅ **YouTube downloads work reliably** (no Vercel limitations)  
+✅ **Direct file uploads** (no external dependencies)  
 ✅ **Video processing works** (real FFmpeg instead of WASM)  
-✅ **Free hosting** (Render/Railway free tiers)  
-✅ **Auto-scaling** (services wake up when needed)  
-✅ **Simple maintenance** (separate deployments)
+✅ **Free hosting** (Vercel for main app)  
+✅ **Auto-scaling** (serverless functions)  
+✅ **Simple maintenance** (single deployment)

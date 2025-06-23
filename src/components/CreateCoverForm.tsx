@@ -11,23 +11,35 @@ interface CreateCoverFormProps {
 
 export default function CreateCoverForm({ onSubmit, disabled }: CreateCoverFormProps) {
   const [formData, setFormData] = useState<CreateCoverFormData>({
-    youtubeUrl: '',
+    audioFile: null,
     character: 'squidward',
     imagePrompt: '',
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
 
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      setFormData({ ...formData, audioFile: file });
+    }
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (isSubmitting || disabled) return;
+    if (isSubmitting || disabled || !formData.audioFile) return;
 
     setIsSubmitting(true);
 
     try {
+      // Create FormData for file upload
+      const uploadData = new FormData();
+      uploadData.append('audioFile', formData.audioFile);
+      uploadData.append('character', formData.character);
+      uploadData.append('imagePrompt', formData.imagePrompt);
+
       const response = await fetch('/api/covers', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(formData),
+        body: uploadData,
       });
 
       const data = await response.json();
@@ -40,10 +52,14 @@ export default function CreateCoverForm({ onSubmit, disabled }: CreateCoverFormP
       
       // Reset form
       setFormData({
-        youtubeUrl: '',
+        audioFile: null,
         character: 'squidward',
         imagePrompt: '',
       });
+      
+      // Reset file input
+      const fileInput = document.getElementById('audio-file') as HTMLInputElement;
+      if (fileInput) fileInput.value = '';
     } catch (error) {
       console.error('Error creating cover:', error);
       alert(error instanceof Error ? error.message : 'Failed to create cover');
@@ -56,21 +72,25 @@ export default function CreateCoverForm({ onSubmit, disabled }: CreateCoverFormP
 
   return (
     <form onSubmit={handleSubmit} className="space-y-4">
-      {/* YouTube URL Input */}
+      {/* Audio File Input */}
       <div>
-        <label htmlFor="youtube-url" className="block text-sm font-medium mb-2">
-          🔗 Link (YouTube or Audio)
+        <label htmlFor="audio-file" className="block text-sm font-medium mb-2">
+          🎵 Audio File
         </label>
         <input
-          id="youtube-url"
-          type="url"
-          value={formData.youtubeUrl}
-          onChange={(e) => setFormData({ ...formData, youtubeUrl: e.target.value })}
-          placeholder="https://youtube.com/watch?v=..."
-          className="w-full px-3 py-2 border border-border rounded-lg bg-background focus:outline-none focus:ring-2 focus:ring-accent focus:border-transparent transition-all"
+          id="audio-file"
+          type="file"
+          accept="audio/*"
+          onChange={handleFileChange}
+          className="w-full px-3 py-2 border border-border rounded-lg bg-background focus:outline-none focus:ring-2 focus:ring-accent focus:border-transparent transition-all file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-medium file:bg-accent file:text-white hover:file:bg-accent-light"
           required
           disabled={isSubmitting || disabled}
         />
+        {formData.audioFile && (
+          <p className="mt-2 text-sm text-muted">
+            Selected: {formData.audioFile.name}
+          </p>
+        )}
       </div>
 
       {/* Character Selection */}

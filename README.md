@@ -1,10 +1,10 @@
 # 🧪 AI CoverLab
 
-Transform any song into a character performance using AI. Drop in a YouTube link, pick a character like Squidward, and watch AI generate a full cover with voice cloning and custom visuals.
+Transform any song into a character performance using AI. Upload an audio file, pick a character like Squidward, and watch AI generate a full cover with voice cloning and custom visuals.
 
 ## How it works
 
-1. **🔗 Submit a song** - Paste any YouTube URL
+1. **🎵 Upload audio** - Upload an MP3, WAV, WebM, or M4A file (max 50MB)
 2. **🎭 Pick a character** - Choose from Squidward and more coming soon  
 3. **🖼️ Describe the vibe** - Optional prompt for custom artwork
 4. **🎵 Get your cover** - AI generates voice, visuals, and video

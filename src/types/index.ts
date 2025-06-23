@@ -1,7 +1,8 @@
 // Frontend types that match our database schema
 export interface Cover {
   id: string;
-  youtubeUrl: string;
+  youtubeUrl?: string | null; // Optional for backward compatibility
+  audioUrl?: string | null;    // New field for direct uploads
   character: string;
   imagePrompt?: string | null;
   
@@ -78,7 +79,7 @@ export interface ProgressUpdate {
 
 // Form types
 export interface CreateCoverFormData {
-  youtubeUrl: string;
+  audioFile: File | null;
   character: string;
   imagePrompt: string;
 }

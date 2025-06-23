@@ -1,5 +1,4 @@
 import { prisma } from '@/clients/prisma';
-import { downloadAudio } from './steps/download';
 import { generateImage } from './steps/image';
 import { cloneVoiceFull, cloneVoiceIsolated } from './steps/voice';
 import { generateVideo } from './steps/video';
@@ -7,7 +6,6 @@ import { stitchFinal } from './steps/stitch';
 
 // Pipeline action types (internal use only)
 type PipelineAction = 
-  | 'downloading'
   | 'generating_image'
   | 'cloning_voice_full'
   | 'cloning_voice_isolated'
@@ -58,11 +56,6 @@ export async function processNextStep(coverId: string, action: PipelineAction) {
 
     // Route to the appropriate handler based on action
     switch (action) {
-      case 'downloading':
-        console.log(`[PIPELINE] 📥 Executing downloadAudio step...`);
-        await downloadAudio(cover);
-        break;
-      
       case 'generating_image':
         console.log(`[PIPELINE] 🖼️ Executing generateImage step...`);
         await generateImage(cover);

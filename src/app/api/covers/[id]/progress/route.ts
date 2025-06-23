@@ -89,7 +89,7 @@ function getStatusMessage(status: string, artifacts: { type: string; url?: strin
   const messages: string[] = [];
   
   if (!completedArtifacts.has('audio') && !inProgressArtifacts.has('audio')) {
-    messages.push('Downloading audio from YouTube');
+    messages.push('Processing uploaded audio');
   }
   if (!completedArtifacts.has('image') && inProgressArtifacts.has('image')) {
     messages.push('Creating character portrait');

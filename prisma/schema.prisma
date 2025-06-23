@@ -13,7 +13,8 @@ datasource db {
 
 model Cover {
   id           String    @id @default(cuid())
-  youtubeUrl   String    @map("youtube_url")
+  youtubeUrl   String?   @map("youtube_url") // Made optional for backward compatibility
+  audioUrl     String?   @map("audio_url")    // New field for direct uploads
   character    String
   imagePrompt  String?   @map("image_prompt")
   

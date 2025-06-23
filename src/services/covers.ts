@@ -3,9 +3,11 @@ import { Cover, CoverStatus } from '@/types';
 import { processNextStep } from '@/core/pipeline';
 
 interface CreateCoverData {
-  youtubeUrl: string;
+  audioUrl: string;
   character: string;
   imagePrompt?: string;
+  title?: string;
+  artist?: string;
 }
 
 export class CoversService {
@@ -13,9 +15,11 @@ export class CoversService {
   static async create(data: CreateCoverData): Promise<Cover> {
     const startTime = Date.now();
     console.log('[COVERS SERVICE] 🎬 Creating new cover - START', { 
-      youtubeUrl: data.youtubeUrl, 
+      audioUrl: data.audioUrl, 
       character: data.character,
       hasImagePrompt: !!data.imagePrompt,
+      title: data.title,
+      artist: data.artist,
       timestamp: new Date().toISOString()
     });
     
@@ -23,8 +27,13 @@ export class CoversService {
       console.log('[COVERS SERVICE] 💾 Creating cover record in database...');
       const cover = await prisma.cover.create({
         data: {
-          ...data,
+          audioUrl: data.audioUrl,
+          character: data.character,
+          imagePrompt: data.imagePrompt,
+          title: data.title,
+          artist: data.artist,
           status: 'in-progress',
+          progress: 20, // Skip download step, start at 20%
         },
       });
       
@@ -34,7 +43,7 @@ export class CoversService {
         dbTime: `${dbTime}ms`,
         coverData: {
           id: cover.id,
-          youtubeUrl: cover.youtubeUrl,
+          audioUrl: cover.audioUrl,
           character: cover.character,
           status: cover.status,
           progress: cover.progress,
@@ -42,13 +51,24 @@ export class CoversService {
         }
       });
 
-      // Trigger parallel processing for download and image generation (fire and forget)
+      // Since we already have the audio file uploaded, we'll create an audio artifact directly
+      console.log('[COVERS SERVICE] 💾 Creating audio artifact...');
+      await prisma.artifact.create({
+        data: {
+          coverId: cover.id,
+          type: 'audio',
+          url: data.audioUrl,
+        },
+      });
+
+      // Trigger parallel processing for voice cloning and image generation (fire and forget)
       console.log('[COVERS SERVICE] 🚀 Starting parallel processing pipeline...');
-      console.log('[COVERS SERVICE] 📥 Triggering download step...');
+      console.log('[COVERS SERVICE] 🎤 Triggering voice cloning steps...');
       console.log('[COVERS SERVICE] 🖼️ Triggering image generation step...');
       
       Promise.all([
-        processNextStep(cover.id, 'downloading'),
+        processNextStep(cover.id, 'cloning_voice_full'),
+        processNextStep(cover.id, 'cloning_voice_isolated'),
         processNextStep(cover.id, 'generating_image')
       ]).then(() => {
         console.log('[COVERS SERVICE] ✅ Both pipeline steps initiated successfully', {
@@ -214,7 +234,8 @@ export class CoversService {
   // Convert DB entity to DTO with proper date handling
   private static toDto(cover: {
     id: string;
-    youtubeUrl: string;
+    youtubeUrl: string | null;
+    audioUrl: string | null;
     character: string;
     imagePrompt: string | null;
     status: string;
